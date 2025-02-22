@@ -1,4 +1,4 @@
-import { useMemo, useRef, Suspense } from "react";
+import { useMemo, useRef, Suspense, useEffect } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, useTexture, Center } from "@react-three/drei";
 import * as THREE from "three";
@@ -112,7 +112,25 @@ const Scene = ({ modelUrl, imageUrl, scale }) => {
 };
 
 // FabricModel now only sets up the Canvas and Suspense, deferring asset loading to Scene
-const FabricModel = ({ imageUrl, modelUrl, scale }) => {
+const FabricModel = ({
+  imageUrl,
+  modelUrl,
+  scale,
+  othermodels,
+  otherimages,
+}) => {
+  useEffect(() => {
+    // Preload all available 3D models
+    othermodels.forEach((url) => {
+      useGLTF.preload(url);
+    });
+
+    // Preload all available textures
+    const textureLoader = new THREE.TextureLoader();
+    otherimages.forEach((url) => {
+      textureLoader.load(url);
+    });
+  }, [othermodels, otherimages]);
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <Suspense

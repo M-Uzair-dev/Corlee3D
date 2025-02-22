@@ -350,6 +350,19 @@ const singleproduct = () => {
               ? 0.5
               : 1.5
           }
+          othermodels={[
+            "/models/shirt/scene.gltf",
+            "/models/shorts/scene.gltf",
+            "/models/pants/scene.gltf",
+            "/models/tshirt/scene.gltf",
+            "/models/jacket/scene.gltf",
+          ]}
+          otherimages={[
+            "/textures/one.jpg",
+            "/textures/two.jpg",
+            "/textures/three.jpg",
+            "/textures/four.jpg",
+          ]}
         />
         <div className="modelButtons">
           <button
