@@ -341,14 +341,14 @@ const singleproduct = () => {
           imageUrl={image}
           scale={
             model === "/models/tshirt/scene.gltf"
-              ? 2
+              ? 2.5
               : model === "/models/shirt/scene.gltf"
-              ? 0.005
+              ? 0.006
               : model === "/models/shorts/scene.gltf"
-              ? 0.8
+              ? 1.2
               : model === "/models/jacket/scene.gltf"
-              ? 0.5
-              : 1.5
+              ? 0.6
+              : 1.8
           }
           othermodels={[
             "/models/shirt/scene.gltf",

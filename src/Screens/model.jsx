@@ -24,13 +24,13 @@ const Model = ({ gltf, texture, scale, desiredTileSize }) => {
     });
   }, [gltf, texture, desiredTileSize]);
 
-  // Clone the scene and apply the custom material
+  // Clone the scene and apply the custom material without shadow settings
   const clonedScene = useMemo(() => {
     const cloned = gltf.scene.clone();
     cloned.traverse((child) => {
       if (child.isMesh) {
         child.material = material;
-        child.castShadow = true;
+        // Removed shadow settings for faster loading
       }
     });
     return cloned;
@@ -43,9 +43,9 @@ const Model = ({ gltf, texture, scale, desiredTileSize }) => {
   );
 };
 
-// Scene component that calls the hooks inside the Canvas context
+// Scene component with simplified lighting and no floor/shadow
 const Scene = ({ modelUrl, imageUrl, scale }) => {
-  const gltf = useGLTF(modelUrl);
+  const gltf = useGLTF(modelUrl, "/draco-gltf/");
   const texture = useTexture(imageUrl);
 
   const desiredTileSize = useMemo(() => {
@@ -57,50 +57,7 @@ const Scene = ({ modelUrl, imageUrl, scale }) => {
   return (
     <>
       <ambientLight intensity={1.0} />
-      <directionalLight
-        position={[2, 5, 3]}
-        intensity={1.5}
-        castShadow
-        shadow-mapSize={[4096, 4096]}
-        shadow-radius={4}
-      />
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -1, 0]} receiveShadow>
-        <planeGeometry args={[1000, 1000]} />
-        <meshStandardMaterial color="#ffffff" roughness={1} metalness={0} />
-      </mesh>
-      <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.49, 0]}>
-        <circleGeometry args={[0.7, 64]} />
-        <meshBasicMaterial
-          color="#000"
-          transparent
-          opacity={0.15}
-          depthWrite={false}
-        >
-          <canvasTexture
-            attach="map"
-            image={(() => {
-              const canvas = document.createElement("canvas");
-              canvas.width = 256;
-              canvas.height = 256;
-              const ctx = canvas.getContext("2d");
-              ctx.filter = "blur(12px)";
-              const gradient = ctx.createRadialGradient(
-                128,
-                128,
-                0,
-                128,
-                128,
-                128
-              );
-              gradient.addColorStop(0, "rgba(0,0,0,0.4)");
-              gradient.addColorStop(1, "rgba(0,0,0,0)");
-              ctx.fillStyle = gradient;
-              ctx.fillRect(0, 0, 256, 256);
-              return canvas;
-            })()}
-          />
-        </meshBasicMaterial>
-      </mesh>
+      {/* Removed directional light, floor, and shadow for faster loading */}
       <Model
         gltf={gltf}
         texture={texture}
@@ -111,7 +68,7 @@ const Scene = ({ modelUrl, imageUrl, scale }) => {
   );
 };
 
-// FabricModel now only sets up the Canvas and Suspense, deferring asset loading to Scene
+// FabricModel now only sets up the Canvas and Suspense
 const FabricModel = ({
   imageUrl,
   modelUrl,
@@ -122,7 +79,7 @@ const FabricModel = ({
   useEffect(() => {
     // Preload all available 3D models
     othermodels.forEach((url) => {
-      useGLTF.preload(url);
+      useGLTF.preload(url, "/draco-gltf/");
     });
 
     // Preload all available textures
@@ -131,8 +88,15 @@ const FabricModel = ({
       textureLoader.load(url);
     });
   }, [othermodels, otherimages]);
+
   return (
-    <div style={{ width: "100%", height: "100%", position: "relative" }}>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        position: "relative",
+      }}
+    >
       <Suspense
         fallback={
           <div
@@ -166,12 +130,10 @@ const FabricModel = ({
         }
       >
         <Canvas
-          shadows
           camera={{ position: [0, 0.2, 3], fov: 45 }}
           gl={{ antialias: true }}
           onCreated={({ gl, scene }) => {
-            gl.shadowMap.type = THREE.PCFSoftShadowMap;
-            scene.background = new THREE.Color("#ffffff");
+            scene.background = new THREE.Color("rgb(239, 239, 239)");
           }}
         >
           <Scene modelUrl={modelUrl} imageUrl={imageUrl} scale={scale} />
