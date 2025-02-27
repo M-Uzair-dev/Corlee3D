@@ -12,7 +12,7 @@ import Model from "./model.jsx";
 import "../index.css";
 
 const singleproduct = () => {
-  const [model, setModel] = useState("/models/tshirt/scene.gltf");
+  const [model, setModel] = useState("/models/shirt.glb");
   let text = "(by yard)";
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -26,7 +26,7 @@ const singleproduct = () => {
   const [currentImages, setCurrentImages] = useState([]);
   const [showLoginPopup, setshowLoginPopup] = useState(false);
   const [buttonloading, setButtonloading] = useState(0);
-  const [image, setImage] = useState("/textures/one.jpg");
+  const [image, setImage] = useState("/textures/one.JPG");
   const navigate = useNavigate();
 
   const togglefav = async () => {
@@ -338,64 +338,53 @@ const singleproduct = () => {
       <div className="modelDiv">
         <Model
           modelUrl={model}
-          imageUrl={image}
+          textureUrl={image}
           scale={
-            model === "/models/tshirt/scene.gltf"
+            model === "/models/jacket.glb"
+              ? 0.7
+              : model === "/models/shirt.glb"
               ? 2.5
-              : model === "/models/shirt/scene.gltf"
-              ? 0.006
-              : model === "/models/shorts/scene.gltf"
-              ? 1.2
-              : model === "/models/jacket/scene.gltf"
-              ? 0.6
-              : 1.8
+              : model === "/models/pants.glb"
+              ? 2
+              : 2.5
           }
-          othermodels={[
-            "/models/shirt/scene.gltf",
-            "/models/shorts/scene.gltf",
-            "/models/pants/scene.gltf",
-            "/models/tshirt/scene.gltf",
-            "/models/jacket/scene.gltf",
+          otherModels={[
+            "/models/shorts.glb",
+            "/models/pants.glb",
+            "/models/jacket.glb",
           ]}
-          otherimages={[
-            "/textures/one.jpg",
-            "/textures/two.jpg",
-            "/textures/three.jpg",
-            "/textures/four.jpg",
+          otherTextures={[
+            "/textures/two.JPG",
+            "/textures/three.JPG",
+            "/textures/four.JPG",
+            "/textures/five.JPG",
           ]}
         />
         <div className="modelButtons">
           <button
             onClick={() => {
-              setModel("/models/shirt/scene.gltf");
-            }}
-          >
-            <img src="/modelImages/shirt.png" alt="" />
-          </button>
-          <button
-            onClick={() => {
-              setModel("/models/shorts/scene.gltf");
+              setModel("/models/shorts.glb");
             }}
           >
             <img src="/modelImages/shorts.png" alt="" />
           </button>
           <button
             onClick={() => {
-              setModel("/models/pants/scene.gltf");
+              setModel("/models/pants.glb");
             }}
           >
             <img src="/modelImages/jeans.png" alt="" />
           </button>
           <button
             onClick={() => {
-              setModel("/models/tshirt/scene.gltf");
+              setModel("/models/shirt.glb");
             }}
           >
             <img src="/modelImages/tshirt.png" alt="" />
           </button>
           <button
             onClick={() => {
-              setModel("/models/jacket/scene.gltf");
+              setModel("/models/jacket.glb");
             }}
           >
             <img src="/modelImages/jacket.png" alt="" />
@@ -404,31 +393,38 @@ const singleproduct = () => {
         <div className="modelColors">
           <div
             className="color"
-            style={{ backgroundColor: "red" }}
+            style={{ backgroundColor: "blue" }}
             onClick={() => {
-              setImage("/textures/one.jpg");
-            }}
-          ></div>
-          <div
-            className="color"
-            style={{ backgroundColor: "burlywood" }}
-            onClick={() => {
-              setImage("/textures/two.jpg");
+              setImage("/textures/one.JPG");
             }}
           ></div>
           <div
             className="color"
             style={{ backgroundColor: "green" }}
             onClick={() => {
-              setImage("/textures/three.jpg");
+              setImage("/textures/two.JPG");
+            }}
+          ></div>
+          <div
+            className="color"
+            style={{ backgroundColor: "brown" }}
+            onClick={() => {
+              setImage("/textures/three.JPG");
             }}
           ></div>
           <div
             className="color"
             onClick={() => {
-              setImage("/textures/four.jpg");
+              setImage("/textures/four.JPG");
             }}
-            style={{ backgroundColor: "orange" }}
+            style={{ backgroundColor: "black" }}
+          ></div>
+          <div
+            className="color"
+            onClick={() => {
+              setImage("/textures/five.JPG");
+            }}
+            style={{ backgroundColor: "burlywood" }}
           ></div>
         </div>
       </div>

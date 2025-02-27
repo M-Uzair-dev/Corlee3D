@@ -1,102 +1,166 @@
-import { useMemo, useRef, Suspense, useEffect } from "react";
+import { useMemo, useRef, Suspense, useEffect, useState } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, useTexture, Center } from "@react-three/drei";
 import * as THREE from "three";
 import { TailSpin } from "react-loader-spinner";
 
-// Model component that applies the custom texture material
-const Model = ({ gltf, texture, scale, desiredTileSize }) => {
-  const modelRef = useRef();
+// Enable Three.js caching system for textures and GLB files
+THREE.Cache.enabled = true;
 
-  // Create a shared material with the custom texture
-  const material = useMemo(() => {
-    // Clone to compute size for proper texture repeat
-    const cloned = gltf.scene.clone();
-    const box = new THREE.Box3().setFromObject(cloned);
+const Model = ({ gltf, texture, scale, tileSize, modelUrl }) => {
+  const modelRef = useRef();
+  const materialRef = useRef();
+
+  // Optimized material creation with cached calculations
+  const { material, size } = useMemo(() => {
+    const box = new THREE.Box3().setFromObject(gltf.scene);
     const size = new THREE.Vector3();
     box.getSize(size);
-    texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(size.x / desiredTileSize, size.y / desiredTileSize);
-    return new THREE.MeshStandardMaterial({
-      map: texture,
+
+    const mat = new THREE.MeshStandardMaterial({
+      map: texture.clone(),
       roughness: 0.9,
       metalness: 0.0,
     });
-  }, [gltf, texture, desiredTileSize]);
 
-  // Clone the scene and apply the custom material without shadow settings
+    mat.map.wrapS = mat.map.wrapT = THREE.RepeatWrapping;
+    mat.map.repeat.set(size.x / tileSize, size.y / tileSize);
+    mat.map.needsUpdate = true;
+
+    return { material: mat, size };
+  }, [gltf, texture, tileSize]);
+
+  // Efficient scene cloning with material application
   const clonedScene = useMemo(() => {
     const cloned = gltf.scene.clone();
     cloned.traverse((child) => {
       if (child.isMesh) {
         child.material = material;
-        // Removed shadow settings for faster loading
+        child.geometry.computeBoundingBox();
       }
     });
     return cloned;
   }, [gltf, material]);
 
+  // Cleanup materials on unmount
+  useEffect(
+    () => () => {
+      materialRef.current?.dispose();
+      texture.dispose();
+    },
+    [texture]
+  );
+
   return (
-    <Center key={gltf} cacheKey={gltf}>
+    <Center key={modelUrl}>
       <primitive ref={modelRef} object={clonedScene} scale={scale} />
     </Center>
   );
 };
 
-// Scene component with simplified lighting and no floor/shadow
-const Scene = ({ modelUrl, imageUrl, scale }) => {
-  const gltf = useGLTF(modelUrl, "/draco-gltf/");
-  const texture = useTexture(imageUrl);
+const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
+  const gltf = useGLTF(modelUrl, true);
+  const texture = useTexture(textureUrl);
 
-  const desiredTileSize = useMemo(() => {
-    if (modelUrl === "/models/shirt/scene.gltf") return 55;
-    if (modelUrl === "/models/jacket/scene.gltf") return 1;
-    return 0.2;
+  useEffect(() => {
+    if (gltf && texture) {
+      onLoaded?.();
+    }
+  }, [gltf, texture, onLoaded]);
+
+  const tileSize = useMemo(() => {
+    if (modelUrl.includes("jacket")) return 500;
+    return 0.1;
   }, [modelUrl]);
 
   return (
     <>
-      <ambientLight intensity={1.0} />
-      {/* Removed directional light, floor, and shadow for faster loading */}
+      {/* Base ambient light */}
+      <ambientLight intensity={0.4} />
+
+      {/* Directional light as key light */}
+      <directionalLight
+        position={[5, 10, 7.5]}
+        intensity={1.0}
+        castShadow
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
+        shadow-camera-far={50}
+        shadow-camera-left={-10}
+        shadow-camera-right={10}
+        shadow-camera-top={10}
+        shadow-camera-bottom={-10}
+      />
+
+      {/* Point light for fill */}
+      <pointLight position={[-5, -5, -5]} intensity={0.5} />
+
+      {/* Spot light for subtle highlight */}
+      <spotLight
+        position={[0, 5, 5]}
+        intensity={0.8}
+        angle={0.3}
+        penumbra={0.5}
+        castShadow
+      />
+
       <Model
         gltf={gltf}
         texture={texture}
-        scale={[scale, scale, scale]}
-        desiredTileSize={desiredTileSize}
+        scale={scale}
+        tileSize={tileSize}
+        modelUrl={modelUrl}
       />
     </>
   );
 };
 
-// FabricModel now only sets up the Canvas and Suspense
 const FabricModel = ({
-  imageUrl,
+  textureUrl,
   modelUrl,
   scale,
-  othermodels,
-  otherimages,
+  otherModels,
+  otherTextures,
 }) => {
-  useEffect(() => {
-    // Preload all available 3D models
-    othermodels.forEach((url) => {
-      useGLTF.preload(url, "/draco-gltf/");
-    });
+  const [initialLoaded, setInitialLoaded] = useState(false);
+  const preloaded = useRef(new Set());
 
-    // Preload all available textures
-    const textureLoader = new THREE.TextureLoader();
-    otherimages.forEach((url) => {
-      textureLoader.load(url);
-    });
-  }, [othermodels, otherimages]);
+  // Immediate preloading of initial assets
+  useEffect(() => {
+    if (!preloaded.current.has(modelUrl)) {
+      useGLTF.preload(modelUrl);
+      preloaded.current.add(modelUrl);
+    }
+    if (!preloaded.current.has(textureUrl)) {
+      useTexture.preload(textureUrl);
+      preloaded.current.add(textureUrl);
+    }
+  }, [modelUrl, textureUrl]);
+
+  // Background preloading of other assets
+  useEffect(() => {
+    if (!initialLoaded) return;
+
+    const preload = async () => {
+      for (const url of otherModels) {
+        if (!preloaded.current.has(url)) {
+          useGLTF.preload(url);
+          preloaded.current.add(url);
+        }
+      }
+      for (const url of otherTextures) {
+        if (!preloaded.current.has(url)) {
+          useTexture.preload(url);
+          preloaded.current.add(url);
+        }
+      }
+    };
+
+    requestIdleCallback(preload);
+  }, [initialLoaded, otherModels, otherTextures]);
 
   return (
-    <div
-      style={{
-        width: "100%",
-        height: "100%",
-        position: "relative",
-      }}
-    >
+    <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <Suspense
         fallback={
           <div
@@ -130,21 +194,30 @@ const FabricModel = ({
         }
       >
         <Canvas
+          frameloop="demand"
           camera={{ position: [0, 0.2, 3], fov: 45 }}
-          gl={{ antialias: true }}
-          onCreated={({ gl, scene }) => {
-            scene.background = new THREE.Color("rgb(239, 239, 239)");
+          gl={{
+            antialias: true,
+            powerPreference: "high-performance",
+          }}
+          onCreated={({ gl }) => {
+            gl.shadowMap.enabled = true;
+            gl.autoClear = false;
           }}
         >
-          <Scene modelUrl={modelUrl} imageUrl={imageUrl} scale={scale} />
+          <Scene
+            modelUrl={modelUrl}
+            textureUrl={textureUrl}
+            scale={scale}
+            onLoaded={() => setInitialLoaded(true)}
+          />
           <OrbitControls
-            enableZoom
-            enableRotate
-            enablePan={false}
+            enableDamping
+            dampingFactor={0.05}
+            rotateSpeed={0.8}
             minDistance={1}
             maxDistance={3}
-            target={[0, 0, 0]}
-            dampingFactor={0.1}
+            enablePan={false}
           />
         </Canvas>
       </Suspense>
