@@ -26,7 +26,7 @@ const singleproduct = () => {
   const [currentImages, setCurrentImages] = useState([]);
   const [showLoginPopup, setshowLoginPopup] = useState(false);
   const [buttonloading, setButtonloading] = useState(0);
-  const [image, setImage] = useState("/textures/one.JPG");
+  const [image, setImage] = useState("/textures/one.jpg");
   const navigate = useNavigate();
 
   const togglefav = async () => {
@@ -354,10 +354,10 @@ const singleproduct = () => {
             "/models/jacket.glb",
           ]}
           otherTextures={[
-            "/textures/two.JPG",
-            "/textures/three.JPG",
-            "/textures/four.JPG",
-            "/textures/five.JPG",
+            "/textures/two.jpg",
+            "/textures/three.jpg",
+            "/textures/four.jpg",
+            "/textures/five.jpg",
           ]}
         />
         <div className="modelButtons">
@@ -395,34 +395,34 @@ const singleproduct = () => {
             className="color"
             style={{ backgroundColor: "blue" }}
             onClick={() => {
-              setImage("/textures/one.JPG");
+              setImage("/textures/one.jpg");
             }}
           ></div>
           <div
             className="color"
             style={{ backgroundColor: "green" }}
             onClick={() => {
-              setImage("/textures/two.JPG");
+              setImage("/textures/two.jpg");
             }}
           ></div>
           <div
             className="color"
             style={{ backgroundColor: "brown" }}
             onClick={() => {
-              setImage("/textures/three.JPG");
+              setImage("/textures/three.jpg");
             }}
           ></div>
           <div
             className="color"
             onClick={() => {
-              setImage("/textures/four.JPG");
+              setImage("/textures/four.jpg");
             }}
             style={{ backgroundColor: "black" }}
           ></div>
           <div
             className="color"
             onClick={() => {
-              setImage("/textures/five.JPG");
+              setImage("/textures/five.jpg");
             }}
             style={{ backgroundColor: "burlywood" }}
           ></div>
