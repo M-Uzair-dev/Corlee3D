@@ -3,6 +3,7 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, useTexture, Center } from "@react-three/drei";
 import * as THREE from "three";
 import { TailSpin } from "react-loader-spinner";
+import "./model.css";
 
 // Enable Three.js caching system for textures and GLB files
 THREE.Cache.enabled = true;
@@ -179,17 +180,17 @@ const FabricModel = ({
               alignItems: "center",
               justifyContent: "center",
               gap: "10px",
+              background: "rgba(255, 255, 255, 0.1)",
             }}
           >
-            <TailSpin
-              height="60"
-              width="60"
-              color="#000"
-              ariaLabel="tail-spin-loading"
-              radius="0.1"
-              style={{ scale: 0.3 }}
-            />
-            Loading...
+            <div class="spinner">
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+              <div></div>
+            </div>
           </div>
         }
       >
