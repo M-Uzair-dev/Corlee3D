@@ -57,3 +57,80 @@
 .spinner {
   scale: 0.9;
 }
+.wrapper {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 10000000000000000000000000000000000000000000000000000000;
+  background-color: white;
+}
+.wrapper *:not(p) {
+  font-family: "Artnoova", sans-serif !important;
+}
+.wrapper h1 {
+  font-size: 50px;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+.wrapper p {
+  width: 50%;
+  text-align: center;
+  margin: 30px 0 40px 0;
+  color: rgb(83, 83, 83);
+  font-size: 18px;
+}
+.wrapper button {
+  padding: 15px 40px;
+  font-size: 20px;
+  border-radius: 1000px;
+  background-color: black;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.modelicon img {
+  width: 100px;
+  margin-bottom: 20px;
+}
+@media (max-width: 1000px) {
+  .wrapper h1,
+  .wrapper p {
+    width: 90%;
+  }
+}
+@media (max-width: 713px) {
+  .wrapper h1 {
+    font-size: 40px;
+  }
+  .wrapper p {
+    font-size: 16px;
+    margin: 20px 0 20px 0;
+  }
+}
+@media (max-width: 580px) {
+  .wrapper h1 {
+    font-size: 30px;
+  }
+  .wrapper p {
+    font-size: 14px;
+    margin: 20px 0 20px 0;
+  }
+  .wrapper button {
+    font-size: 17px;
+  }
+  .wrapper img {
+    width: 70px;
+  }
+}
+@media (max-width: 429px) {
+  .wrapper h1 {
+    width: 270px;
+  }
+}

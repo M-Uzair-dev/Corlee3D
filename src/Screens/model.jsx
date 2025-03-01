@@ -77,7 +77,7 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
   return (
     <>
       {/* Base ambient light */}
-      <ambientLight intensity={0.4} />
+      <ambientLight intensity={0.7} />
 
       {/* Directional light as key light */}
       <directionalLight
@@ -122,6 +122,7 @@ const FabricModel = ({
   scale,
   otherModels,
   otherTextures,
+  loadingText,
 }) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
   const preloaded = useRef(new Set());
@@ -179,6 +180,7 @@ const FabricModel = ({
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
+              flexDirection: "column",
               gap: "10px",
               background: "rgba(255, 255, 255, 0.1)",
             }}
@@ -191,6 +193,8 @@ const FabricModel = ({
               <div></div>
               <div></div>
             </div>
+
+            <p style={{ fontSize: "17px" }}>{loadingText}</p>
           </div>
         }
       >

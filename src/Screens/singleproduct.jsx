@@ -10,6 +10,7 @@ import Imagesinproduct from "./Imagesinproduct";
 import { toast } from "sonner";
 import Model from "./model.jsx";
 import "../index.css";
+import "./model.css";
 
 const singleproduct = () => {
   const [model, setModel] = useState("/models/shirt.glb");
@@ -38,6 +39,8 @@ const singleproduct = () => {
       setshowLoginPopup(true);
     }
   };
+
+  const [hide, setHide] = useState(true);
 
   const loadFabricData = async () => {
     try {
@@ -105,6 +108,34 @@ const singleproduct = () => {
       toast.error("Something went wrong");
     }
   };
+
+  const [loadingText, setLoadingText] = useState("Initializing...");
+
+  const texts = [
+    "Loading assets...",
+    "Assembling the scene...",
+    "Polishing details...",
+    "Finalizing textures...",
+    "Rendering the scene...",
+    "Almost there...",
+  ];
+
+  useEffect(() => {
+    if (hide) return;
+    let index = 0;
+    const intervals = [2000, 3000, 400, 3000, 4000, 300]; // Custom intervals
+
+    const interval = setInterval(() => {
+      if (index < texts.length) {
+        setLoadingText(texts[index]);
+        index++;
+      } else {
+        clearInterval(interval);
+      }
+    }, intervals[index]);
+
+    return () => clearInterval(interval);
+  }, [hide]);
 
   return (
     <div>
@@ -336,6 +367,26 @@ const singleproduct = () => {
       </div>
 
       <div className="modelDiv">
+        {hide && (
+          <div className="wrapper">
+            <div className="modelicon">
+              <img src="/3d.png" alt="3d model icon" />
+            </div>
+            <h1>Preview This Fabric in 3D</h1>
+            <p>
+              Explore how this fabric looks on a shirt, pants, or other clothing
+              items with our interactive 3D model. Rotate and view it from
+              different angles to see every detail before making a choice.
+            </p>
+            <button
+              onClick={() => {
+                setHide(false);
+              }}
+            >
+              View in 3D
+            </button>
+          </div>
+        )}
         <Model
           modelUrl={model}
           textureUrl={image}
@@ -346,7 +397,7 @@ const singleproduct = () => {
               ? 2.5
               : model === "/models/pants.glb"
               ? 2
-              : 2.5
+              : 3
           }
           otherModels={[
             "/models/shorts.glb",
@@ -359,6 +410,7 @@ const singleproduct = () => {
             "/textures/four.jpg",
             "/textures/five.jpg",
           ]}
+          loadingText={loadingText}
         />
         <div className="modelButtons">
           <button
