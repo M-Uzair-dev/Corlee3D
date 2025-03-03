@@ -9,6 +9,7 @@
   /* overflow: hidden; */
   position: relative;
   overflow: hidden;
+  cursor: grab;
 }
 .modelButtons {
   position: absolute;
