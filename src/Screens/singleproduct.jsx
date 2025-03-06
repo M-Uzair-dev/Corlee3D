@@ -471,13 +471,13 @@ const singleproduct = () => {
             }}
             style={{ backgroundColor: "black" }}
           ></div>
-          <div
+{/*           <div
             className="color"
             onClick={() => {
               setImage("/textures/five.jpg");
             }}
             style={{ backgroundColor: "burlywood" }}
-          ></div>
+          ></div> */}
         </div>
       </div>
       <StylishProductDisplay
