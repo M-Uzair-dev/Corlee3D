@@ -27,7 +27,10 @@ const singleproduct = () => {
   const [currentImages, setCurrentImages] = useState([]);
   const [showLoginPopup, setshowLoginPopup] = useState(false);
   const [buttonloading, setButtonloading] = useState(0);
-  const [image, setImage] = useState("/textures/one.jpg");
+  const [image, setImage] = useState();
+  const [colors, setColors] = useState([]);
+  const [textures, setTextures] = useState([]);
+
   const navigate = useNavigate();
 
   const togglefav = async () => {
@@ -48,9 +51,15 @@ const singleproduct = () => {
       setLoading(true);
 
       const response = await api.get(`/fabrics/${productid}/`);
+      console.log("WE GOT RESPONSE : ", response);
       if (response.status === 200) {
         setProduct(response.data);
         setcolor(response.data.color_images[0].color);
+        setColors(response.data.color_images.map((item) => item.color));
+        setTextures(
+          response.data.color_images.map((item) => item.model_image_url)
+        );
+        setImage(response?.data?.color_images[0]?.model_image_url);
         setCurrentImages(response.data.color_images[0]);
         setLoading(false);
       } else {
@@ -208,7 +217,13 @@ const singleproduct = () => {
                   </svg>
                 )}
               </button>
-              <h1>{product.item_code}</h1>
+              <h1
+                onClick={() => {
+                  console.log(colors);
+                }}
+              >
+                {product.item_code}
+              </h1>
               <p className="functionaltext">Functional</p>
               <p className="functionaltext2">{product.description}</p>
               <p className="colorsinproduct">Colors</p>
@@ -389,7 +404,7 @@ const singleproduct = () => {
         )}
         <Model
           modelUrl={model}
-          textureUrl={image}
+          textureUrl={image || ""}
           scale={
             model === "/models/jacket.glb"
               ? 0.7
@@ -404,80 +419,53 @@ const singleproduct = () => {
             "/models/pants.glb",
             "/models/jacket.glb",
           ]}
-          otherTextures={[
-            "/textures/two.jpg",
-            "/textures/three.jpg",
-            "/textures/four.jpg",
-            "/textures/five.jpg",
-          ]}
+          otherTextures={textures || []}
           loadingText={loadingText}
         />
-        <div className="modelButtons">
-          <button
-            onClick={() => {
-              setModel("/models/shorts.glb");
-            }}
-          >
-            <img src="/modelImages/shorts.png" alt="" />
-          </button>
-          <button
-            onClick={() => {
-              setModel("/models/pants.glb");
-            }}
-          >
-            <img src="/modelImages/jeans.png" alt="" />
-          </button>
-          <button
-            onClick={() => {
-              setModel("/models/shirt.glb");
-            }}
-          >
-            <img src="/modelImages/tshirt.png" alt="" />
-          </button>
-          <button
-            onClick={() => {
-              setModel("/models/jacket.glb");
-            }}
-          >
-            <img src="/modelImages/jacket.png" alt="" />
-          </button>
-        </div>
-        <div className="modelColors">
-          <div
-            className="color"
-            style={{ backgroundColor: "blue" }}
-            onClick={() => {
-              setImage("/textures/one.jpg");
-            }}
-          ></div>
-          <div
-            className="color"
-            style={{ backgroundColor: "green" }}
-            onClick={() => {
-              setImage("/textures/two.jpg");
-            }}
-          ></div>
-          <div
-            className="color"
-            style={{ backgroundColor: "brown" }}
-            onClick={() => {
-              setImage("/textures/three.jpg");
-            }}
-          ></div>
-          <div
-            className="color"
-            onClick={() => {
-              setImage("/textures/four.jpg");
-            }}
-            style={{ backgroundColor: "black" }}
-          ></div>
-          <div
-            className="color"
-            onClick={() => {
-              setImage("/textures/five.jpg");
-            }}
-            style={{ backgroundColor: "burlywood" }}
-          ></div>
+        <div className="bottomElements">
+          <div className="modelButtons">
+            <button
+              onClick={() => {
+                setModel("/models/shorts.glb");
+              }}
+            >
+              <img src="/modelImages/shorts.png" alt="" />
+            </button>
+            <button
+              onClick={() => {
+                setModel("/models/pants.glb");
+              }}
+            >
+              <img src="/modelImages/jeans.png" alt="" />
+            </button>
+            <button
+              onClick={() => {
+                setModel("/models/shirt.glb");
+              }}
+            >
+              <img src="/modelImages/tshirt.png" alt="" />
+            </button>
+            <button
+              onClick={() => {
+                setModel("/models/jacket.glb");
+              }}
+            >
+              <img src="/modelImages/jacket.png" alt="" />
+            </button>
+          </div>
+          <div className="modelColors">
+            {colors?.map((item, index) => {
+              return (
+                <div
+                  className="color"
+                  style={{ backgroundColor: item }}
+                  onClick={() => {
+                    setImage(textures[index]);
+                  }}
+                ></div>
+              );
+            })}
+          </div>
         </div>
       </div>
       <StylishProductDisplay

@@ -12,9 +12,6 @@
   cursor: grab;
 }
 .modelButtons {
-  position: absolute;
-  bottom: 30px;
-  left: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -39,9 +36,6 @@
   scale: 1.01;
 }
 .modelColors {
-  position: absolute;
-  bottom: 30px;
-  right: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,4 +54,37 @@
 }
 .loaderSpinner {
   scale: 0.5;
+}
+.wrapper {
+  cursor: default;
+}
+
+.bottomElements {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between; /* Default: one on left, one on right */
+  padding: 10px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+  gap: 20px; /* Adjust space between wrapped elements */
+}
+
+.bottomElements > * {
+  white-space: nowrap; /* Prevents elements from stretching */
+}
+
+@media (max-width: 500px) {
+  /* Adjust breakpoint as needed */
+  .bottomElements {
+    justify-content: center; /* Centers when wrapped */
+  }
+
+  .bottomElements > * {
+    width: auto; /* Keeps width based on content */
+    text-align: center; /* Aligns text when stacked */
+  }
 }

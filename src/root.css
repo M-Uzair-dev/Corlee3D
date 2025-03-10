@@ -2708,6 +2708,8 @@ body {
   height: 500px;
   background-color: rgba(0, 0, 0, 0.116);
   border-radius: 35px;
+  object-fit: cover;
+  background-position: center;
 }
 @media (max-width: 1000px) {
   .bigimage {
@@ -3228,6 +3230,7 @@ body {
 .product-card-container3 {
   background-size: cover;
   background-repeat: no-repeat;
+  background-position: center;
 }
 .svg-container2 {
   display: flex;
