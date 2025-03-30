@@ -40,9 +40,12 @@ function TicketInfoSection(props) {
     try {
       setLoading(true);
       const res = await api.get(`/contact-requests/${props.id}/`);
-      console.log(res);
+      console.log("Ticket Info Response :", res);
       if (res.status === 200) {
-        setData(res.data);
+        setData({
+          contact_request: res.data,
+          user: res.data.user,
+        });
         setLoading(false);
       } else {
         toast.error("Something went wrong");
@@ -202,7 +205,7 @@ function TicketInfoSection(props) {
                         <div className="productdetailsdiv">
                           <div className="colordiv">
                             <p className="color">Color </p>
-                            {data?.contact_request?.related_fabric?.color_images.map(
+                            {data?.contact_request?.related_fabric?.color_images?.map(
                               (e, i) => (
                                 <div
                                   className="colorcircle"

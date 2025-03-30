@@ -6324,3 +6324,10 @@ button:hover:not(.button-with-icon2) {
   line-height: 1.4;
   letter-spacing: 0;
 }
+.header-title {
+  max-width: calc(100vw - 250px);
+}
+.content-container *{
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+}

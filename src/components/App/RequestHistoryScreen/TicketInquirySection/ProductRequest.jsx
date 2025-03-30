@@ -60,7 +60,7 @@ const ProductRequest = (props) => {
               : { justifyContent: "flex-start" }
           }
         >
-          {images.slice(0, 6 - counter).map((image, index) => (
+          {images.slice(0, 6 - counter)?.map((image, index) => (
             <div className="productimagediv">
               <div
                 className="imageofproduct"

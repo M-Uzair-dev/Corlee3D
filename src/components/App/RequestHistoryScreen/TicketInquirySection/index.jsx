@@ -42,10 +42,10 @@ function TicketInquirySection({ ticketInquiriesData }) {
     try {
       setLoading(true);
       const response = await api.get("/contact-requests/");
-      console.log(response);
+      console.log("History Response :", response);
       if (response.status === 200) {
-        if (response.data.contact_requests.length > 0) {
-          setData(response.data.contact_requests);
+        if (response?.data?.results?.length > 0) {
+          setData(response.data.results);
           setNoData(false);
           setLoading(false);
         } else {
@@ -59,7 +59,7 @@ function TicketInquirySection({ ticketInquiriesData }) {
     } catch (e) {
       console.error(e);
       setLoading(false);
-      navigate("/");
+      // navigate("/");
     }
   };
   useEffect(() => {
@@ -110,7 +110,7 @@ function TicketInquirySection({ ticketInquiriesData }) {
             {" "}
             <div className="resultsfound">
               <p>
-                {data.length} {data.length > 1 ? "results" : "result"} found
+                {data?.length} {data?.length > 1 ? "results" : "result"} found
               </p>
             </div>
             {data.map((item, index) =>

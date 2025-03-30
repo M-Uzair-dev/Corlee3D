@@ -222,9 +222,9 @@ const singleproduct = () => {
                   console.log(colors);
                 }}
               >
-                {product.item_code}
+                {product.title}
               </h1>
-              <p className="functionaltext">Functional</p>
+              <p className="functionaltext">{product.product_category_name}</p>
               <p className="functionaltext2">{product.description}</p>
               <p className="colorsinproduct">Colors</p>
               <div className="colorsinproduct">
@@ -415,7 +415,7 @@ const singleproduct = () => {
               : 3
           }
           otherModels={[
-            "/models/shorts.glb",
+            // "/models/shorts.glb",
             "/models/pants.glb",
             "/models/jacket.glb",
           ]}
@@ -424,13 +424,13 @@ const singleproduct = () => {
         />
         <div className="bottomElements">
           <div className="modelButtons">
-            <button
+            {/* <button
               onClick={() => {
                 setModel("/models/shorts.glb");
               }}
             >
               <img src="/modelImages/shorts.png" alt="" />
-            </button>
+            </button> */}
             <button
               onClick={() => {
                 setModel("/models/pants.glb");

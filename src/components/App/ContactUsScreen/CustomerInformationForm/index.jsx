@@ -23,9 +23,6 @@ function CustomerInformationForm(props) {
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
-  const handleoptions = (value) => {
-    setData({ ...data, subject: value });
-  };
   const handlesubmit = async () => {
     try {
       if (!localStorage.getItem("token")) {
@@ -39,6 +36,7 @@ function CustomerInformationForm(props) {
         return;
       }
       setLoading(true);
+      console.log("SENDING DATA :", data);
       const res = await api.post("/contact/", { ...data });
       console.log(res);
       if (res.status === 200) {
@@ -113,7 +111,7 @@ function CustomerInformationForm(props) {
               <input
                 id="email"
                 placeholder="i.e johmdoe@email.com"
-                type="text"
+                type="email"
                 name="email"
                 onChange={handleChange}
                 value={data.email}

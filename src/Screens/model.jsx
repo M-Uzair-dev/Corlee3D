@@ -144,9 +144,9 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText }) => {
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
       <Suspense
-        ffallback={
+        fallback={
           <div className="loading-container">
-            <div className="spinner">
+            <div className="spinner-in-model">
               <div></div>
               <div></div>
               <div></div>
