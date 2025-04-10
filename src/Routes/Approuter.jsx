@@ -29,13 +29,6 @@ import Thankyou from "../Screens/Thankyou";
 import ProductRequest from "../Screens/ProductRequest";
 import Dashboard from "../Screens/Dashboard";
 
-// Import edit pages
-import EditFabricPage from "../pages/EditPages/EditFabricPage";
-import EditColorCategoryPage from "../pages/EditPages/EditColorCategoryPage";
-import EditFabricCategoryPage from "../pages/EditPages/EditFabricCategoryPage";
-import EditUserPage from "../pages/EditPages/EditUserPage";
-import EditBlogPage from "../pages/EditPages/EditBlogPage";
-
 function Approuter() {
   return (
     <Router>
@@ -62,7 +55,6 @@ function Approuter() {
         <Route path="/" element={<Token />}>
           <Route path="/" element={<Home />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
-
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/addCompanyDetails" element={<Continiewithgoogle />} />
