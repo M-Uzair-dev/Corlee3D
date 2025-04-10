@@ -49,7 +49,7 @@ const DashboardHome = () => {
 
   const categoryData = {
     labels: analytics.top_ordered_categories.map(
-      (category) => category.category_name || "Unknown"
+      (category) => category.fabric__product_category__name || "Unknown"
     ),
     datasets: [
       {
@@ -58,7 +58,7 @@ const DashboardHome = () => {
           (category) => category.total_orders
         ),
         backgroundColor: "#34a853",
-        maxBarThickness: 40,
+        maxBarThickness: 30,
       },
     ],
   };
