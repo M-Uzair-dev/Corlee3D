@@ -6327,7 +6327,14 @@ button:hover:not(.button-with-icon2) {
 .header-title {
   max-width: calc(100vw - 250px);
 }
-.content-container *{
+.content-container * {
   margin-top: 0 !important;
   margin-bottom: 0 !important;
+}
+.chart-card {
+  flex: 1;
+  max-width: 100%;
+}
+.chart-grid {
+  flex-direction: column;
 }
