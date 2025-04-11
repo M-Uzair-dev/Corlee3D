@@ -10,33 +10,39 @@ const ContactRequests = () => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [requestToDelete, setRequestToDelete] = useState(null);
-  const [requestsData, setRequestsData] = useState({
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [contactRequestsData, setContactRequestsData] = useState({
     fields: {
-      id: "ID",
-      request_type: "Type",
-      subject: "Subject",
-      company_name: "Company",
+      name: "Name",
       email: "Email",
+      phone: "Phone",
+      message: "Message",
       status: "Status",
-      actions: "Actions",
+      created_at: "Created At",
     },
     data: [],
     isLoading: true,
     options: {
-      edit: false,
-      delete: false,
-      view: false, // We'll handle custom actions
+      create: false,
+      edit: true,
+      delete: true,
+      view: true,
     },
   });
 
-  useEffect(() => {
-    fetchRequests();
-  }, []);
+  const ITEMS_PER_PAGE = 8;
 
-  const fetchRequests = async () => {
+  useEffect(() => {
+    fetchContactRequests();
+  }, [page]);
+
+  const fetchContactRequests = async () => {
     try {
-      setRequestsData((prev) => ({ ...prev, isLoading: true }));
-      const response = await api.get("/contact-requests/public/");
+      setContactRequestsData((prev) => ({ ...prev, isLoading: true }));
+      const response = await api.get(
+        `/contact-requests/?page=${page}&page_size=${ITEMS_PER_PAGE}`
+      );
       console.log("Contact requests response:", response.data);
 
       const transformedData = response.data.results.map((request) => ({
@@ -80,7 +86,7 @@ const ContactRequests = () => {
         ),
       }));
 
-      setRequestsData((prev) => ({
+      setContactRequestsData((prev) => ({
         ...prev,
         data: transformedData,
         isLoading: false,
@@ -88,7 +94,7 @@ const ContactRequests = () => {
     } catch (error) {
       console.error("Error fetching contact requests:", error);
       toast.error("Failed to load contact requests");
-      setRequestsData((prev) => ({ ...prev, isLoading: false }));
+      setContactRequestsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
@@ -109,7 +115,7 @@ const ContactRequests = () => {
     try {
       // The actual deletion is handled by the DeleteModal component
       // We just need to refresh the list after successful deletion
-      fetchRequests();
+      fetchContactRequests();
     } catch (error) {
       console.error("Error handling request deletion:", error);
       toast.error("Failed to complete request deletion");
@@ -121,10 +127,10 @@ const ContactRequests = () => {
       <PageContent
         title="Contact Requests"
         icon={<FaEnvelope />}
-        data={requestsData}
+        data={contactRequestsData}
         page="contactRequest"
         onDelete={handleDeleteRequest}
-        onRefresh={fetchRequests}
+        onRefresh={fetchContactRequests}
       />
 
       <DeleteModal

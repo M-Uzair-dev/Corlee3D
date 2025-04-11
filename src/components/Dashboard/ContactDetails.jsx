@@ -7,35 +7,38 @@ import { useNavigate } from "react-router-dom";
 
 const ContactDetails = () => {
   const navigate = useNavigate();
-  const [contactData, setContactData] = useState({
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [contactDetailsData, setContactDetailsData] = useState({
     fields: {
-      phone: "Phone",
+      name: "Name",
       email: "Email",
+      phone: "Phone",
       address: "Address",
-      city: "City",
-      county: "County",
-      postal_code: "Postal Code",
-      country: "Country",
-      latitude: "Latitude",
-      longitude: "Longitude",
-      facebook: "Facebook",
-      instagram: "Instagram",
-      whatsapp: "WhatsApp",
-      line: "Line",
-      actions: "Actions",
+      created_at: "Created At",
     },
     data: [],
     isLoading: true,
+    options: {
+      create: false,
+      edit: true,
+      delete: true,
+      view: true,
+    },
   });
+
+  const ITEMS_PER_PAGE = 8;
 
   useEffect(() => {
     fetchContactDetails();
-  }, []);
+  }, [page]);
 
   const fetchContactDetails = async () => {
     try {
-      setContactData((prev) => ({ ...prev, isLoading: true }));
-      const response = await api.get("/contact-details/");
+      setContactDetailsData((prev) => ({ ...prev, isLoading: true }));
+      const response = await api.get(
+        `/contact-details/?page=${page}&page_size=${ITEMS_PER_PAGE}`
+      );
       console.log("Contact details response:", response.data);
 
       const transformedData = response.data.results.map((item) => ({
@@ -66,7 +69,7 @@ const ContactDetails = () => {
         ),
       }));
 
-      setContactData((prev) => ({
+      setContactDetailsData((prev) => ({
         ...prev,
         data: transformedData,
         isLoading: false,
@@ -74,7 +77,7 @@ const ContactDetails = () => {
     } catch (error) {
       console.error("Error fetching contact details:", error);
       toast.error("Failed to load contact details");
-      setContactData((prev) => ({ ...prev, isLoading: false }));
+      setContactDetailsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
@@ -86,7 +89,7 @@ const ContactDetails = () => {
     <PageContent
       title="Contact Details"
       icon={<FaAddressCard />}
-      data={contactData}
+      data={contactDetailsData}
       page="contactDetails"
       onRefresh={fetchContactDetails}
     />

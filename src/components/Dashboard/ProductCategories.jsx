@@ -1,25 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { FaShoppingCart, FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import { FaBox, FaEdit, FaTrash } from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
 
-const Orders = () => {
+const ProductCategories = () => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [orderToDelete, setOrderToDelete] = useState(null);
+  const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
-  const [ordersData, setOrdersData] = useState({
+  const [categoriesData, setCategoriesData] = useState({
     fields: {
-      order_number: "Order Number",
-      customer_name: "Customer Name",
-      total_amount: "Total Amount",
-      status: "Status",
-      created_at: "Order Date",
+      name: "Category Name",
+      description: "Description",
     },
     data: [],
     isLoading: true,
@@ -27,51 +24,38 @@ const Orders = () => {
       create: true,
       edit: true,
       delete: true,
-      view: true,
     },
   });
 
   useEffect(() => {
-    fetchOrders();
+    fetchCategories();
   }, [currentPage, pageSize]);
 
-  const fetchOrders = async () => {
+  const fetchCategories = async () => {
     try {
-      setOrdersData((prev) => ({ ...prev, isLoading: true }));
+      setCategoriesData((prev) => ({ ...prev, isLoading: true }));
       const response = await api.get(
-        `/orders/?page=${currentPage}&page_size=${pageSize}`
+        `/product-categories/?page=${currentPage}&page_size=${pageSize}`
       );
-      console.log("Orders response:", response.data);
+      console.log("Categories response:", response.data);
 
-      const transformedData = response.data.results.map((order) => ({
-        id: order.id,
-        order_number: order.order_number || "N/A",
-        customer_name: order.customer_name || "Unknown Customer",
-        total_amount: `$${order.total_amount?.toFixed(2) || "0.00"}`,
-        status: order.status || "Pending",
-        created_at: order.created_at
-          ? new Date(order.created_at).toLocaleDateString()
-          : "N/A",
+      const transformedData = response.data.results.map((category) => ({
+        id: category.id,
+        name: category.name || "Unnamed Category",
+        description: category.description || "No description",
         actions: (
           <div className="action-cell">
             <button
-              className="action-btn view"
-              onClick={() => handleViewOrder(order.id)}
-              title="View Order"
-            >
-              <FaEye />
-            </button>
-            <button
               className="action-btn edit"
-              onClick={() => handleEditOrder(order.id)}
-              title="Edit Order"
+              onClick={() => handleEditCategory(category.id)}
+              title="Edit Category"
             >
               <FaEdit />
             </button>
             <button
               className="action-btn delete"
-              onClick={() => handleShowDeleteModal(order.id)}
-              title="Delete Order"
+              onClick={() => handleShowDeleteModal(category.id)}
+              title="Delete Category"
             >
               <FaTrash />
             </button>
@@ -80,33 +64,29 @@ const Orders = () => {
       }));
 
       setTotalCount(response.data.count);
-      setOrdersData((prev) => ({
+      setCategoriesData((prev) => ({
         ...prev,
         data: transformedData,
         isLoading: false,
       }));
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      toast.error("Failed to load orders");
-      setOrdersData((prev) => ({ ...prev, isLoading: false }));
+      console.error("Error fetching categories:", error);
+      toast.error("Failed to load categories");
+      setCategoriesData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
-  const handleViewOrder = (id) => {
-    navigate(`/dashboard/orders/${id}`);
-  };
-
-  const handleEditOrder = (id) => {
-    navigate(`/dashboard/orders/edit/${id}`);
+  const handleEditCategory = (id) => {
+    navigate(`/dashboard/product-categories/edit/${id}`);
   };
 
   const handleShowDeleteModal = (id) => {
-    setOrderToDelete(id);
+    setCategoryToDelete(id);
     setShowDeleteModal(true);
   };
 
-  const handleDeleteOrder = () => {
-    fetchOrders();
+  const handleDeleteCategory = () => {
+    fetchCategories();
   };
 
   const handlePageChange = (newPage) => {
@@ -121,12 +101,12 @@ const Orders = () => {
   return (
     <>
       <PageContent
-        title="Orders"
-        icon={<FaShoppingCart />}
-        data={ordersData}
-        page="order"
-        onDelete={handleDeleteOrder}
-        onRefresh={fetchOrders}
+        title="Product Categories"
+        icon={<FaBox />}
+        data={categoriesData}
+        page="productCategory"
+        onDelete={handleDeleteCategory}
+        onRefresh={fetchCategories}
         pagination={{
           currentPage,
           pageSize,
@@ -139,9 +119,9 @@ const Orders = () => {
       <DeleteModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        itemId={orderToDelete}
-        itemType="order"
-        onDeleteSuccess={handleDeleteOrder}
+        itemId={categoryToDelete}
+        itemType="productCategory"
+        onDeleteSuccess={handleDeleteCategory}
       />
 
       <style jsx>{`
@@ -165,10 +145,6 @@ const Orders = () => {
           color: #333;
         }
 
-        .action-btn.view:hover {
-          color: #4285f4;
-        }
-
         .action-btn.edit:hover {
           color: #fbbc05;
         }
@@ -181,4 +157,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default ProductCategories;

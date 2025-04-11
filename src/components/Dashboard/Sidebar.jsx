@@ -64,7 +64,7 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
           <span className="sidebar-logo-icon">
             <FaChartBar />
           </span>
-          {isSidebarOpen && <span>Dashboard</span>}
+          {isSidebarOpen && <span>Corlee</span>}
         </div>
         {!isMobile && (
           <button className="sidebar-toggle" onClick={toggleSidebar}>

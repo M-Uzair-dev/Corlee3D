@@ -10,21 +10,24 @@ const Fabrics = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [fabricsData, setFabricsData] = useState({
     fields: {
-      title: "string",
-      category: "string",
-      "Item Code": "string",
-      "Hot Selling": "boolean",
+      name: "Name",
+      description: "Description",
+      price: "Price",
+      stock: "Stock",
+      category: "Category",
+      status: "Status",
     },
     data: [],
     isLoading: true,
     options: {
+      create: true,
       edit: true,
       delete: true,
       view: true,
     },
   });
 
-  const ITEMS_PER_PAGE = 8; // We're retrieving 8 items per page
+  const ITEMS_PER_PAGE = 8;
 
   useEffect(() => {
     fetchFabrics();
@@ -33,7 +36,9 @@ const Fabrics = () => {
   const fetchFabrics = async () => {
     try {
       setFabricsData((prev) => ({ ...prev, isLoading: true }));
-      const response = await api.get(`/fabrics/?page=${page}`);
+      const response = await api.get(
+        `/fabrics/?page=${page}&page_size=${ITEMS_PER_PAGE}`
+      );
       console.log(response.data);
       if (response.data.results) {
         // Transform API data to match table structure

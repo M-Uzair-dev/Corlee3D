@@ -28,6 +28,7 @@ import Token from "../Screens/Token";
 import Thankyou from "../Screens/Thankyou";
 import ProductRequest from "../Screens/ProductRequest";
 import Dashboard from "../Screens/Dashboard";
+import DashboardPassword from "../Screens/DashboardPassword";
 
 function Approuter() {
   return (
@@ -54,6 +55,7 @@ function Approuter() {
         </Route>
         <Route path="/" element={<Token />}>
           <Route path="/" element={<Home />} />
+          <Route path="/dashboard-password" element={<DashboardPassword />} />
           <Route path="/dashboard/*" element={<Dashboard />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />

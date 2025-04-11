@@ -1,30 +1,31 @@
 import React, { useState, useEffect } from "react";
-import { FaShoppingCart, FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import { FaEnvelope, FaEye, FaEdit, FaTrash } from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
 
-const Orders = () => {
+const PublicContactRequests = () => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [orderToDelete, setOrderToDelete] = useState(null);
+  const [requestToDelete, setRequestToDelete] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
-  const [ordersData, setOrdersData] = useState({
+  const [requestsData, setRequestsData] = useState({
     fields: {
-      order_number: "Order Number",
-      customer_name: "Customer Name",
-      total_amount: "Total Amount",
+      name: "Name",
+      email: "Email",
+      subject: "Subject",
+      message: "Message",
       status: "Status",
-      created_at: "Order Date",
+      created_at: "Date",
     },
     data: [],
     isLoading: true,
     options: {
-      create: true,
+      create: false,
       edit: true,
       delete: true,
       view: true,
@@ -32,46 +33,47 @@ const Orders = () => {
   });
 
   useEffect(() => {
-    fetchOrders();
+    fetchRequests();
   }, [currentPage, pageSize]);
 
-  const fetchOrders = async () => {
+  const fetchRequests = async () => {
     try {
-      setOrdersData((prev) => ({ ...prev, isLoading: true }));
+      setRequestsData((prev) => ({ ...prev, isLoading: true }));
       const response = await api.get(
-        `/orders/?page=${currentPage}&page_size=${pageSize}`
+        `/contact-requests/public/?page=${currentPage}&page_size=${pageSize}`
       );
-      console.log("Orders response:", response.data);
+      console.log("Public contact requests response:", response.data);
 
-      const transformedData = response.data.results.map((order) => ({
-        id: order.id,
-        order_number: order.order_number || "N/A",
-        customer_name: order.customer_name || "Unknown Customer",
-        total_amount: `$${order.total_amount?.toFixed(2) || "0.00"}`,
-        status: order.status || "Pending",
-        created_at: order.created_at
-          ? new Date(order.created_at).toLocaleDateString()
-          : "N/A",
+      const transformedData = response.data.results.map((request) => ({
+        id: request.id,
+        name: request.name || "Anonymous",
+        email: request.email || "No email",
+        subject: request.subject || "No subject",
+        message: request.message || "No message",
+        status: request.status || "Pending",
+        created_at: request.created_at
+          ? new Date(request.created_at).toLocaleString()
+          : "Unknown",
         actions: (
           <div className="action-cell">
             <button
               className="action-btn view"
-              onClick={() => handleViewOrder(order.id)}
-              title="View Order"
+              onClick={() => handleViewRequest(request.id)}
+              title="View Request"
             >
               <FaEye />
             </button>
             <button
               className="action-btn edit"
-              onClick={() => handleEditOrder(order.id)}
-              title="Edit Order"
+              onClick={() => handleEditRequest(request.id)}
+              title="Edit Request"
             >
               <FaEdit />
             </button>
             <button
               className="action-btn delete"
-              onClick={() => handleShowDeleteModal(order.id)}
-              title="Delete Order"
+              onClick={() => handleShowDeleteModal(request.id)}
+              title="Delete Request"
             >
               <FaTrash />
             </button>
@@ -80,33 +82,33 @@ const Orders = () => {
       }));
 
       setTotalCount(response.data.count);
-      setOrdersData((prev) => ({
+      setRequestsData((prev) => ({
         ...prev,
         data: transformedData,
         isLoading: false,
       }));
     } catch (error) {
-      console.error("Error fetching orders:", error);
-      toast.error("Failed to load orders");
-      setOrdersData((prev) => ({ ...prev, isLoading: false }));
+      console.error("Error fetching public contact requests:", error);
+      toast.error("Failed to load contact requests");
+      setRequestsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
-  const handleViewOrder = (id) => {
-    navigate(`/dashboard/orders/${id}`);
+  const handleViewRequest = (id) => {
+    navigate(`/dashboard/contact-requests/public/${id}`);
   };
 
-  const handleEditOrder = (id) => {
-    navigate(`/dashboard/orders/edit/${id}`);
+  const handleEditRequest = (id) => {
+    navigate(`/dashboard/contact-requests/public/edit/${id}`);
   };
 
   const handleShowDeleteModal = (id) => {
-    setOrderToDelete(id);
+    setRequestToDelete(id);
     setShowDeleteModal(true);
   };
 
-  const handleDeleteOrder = () => {
-    fetchOrders();
+  const handleDeleteRequest = () => {
+    fetchRequests();
   };
 
   const handlePageChange = (newPage) => {
@@ -121,12 +123,12 @@ const Orders = () => {
   return (
     <>
       <PageContent
-        title="Orders"
-        icon={<FaShoppingCart />}
-        data={ordersData}
-        page="order"
-        onDelete={handleDeleteOrder}
-        onRefresh={fetchOrders}
+        title="Public Contact Requests"
+        icon={<FaEnvelope />}
+        data={requestsData}
+        page="publicContactRequest"
+        onDelete={handleDeleteRequest}
+        onRefresh={fetchRequests}
         pagination={{
           currentPage,
           pageSize,
@@ -139,9 +141,9 @@ const Orders = () => {
       <DeleteModal
         isOpen={showDeleteModal}
         onClose={() => setShowDeleteModal(false)}
-        itemId={orderToDelete}
-        itemType="order"
-        onDeleteSuccess={handleDeleteOrder}
+        itemId={requestToDelete}
+        itemType="publicContactRequest"
+        onDeleteSuccess={handleDeleteRequest}
       />
 
       <style jsx>{`
@@ -181,4 +183,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default PublicContactRequests;

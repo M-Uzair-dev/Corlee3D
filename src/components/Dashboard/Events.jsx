@@ -10,11 +10,16 @@ function Events() {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [eventsData, setEventsData] = useState({
     fields: {
-      title: "Event Title",
-      date: "Date",
+      title: "Title",
+      description: "Description",
+      start_date: "Start Date",
+      end_date: "End Date",
       location: "Location",
+      status: "Status",
     },
     data: [],
     isLoading: true,
@@ -26,14 +31,18 @@ function Events() {
     },
   });
 
+  const ITEMS_PER_PAGE = 8;
+
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [page]);
 
   const fetchEvents = async () => {
     try {
       setEventsData((prev) => ({ ...prev, isLoading: true }));
-      const response = await api.get("/events/");
+      const response = await api.get(
+        `/events/?page=${page}&page_size=${ITEMS_PER_PAGE}`
+      );
       console.log("Events API response:", response.data);
 
       const formattedEvents = response?.data?.results?.map((event) => ({
@@ -70,6 +79,7 @@ function Events() {
         ),
       }));
 
+      setTotalPages(Math.ceil(response.data.count / ITEMS_PER_PAGE));
       setEventsData((prev) => ({
         ...prev,
         data: formattedEvents,
@@ -103,6 +113,10 @@ function Events() {
     navigate("/dashboard/events/create");
   };
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
   return (
     <>
       <PageContent
@@ -112,6 +126,11 @@ function Events() {
         page="event"
         onDelete={handleDeleteEvent}
         onRefresh={fetchEvents}
+        pagination={{
+          currentPage: page,
+          totalPages,
+          onPageChange: handlePageChange,
+        }}
       />
 
       <DeleteModal

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Routes, useLocation } from "react-router-dom";
+import { Route, Routes, useLocation, Navigate } from "react-router-dom";
 import { FaBars, FaTimes } from "react-icons/fa";
 import "./Dashboard.css";
 
@@ -121,6 +121,14 @@ const Dashboard = () => {
     if (path === "/dashboard/events/create") return "Create Event";
     return "Dashboard";
   };
+  const iseLoggedIn = localStorage.getItem("token") !== null;
+  const isAuthenticated = localStorage.getItem("theUserIsAdmin") == "ADMIN";
+  if (!iseLoggedIn) {
+    localStorage.removeItem("theUserIsAdmin");
+    return <Navigate to="/login" />;
+  } else if (!isAuthenticated) {
+    return <Navigate to="/dashboard-password" />;
+  }
 
   return (
     <div className="dashboard-container">
