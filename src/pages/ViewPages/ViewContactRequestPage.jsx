@@ -186,25 +186,27 @@ function ViewContactRequestPage() {
           <div className="view-field">
             <label>Name</label>
             <div className="input-style">
-              {requestData.name || "Not specified"}
+              {requestData.name || requestData.user.name || "Not specified"}
             </div>
           </div>
           <div className="view-field">
             <label>Company Name</label>
             <div className="input-style">
-              {requestData.company_name || "Not specified"}
+              {requestData.company_name ||
+                requestData.user.company_name ||
+                "Not specified"}
             </div>
           </div>
           <div className="view-field">
             <label>Email</label>
             <div className="input-style">
-              {requestData.email || "Not specified"}
+              {requestData.email || requestData.user.email || "Not specified"}
             </div>
           </div>
           <div className="view-field">
             <label>Phone</label>
             <div className="input-style">
-              {requestData.phone || "Not specified"}
+              {requestData.phone || requestData.user.phone || "Not specified"}
             </div>
           </div>
         </div>

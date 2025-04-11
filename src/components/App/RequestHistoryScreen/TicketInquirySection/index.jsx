@@ -44,8 +44,8 @@ function TicketInquirySection({ ticketInquiriesData }) {
       const response = await api.get("/contact-requests/");
       console.log("History Response :", response);
       if (response.status === 200) {
-        if (response?.data?.results?.length > 0) {
-          setData(response.data.results);
+        if (response?.data?.contact_requests?.length > 0) {
+          setData(response.data.contact_requests);
           setNoData(false);
           setLoading(false);
         } else {

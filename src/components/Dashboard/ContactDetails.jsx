@@ -26,12 +26,6 @@ const ContactDetails = () => {
     },
     data: [],
     isLoading: true,
-    options: {
-      create: false,
-      edit: false,
-      delete: false,
-      view: false,
-    },
   });
 
   useEffect(() => {

@@ -31,8 +31,6 @@ const PageContent = ({
         return `/dashboard/orders/create`;
       case "blogCategory":
         return `/dashboard/blog-categories/create`;
-      case "contactDetails":
-        return `/dashboard/contact-details/create`;
       case "contactRequest":
         return null;
       case "event":
@@ -69,7 +67,11 @@ const PageContent = ({
             options={{
               ...data.options,
               create:
-                page === "order" || page === "contactRequest" ? false : true,
+                page === "order" ||
+                title === "Contact Details" ||
+                title === "Contact Requests"
+                  ? false
+                  : true,
             }}
             page={page}
             onDelete={onDelete}

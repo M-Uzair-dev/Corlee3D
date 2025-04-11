@@ -30,10 +30,11 @@ function EditContactRequestPage() {
 
   const statusOptions = [
     { value: "new", label: "New" },
-    { value: "pending", label: "Pending" },
-    { value: "in_progress", label: "In Progress" },
-    { value: "resolved", label: "Resolved" },
-    { value: "closed", label: "Closed" },
+    { value: "processing", label: "Processing" },
+    { value: "dispatched", label: "Dispatched" },
+    { value: "delivered", label: "Delivered" },
+    { value: "cancelled", label: "Cancelled" },
+    { value: "returned", label: "Returned" },
   ];
 
   useEffect(() => {
@@ -50,11 +51,11 @@ function EditContactRequestPage() {
         request_type: request.request_type || "",
         subject: request.subject || "",
         message: request.message || "",
-        company_name: request.company_name || "",
-        email: request.email || "",
-        phone: request.phone || "",
+        company_name: request.company_name || request.user.company_name || "",
+        email: request.email || request.user.email || "",
+        phone: request.phone || request.user.phone || "",
         current_status: request.status || "new",
-        name: request.name || "",
+        name: request.name || request.user.name || "",
       });
     } catch (error) {
       console.error("Error fetching contact request:", error);
@@ -79,8 +80,15 @@ function EditContactRequestPage() {
     setErrorMessage("");
 
     try {
-      console.log("Submitting contact request data:", formData);
-      const response = await api.put(`/contact-requests/${id}/`, formData);
+      // Transform the data to match backend expectations
+      const dataToSend = {
+        ...formData,
+        status: formData.current_status,
+      };
+      delete dataToSend.current_status;
+
+      console.log("Submitting contact request data:", dataToSend);
+      const response = await api.put(`/contact-requests/${id}/`, dataToSend);
       console.log("Updated contact request response:", response.data);
       toast.success("Contact request updated successfully");
       navigate(`/dashboard/contact-requests/${id}`);

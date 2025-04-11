@@ -36,7 +36,7 @@ const ContactRequests = () => {
   const fetchRequests = async () => {
     try {
       setRequestsData((prev) => ({ ...prev, isLoading: true }));
-      const response = await api.get("/contact-requests/");
+      const response = await api.get("/contact-requests/public/");
       console.log("Contact requests response:", response.data);
 
       const transformedData = response.data.results.map((request) => ({

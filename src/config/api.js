@@ -13,11 +13,3 @@ const setAuthToken = (token) => {
 };
 
 export { api, setAuthToken };
-
-const data = {
-  name: "ali",
-  age: 20,
-  city: "tehran",
-  country: "iran",
-  email: "ali@gmail.com",
-};

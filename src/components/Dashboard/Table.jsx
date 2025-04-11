@@ -55,8 +55,6 @@ const Table = ({ fields, data = [], isLoading, options, page, onDelete }) => {
         return `/dashboard/orders/create`;
       case "blogCategory":
         return `/dashboard/blog-categories/create`;
-      case "contactDetails":
-        return `/dashboard/contact-details/create`;
       case "contactRequest":
         return `/dashboard/contact-requests/create`;
       case "event":
