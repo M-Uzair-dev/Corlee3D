@@ -93,7 +93,7 @@ function Navbar(props) {
           <div className="logoinner">
             <MenuIcon
               className="menu-icon-nav2"
-              onClick={() => setOpen(true)}
+              onClick={() => setOpen(1)}
               style={
                 open
                   ? {

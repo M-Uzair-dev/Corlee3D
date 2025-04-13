@@ -129,7 +129,6 @@ function ProductNavigation(props) {
             }}
             onClick={() => {
               props.changeshowprod();
-              setOpen(false);
             }}
             style={{ cursor: "pointer" }}
           >
