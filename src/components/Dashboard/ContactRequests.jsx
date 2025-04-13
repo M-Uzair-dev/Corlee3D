@@ -40,8 +40,12 @@ const ContactRequests = () => {
   const fetchContactRequests = async () => {
     try {
       setContactRequestsData((prev) => ({ ...prev, isLoading: true }));
+      console.log(
+        "Fetching contact requests on url: ",
+        `/contact-requests/all/?page=${page}&page_size=${ITEMS_PER_PAGE}`
+      );
       const response = await api.get(
-        `/contact-requests/?page=${page}&page_size=${ITEMS_PER_PAGE}`
+        `/contact-requests/all/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
       console.log("Contact requests response:", response.data);
 
@@ -91,6 +95,7 @@ const ContactRequests = () => {
         data: transformedData,
         isLoading: false,
       }));
+      setTotalPages(response.data.total_pages);
     } catch (error) {
       console.error("Error fetching contact requests:", error);
       toast.error("Failed to load contact requests");
@@ -122,6 +127,10 @@ const ContactRequests = () => {
     }
   };
 
+  const handlePageChange = (newPage) => {
+    setPage(newPage);
+  };
+
   return (
     <>
       <PageContent
@@ -131,6 +140,9 @@ const ContactRequests = () => {
         page="contactRequest"
         onDelete={handleDeleteRequest}
         onRefresh={fetchContactRequests}
+        currentPage={page}
+        totalPages={totalPages}
+        onPageChange={handlePageChange}
       />
 
       <DeleteModal

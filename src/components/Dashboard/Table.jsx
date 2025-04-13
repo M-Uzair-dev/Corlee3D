@@ -1,10 +1,27 @@
 import React, { useState } from "react";
-import { FaEdit, FaTrash, FaEye, FaPlus } from "react-icons/fa";
+import {
+  FaEdit,
+  FaTrash,
+  FaEye,
+  FaPlus,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
 import LoadingSpinner from "../UI/LoadingSpinner";
 
-const Table = ({ fields, data = [], isLoading, options, page, onDelete }) => {
+const Table = ({
+  fields,
+  data = [],
+  isLoading,
+  options,
+  page,
+  onDelete,
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
+}) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
   const columnNames = Object.keys(fields);
@@ -224,6 +241,29 @@ const Table = ({ fields, data = [], isLoading, options, page, onDelete }) => {
               ))}
             </tbody>
           </table>
+
+          {/* Pagination Controls */}
+          {totalPages > 1 && (
+            <div className="pagination-controls">
+              <button
+                className="pagination-button"
+                onClick={() => onPageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <FaChevronLeft />
+              </button>
+              <span className="page-info">
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                className="pagination-button"
+                onClick={() => onPageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                <FaChevronRight />
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -249,16 +289,48 @@ const Table = ({ fields, data = [], isLoading, options, page, onDelete }) => {
           border: none;
           border-radius: 4px;
           padding: 8px 16px;
-          font-size: 14px;
           cursor: pointer;
           display: flex;
           align-items: center;
           gap: 8px;
-          transition: background-color 0.2s;
         }
 
         .create-button:hover {
-          background-color: #2e8b46;
+          background-color: #2d9248;
+        }
+
+        .pagination-controls {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+          margin-top: 20px;
+          padding: 10px;
+        }
+
+        .pagination-button {
+          background: none;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          padding: 8px 12px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .pagination-button:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .pagination-button:hover:not(:disabled) {
+          background-color: #f5f5f5;
+        }
+
+        .page-info {
+          font-size: 14px;
+          color: #666;
         }
       `}</style>
     </>

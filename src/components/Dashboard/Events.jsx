@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaCalendarAlt, FaEye, FaEdit, FaTrash, FaPlus } from "react-icons/fa";
+import { FaCalendar, FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
 
-function Events() {
+const Events = () => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [eventToDelete, setEventToDelete] = useState(null);
@@ -15,9 +15,7 @@ function Events() {
   const [eventsData, setEventsData] = useState({
     fields: {
       title: "Title",
-      description: "Description",
-      start_date: "Start Date",
-      end_date: "End Date",
+      date: "Date",
       location: "Location",
       status: "Status",
     },
@@ -43,48 +41,28 @@ function Events() {
       const response = await api.get(
         `/events/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
-      console.log("Events API response:", response.data);
 
-      const formattedEvents = response?.data?.results?.map((event) => ({
-        id: event.id,
-        title: event.title || "Untitled Event",
-        date: event.date
-          ? new Date(event.date).toLocaleDateString()
-          : "No date",
-        location: event.location || "No location",
-        actions: (
-          <div className="action-cell">
-            <button
-              className="action-btn view"
-              onClick={() => handleViewEvent(event.id)}
-              title="View Event"
-            >
-              <FaEye />
-            </button>
-            <button
-              className="action-btn edit"
-              onClick={() => handleEditEvent(event.id)}
-              title="Edit Event"
-            >
-              <FaEdit />
-            </button>
-            <button
-              className="action-btn delete"
-              onClick={() => handleShowDeleteModal(event.id)}
-              title="Delete Event"
-            >
-              <FaTrash />
-            </button>
-          </div>
-        ),
-      }));
+      if (response.data.results) {
+        const transformedData = response.data.results.map((event) => ({
+          id: event.id,
+          title: event.title || "Untitled",
+          date: event.date
+            ? new Date(event.date).toLocaleDateString()
+            : "Not set",
+          location: event.location || "Not specified",
+          status: event.status || "Upcoming",
+        }));
 
-      setTotalPages(Math.ceil(response.data.count / ITEMS_PER_PAGE));
-      setEventsData((prev) => ({
-        ...prev,
-        data: formattedEvents,
-        isLoading: false,
-      }));
+        const totalCount = response.data.count || 0;
+        const calculatedTotalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+        setTotalPages(calculatedTotalPages);
+
+        setEventsData((prev) => ({
+          ...prev,
+          data: transformedData,
+          isLoading: false,
+        }));
+      }
     } catch (error) {
       console.error("Error fetching events:", error);
       toast.error("Failed to load events");
@@ -106,6 +84,7 @@ function Events() {
   };
 
   const handleDeleteEvent = () => {
+    toast.success("Event deleted successfully");
     fetchEvents();
   };
 
@@ -113,25 +92,52 @@ function Events() {
     navigate("/dashboard/events/create");
   };
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
   };
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  const Pagination = () => (
+    <div className="pagination-controls">
+      <button
+        className="pagination-btn"
+        onClick={handlePrevPage}
+        disabled={page <= 1 || eventsData.isLoading}
+      >
+        <FaChevronLeft /> Previous
+      </button>
+      <span className="pagination-info">
+        Page {page} of {totalPages}
+      </span>
+      {page < totalPages && (
+        <button
+          className="pagination-btn"
+          onClick={handleNextPage}
+          disabled={eventsData.isLoading}
+        >
+          Next <FaChevronRight />
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <>
       <PageContent
         title="Events"
-        icon={<FaCalendarAlt />}
+        icon={<FaCalendar />}
         data={eventsData}
         page="event"
         onDelete={handleDeleteEvent}
-        onRefresh={fetchEvents}
-        pagination={{
-          currentPage: page,
-          totalPages,
-          onPageChange: handlePageChange,
-        }}
       />
+      {totalPages > 1 && <Pagination />}
 
       <DeleteModal
         isOpen={showDeleteModal}
@@ -142,40 +148,44 @@ function Events() {
       />
 
       <style jsx>{`
-        .action-cell {
+        .pagination-controls {
           display: flex;
-          gap: 8px;
-          justify-content: center;
           align-items: center;
+          justify-content: center;
+          gap: 16px;
+          margin-top: 20px;
+          padding: 10px;
         }
 
-        .action-btn {
-          background: none;
-          border: none;
-          padding: 4px;
+        .pagination-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          background: white;
           cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+          background: #f5f5f5;
+          border-color: #ccc;
+        }
+
+        .pagination-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .pagination-info {
           color: #666;
-          transition: color 0.2s;
-        }
-
-        .action-btn:hover {
-          color: #333;
-        }
-
-        .action-btn.view:hover {
-          color: #4285f4;
-        }
-
-        .action-btn.edit:hover {
-          color: #fbbc05;
-        }
-
-        .action-btn.delete:hover {
-          color: #ea4335;
+          font-size: 14px;
         }
       `}</style>
     </>
   );
-}
+};
 
 export default Events;

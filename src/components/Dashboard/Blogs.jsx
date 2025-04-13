@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaBlog, FaEdit, FaTrash, FaEye } from "react-icons/fa";
+import {
+  FaBlog,
+  FaEdit,
+  FaTrash,
+  FaEye,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
@@ -10,10 +17,9 @@ const Blogs = () => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [blogToDelete, setBlogToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalCount, setTotalCount] = useState(0);
-  const [blogData, setBlogData] = useState({
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
+  const [blogsData, setBlogsData] = useState({
     fields: {
       title: "Title",
       category: "Category",
@@ -31,62 +37,68 @@ const Blogs = () => {
     },
   });
 
+  const ITEMS_PER_PAGE = 8;
+
   useEffect(() => {
     fetchBlogs();
-  }, [currentPage, pageSize]);
+  }, [page]);
 
   const fetchBlogs = async () => {
     try {
-      setBlogData((prev) => ({ ...prev, isLoading: true }));
+      setBlogsData((prev) => ({ ...prev, isLoading: true }));
       const response = await api.get(
-        `/blogs/?page=${currentPage}&page_size=${pageSize}`
+        `/blogs/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
-      console.log("Blogs response:", response.data);
 
-      const transformedData = response.data.results.map((blog) => ({
-        id: blog.id,
-        title: blog.title || "Untitled",
-        category: blog.category_name || "Uncategorized",
-        author: blog.author_name || "Unknown Author",
-        view_count: blog.view_count || 0,
-        created_at: new Date(blog.created_at).toLocaleDateString(),
-        actions: (
-          <div className="action-cell">
-            <button
-              className="action-btn view"
-              onClick={() => handleViewBlog(blog.id)}
-              title="View Blog"
-            >
-              <FaEye />
-            </button>
-            <button
-              className="action-btn edit"
-              onClick={() => handleEditBlog(blog.id)}
-              title="Edit Blog"
-            >
-              <FaEdit />
-            </button>
-            <button
-              className="action-btn delete"
-              onClick={() => handleShowDeleteModal(blog.id)}
-              title="Delete Blog"
-            >
-              <FaTrash />
-            </button>
-          </div>
-        ),
-      }));
+      if (response.data.results) {
+        const transformedData = response.data.results.map((blog) => ({
+          id: blog.id,
+          title: blog.title || "Untitled",
+          category: blog.category_name || "Uncategorized",
+          author: blog.author_name || "Unknown Author",
+          view_count: blog.view_count || 0,
+          created_at: new Date(blog.created_at).toLocaleDateString(),
+          actions: (
+            <div className="action-cell">
+              <button
+                className="action-btn view"
+                onClick={() => handleViewBlog(blog.id)}
+                title="View Blog"
+              >
+                <FaEye />
+              </button>
+              <button
+                className="action-btn edit"
+                onClick={() => handleEditBlog(blog.id)}
+                title="Edit Blog"
+              >
+                <FaEdit />
+              </button>
+              <button
+                className="action-btn delete"
+                onClick={() => handleShowDeleteModal(blog.id)}
+                title="Delete Blog"
+              >
+                <FaTrash />
+              </button>
+            </div>
+          ),
+        }));
 
-      setTotalCount(response.data.count);
-      setBlogData((prev) => ({
-        ...prev,
-        data: transformedData,
-        isLoading: false,
-      }));
+        const totalCount = response.data.count || 0;
+        const calculatedTotalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+        setTotalPages(calculatedTotalPages);
+
+        setBlogsData((prev) => ({
+          ...prev,
+          data: transformedData,
+          isLoading: false,
+        }));
+      }
     } catch (error) {
       console.error("Error fetching blogs:", error);
       toast.error("Failed to load blogs");
-      setBlogData((prev) => ({ ...prev, isLoading: false }));
+      setBlogsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
@@ -104,42 +116,65 @@ const Blogs = () => {
   };
 
   const handleDeleteBlog = () => {
+    toast.success("Blog deleted successfully");
     fetchBlogs();
   };
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
   };
 
-  const handlePageSizeChange = (newSize) => {
-    setPageSize(newSize);
-    setCurrentPage(1);
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
   };
 
   const handleCreate = () => {
     navigate("/dashboard/blogs/create");
   };
 
+  const Pagination = () => (
+    <div className="pagination-controls">
+      <button
+        className="pagination-btn"
+        onClick={handlePrevPage}
+        disabled={page <= 1 || blogsData.isLoading}
+      >
+        <FaChevronLeft /> Previous
+      </button>
+      <span className="pagination-info">
+        Page {page} of {totalPages}
+      </span>
+      {page < totalPages && (
+        <button
+          className="pagination-btn"
+          onClick={handleNextPage}
+          disabled={blogsData.isLoading}
+        >
+          Next <FaChevronRight />
+        </button>
+      )}
+    </div>
+  );
+
   return (
     <>
       <PageContent
         title="Blogs"
         icon={<FaBlog />}
-        data={blogData}
+        data={blogsData}
         page="blogs"
         onRefresh={fetchBlogs}
         onCreate={handleCreate}
         onDelete={handleDeleteBlog}
         onEdit={handleEditBlog}
         onView={handleViewBlog}
-        pagination={{
-          currentPage,
-          pageSize,
-          totalCount,
-          onPageChange: handlePageChange,
-          onPageSizeChange: handlePageSizeChange,
-        }}
       />
+
+      {totalPages > 1 && <Pagination />}
 
       <DeleteModal
         isOpen={showDeleteModal}
@@ -180,6 +215,42 @@ const Blogs = () => {
 
         .action-btn.delete:hover {
           color: #ea4335;
+        }
+
+        .pagination-controls {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          margin-top: 20px;
+          padding: 10px;
+        }
+
+        .pagination-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          background: white;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+          background: #f5f5f5;
+          border-color: #ccc;
+        }
+
+        .pagination-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .pagination-info {
+          color: #666;
+          font-size: 14px;
         }
       `}</style>
     </>

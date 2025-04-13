@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaShoppingCart, FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaShoppingCart,
+  FaEye,
+  FaEdit,
+  FaTrash,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
@@ -10,9 +17,8 @@ const Orders = () => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [orderToDelete, setOrderToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [ordersData, setOrdersData] = useState({
     fields: {
       order_number: "Order Number",
@@ -31,60 +37,66 @@ const Orders = () => {
     },
   });
 
+  const ITEMS_PER_PAGE = 8;
+
   useEffect(() => {
     fetchOrders();
-  }, [currentPage, pageSize]);
+  }, [page]);
 
   const fetchOrders = async () => {
     try {
       setOrdersData((prev) => ({ ...prev, isLoading: true }));
       const response = await api.get(
-        `/orders/?page=${currentPage}&page_size=${pageSize}`
+        `/orders/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
-      console.log("Orders response:", response.data);
 
-      const transformedData = response.data.results.map((order) => ({
-        id: order.id,
-        order_number: order.order_number || "N/A",
-        customer_name: order.customer_name || "Unknown Customer",
-        total_amount: `$${order.total_amount?.toFixed(2) || "0.00"}`,
-        status: order.status || "Pending",
-        created_at: order.created_at
-          ? new Date(order.created_at).toLocaleDateString()
-          : "N/A",
-        actions: (
-          <div className="action-cell">
-            <button
-              className="action-btn view"
-              onClick={() => handleViewOrder(order.id)}
-              title="View Order"
-            >
-              <FaEye />
-            </button>
-            <button
-              className="action-btn edit"
-              onClick={() => handleEditOrder(order.id)}
-              title="Edit Order"
-            >
-              <FaEdit />
-            </button>
-            <button
-              className="action-btn delete"
-              onClick={() => handleShowDeleteModal(order.id)}
-              title="Delete Order"
-            >
-              <FaTrash />
-            </button>
-          </div>
-        ),
-      }));
+      if (response.data.results) {
+        const transformedData = response.data.results.map((order) => ({
+          id: order.id,
+          order_number: order.order_number || "N/A",
+          customer_name: order.customer_name || "Unknown Customer",
+          total_amount: `$${order.total_amount?.toFixed(2) || "0.00"}`,
+          status: order.status || "Pending",
+          created_at: order.created_at
+            ? new Date(order.created_at).toLocaleDateString()
+            : "N/A",
+          actions: (
+            <div className="action-cell">
+              <button
+                className="action-btn view"
+                onClick={() => handleViewOrder(order.id)}
+                title="View Order"
+              >
+                <FaEye />
+              </button>
+              <button
+                className="action-btn edit"
+                onClick={() => handleEditOrder(order.id)}
+                title="Edit Order"
+              >
+                <FaEdit />
+              </button>
+              <button
+                className="action-btn delete"
+                onClick={() => handleShowDeleteModal(order.id)}
+                title="Delete Order"
+              >
+                <FaTrash />
+              </button>
+            </div>
+          ),
+        }));
 
-      setTotalCount(response.data.count);
-      setOrdersData((prev) => ({
-        ...prev,
-        data: transformedData,
-        isLoading: false,
-      }));
+        const totalCount = response.data.count || 0;
+        const calculatedTotalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+        setTotalPages(calculatedTotalPages);
+
+        setOrdersData((prev) => ({
+          ...prev,
+          data: transformedData,
+          isLoading: false,
+        }));
+      }
     } catch (error) {
       console.error("Error fetching orders:", error);
       toast.error("Failed to load orders");
@@ -106,17 +118,45 @@ const Orders = () => {
   };
 
   const handleDeleteOrder = () => {
+    toast.success("Order deleted successfully");
     fetchOrders();
   };
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
   };
 
-  const handlePageSizeChange = (newSize) => {
-    setPageSize(newSize);
-    setCurrentPage(1);
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
   };
+
+  const Pagination = () => (
+    <div className="pagination-controls">
+      <button
+        className="pagination-btn"
+        onClick={handlePrevPage}
+        disabled={page <= 1 || ordersData.isLoading}
+      >
+        <FaChevronLeft /> Previous
+      </button>
+      <span className="pagination-info">
+        Page {page} of {totalPages}
+      </span>
+      {page < totalPages && (
+        <button
+          className="pagination-btn"
+          onClick={handleNextPage}
+          disabled={ordersData.isLoading}
+        >
+          Next <FaChevronRight />
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -126,15 +166,8 @@ const Orders = () => {
         data={ordersData}
         page="order"
         onDelete={handleDeleteOrder}
-        onRefresh={fetchOrders}
-        pagination={{
-          currentPage,
-          pageSize,
-          totalCount,
-          onPageChange: handlePageChange,
-          onPageSizeChange: handlePageSizeChange,
-        }}
       />
+      {totalPages > 1 && <Pagination />}
 
       <DeleteModal
         isOpen={showDeleteModal}
@@ -175,6 +208,42 @@ const Orders = () => {
 
         .action-btn.delete:hover {
           color: #ea4335;
+        }
+
+        .pagination-controls {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          margin-top: 20px;
+          padding: 10px;
+        }
+
+        .pagination-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          background: white;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+          background: #f5f5f5;
+          border-color: #ccc;
+        }
+
+        .pagination-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .pagination-info {
+          color: #666;
+          font-size: 14px;
         }
       `}</style>
     </>

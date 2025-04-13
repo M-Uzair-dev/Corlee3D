@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { FaBox, FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaBox,
+  FaEdit,
+  FaTrash,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
@@ -10,13 +16,13 @@ const ProductCategories = () => {
   const navigate = useNavigate();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [pageSize, setPageSize] = useState(10);
-  const [totalCount, setTotalCount] = useState(0);
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
   const [categoriesData, setCategoriesData] = useState({
     fields: {
-      name: "Category Name",
+      name: "Name",
       description: "Description",
+      status: "Status",
     },
     data: [],
     isLoading: true,
@@ -24,51 +30,41 @@ const ProductCategories = () => {
       create: true,
       edit: true,
       delete: true,
+      view: true,
     },
   });
 
+  const ITEMS_PER_PAGE = 8;
+
   useEffect(() => {
     fetchCategories();
-  }, [currentPage, pageSize]);
+  }, [page]);
 
   const fetchCategories = async () => {
     try {
       setCategoriesData((prev) => ({ ...prev, isLoading: true }));
       const response = await api.get(
-        `/product-categories/?page=${currentPage}&page_size=${pageSize}`
+        `/product-categories/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
-      console.log("Categories response:", response.data);
 
-      const transformedData = response.data.results.map((category) => ({
-        id: category.id,
-        name: category.name || "Unnamed Category",
-        description: category.description || "No description",
-        actions: (
-          <div className="action-cell">
-            <button
-              className="action-btn edit"
-              onClick={() => handleEditCategory(category.id)}
-              title="Edit Category"
-            >
-              <FaEdit />
-            </button>
-            <button
-              className="action-btn delete"
-              onClick={() => handleShowDeleteModal(category.id)}
-              title="Delete Category"
-            >
-              <FaTrash />
-            </button>
-          </div>
-        ),
-      }));
+      if (response.data.results) {
+        const transformedData = response.data.results.map((category) => ({
+          id: category.id,
+          name: category.name || "Unnamed",
+          description: category.description || "No description",
+          status: category.status || "Active",
+        }));
 
-      setTotalCount(response.data.count);
-      setCategoriesData((prev) => ({
-        ...prev,
-        data: transformedData,
-        isLoading: false,
-      }));
+        const totalCount = response.data.count || 0;
+        const calculatedTotalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
+        setTotalPages(calculatedTotalPages);
+
+        setCategoriesData((prev) => ({
+          ...prev,
+          data: transformedData,
+          isLoading: false,
+        }));
+      }
     } catch (error) {
       console.error("Error fetching categories:", error);
       toast.error("Failed to load categories");
@@ -89,14 +85,46 @@ const ProductCategories = () => {
     fetchCategories();
   };
 
-  const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
   };
 
-  const handlePageSizeChange = (newSize) => {
-    setPageSize(newSize);
-    setCurrentPage(1);
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
   };
+
+  const handleDeleteSuccess = () => {
+    toast.success("Category deleted successfully");
+    fetchCategories();
+  };
+
+  const Pagination = () => (
+    <div className="pagination-controls">
+      <button
+        className="pagination-btn"
+        onClick={handlePrevPage}
+        disabled={page <= 1 || categoriesData.isLoading}
+      >
+        <FaChevronLeft /> Previous
+      </button>
+      <span className="pagination-info">
+        Page {page} of {totalPages}
+      </span>
+      {page < totalPages && (
+        <button
+          className="pagination-btn"
+          onClick={handleNextPage}
+          disabled={categoriesData.isLoading}
+        >
+          Next <FaChevronRight />
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -104,17 +132,10 @@ const ProductCategories = () => {
         title="Product Categories"
         icon={<FaBox />}
         data={categoriesData}
-        page="productCategory"
-        onDelete={handleDeleteCategory}
-        onRefresh={fetchCategories}
-        pagination={{
-          currentPage,
-          pageSize,
-          totalCount,
-          onPageChange: handlePageChange,
-          onPageSizeChange: handlePageSizeChange,
-        }}
+        page="product-category"
+        onDelete={handleDeleteSuccess}
       />
+      {totalPages > 1 && <Pagination />}
 
       <DeleteModal
         isOpen={showDeleteModal}
@@ -151,6 +172,42 @@ const ProductCategories = () => {
 
         .action-btn.delete:hover {
           color: #ea4335;
+        }
+
+        .pagination-controls {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 16px;
+          margin-top: 20px;
+          padding: 10px;
+        }
+
+        .pagination-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 8px 16px;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          background: white;
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+          background: #f5f5f5;
+          border-color: #ccc;
+        }
+
+        .pagination-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .pagination-info {
+          color: #666;
+          font-size: 14px;
         }
       `}</style>
     </>

@@ -12,6 +12,9 @@ const PageContent = ({
   onCreate,
   onEdit,
   onView,
+  currentPage = 1,
+  totalPages = 1,
+  onPageChange,
 }) => {
   const navigate = useNavigate();
 
@@ -78,6 +81,9 @@ const PageContent = ({
             onCreate={handleCreate}
             onEdit={onEdit}
             onView={onView}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={onPageChange}
           />
           {children}
         </div>

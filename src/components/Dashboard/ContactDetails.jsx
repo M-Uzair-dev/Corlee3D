@@ -11,11 +11,19 @@ const ContactDetails = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [contactDetailsData, setContactDetailsData] = useState({
     fields: {
-      name: "Name",
-      email: "Email",
       phone: "Phone",
+      email: "Email",
       address: "Address",
-      created_at: "Created At",
+      city: "City",
+      county: "County",
+      postal_code: "Postal Code",
+      country: "Country",
+      latitude: "Latitude",
+      longitude: "Longitude",
+      facebook: "Facebook",
+      instagram: "Instagram",
+      whatsapp: "WhatsApp",
+      line: "Line",
     },
     data: [],
     isLoading: true,
