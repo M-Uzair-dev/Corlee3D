@@ -14,12 +14,11 @@ const ContactRequests = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [contactRequestsData, setContactRequestsData] = useState({
     fields: {
-      name: "Name",
+      request_type: "Request Type",
+      subject: "Subject",
+      company_name: "Company Name",
       email: "Email",
-      phone: "Phone",
-      message: "Message",
       status: "Status",
-      created_at: "Created At",
     },
     data: [],
     isLoading: true,
