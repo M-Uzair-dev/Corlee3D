@@ -21,16 +21,16 @@ const Orders = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [ordersData, setOrdersData] = useState({
     fields: {
-      order_number: "Order Number",
+      id: "Order ID",
       customer_name: "Customer Name",
-      total_amount: "Total Amount",
-      status: "Status",
-      created_at: "Order Date",
+      customer_email: "Customer Email",
+      customer_phone: "Customer Phone",
+      order_date: "Order Date",
+      order_items: "Order Items",
     },
     data: [],
     isLoading: true,
     options: {
-      create: true,
       edit: true,
       delete: true,
       view: true,
@@ -49,17 +49,17 @@ const Orders = () => {
       const response = await api.get(
         `/orders/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
-
+      console.log(response.data);
       if (response.data.results) {
         const transformedData = response.data.results.map((order) => ({
           id: order.id,
-          order_number: order.order_number || "N/A",
-          customer_name: order.customer_name || "Unknown Customer",
-          total_amount: `$${order.total_amount?.toFixed(2) || "0.00"}`,
-          status: order.status || "Pending",
-          created_at: order.created_at
+          customer_name: order.user.name || "Unknown Customer",
+          customer_email: order.user.email || "No email",
+          customer_phone: order.user.phone || "No phone",
+          order_date: order.order_date
             ? new Date(order.created_at).toLocaleDateString()
             : "N/A",
+          order_items: order?.items?.length || 0,
           actions: (
             <div className="action-cell">
               <button

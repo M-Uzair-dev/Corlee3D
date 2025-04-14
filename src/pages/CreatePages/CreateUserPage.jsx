@@ -172,7 +172,7 @@ function CreateUserPage() {
           </div>
         </div>
 
-        <div className="form-section">
+        {/* <div className="form-section">
           <h3>User Settings</h3>
 
           <div className="form-row checkboxes">
@@ -198,7 +198,7 @@ function CreateUserPage() {
               <label htmlFor="is_active">Active Account</label>
             </div>
           </div>
-        </div>
+        </div> */}
 
         <div className="form-actions">
           <button

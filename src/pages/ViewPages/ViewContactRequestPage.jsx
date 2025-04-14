@@ -19,7 +19,7 @@ function ViewContactRequestPage() {
   const fetchRequestData = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get(`/contact-requests/${id}/`);
+      const response = await api.get(`/contact-requests/all/${id}/`);
       setRequestData(response.data);
       console.log("response.data", response.data);
     } catch (error) {

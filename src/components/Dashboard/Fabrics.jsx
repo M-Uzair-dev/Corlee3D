@@ -10,12 +10,11 @@ const Fabrics = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [fabricsData, setFabricsData] = useState({
     fields: {
-      name: "Name",
-      description: "Description",
-      price: "Price",
-      stock: "Stock",
+      title: "Title",
       category: "Category",
-      status: "Status",
+      item_code: "Item Code",
+      hot_selling: "Hot Selling",
+      id: "ID",
     },
     data: [],
     isLoading: true,
@@ -45,8 +44,8 @@ const Fabrics = () => {
         const transformedData = response.data.results.map((fabric) => ({
           title: fabric.title || "Unnamed",
           category: fabric.product_category_name || "Uncategorized",
-          "Item Code": fabric.item_code || "N/A",
-          "Hot Selling": fabric.is_hot_selling || false,
+          item_code: fabric.item_code || "N/A",
+          hot_selling: fabric.is_hot_selling ? "Yes" : "No",
           id: fabric.id,
         }));
 

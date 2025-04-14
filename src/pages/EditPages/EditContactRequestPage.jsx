@@ -44,7 +44,7 @@ function EditContactRequestPage() {
   const fetchRequestData = async () => {
     try {
       setIsLoading(true);
-      const response = await api.get(`/contact-requests/${id}/`);
+      const response = await api.get(`/contact-requests/all/${id}/`);
       console.log("Fetched contact request data:", response.data);
       const request = response.data;
       setFormData({

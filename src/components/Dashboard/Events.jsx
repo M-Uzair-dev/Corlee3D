@@ -14,6 +14,7 @@ const Events = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [eventsData, setEventsData] = useState({
     fields: {
+      id: "ID",
       title: "Title",
       date: "Date",
       location: "Location",

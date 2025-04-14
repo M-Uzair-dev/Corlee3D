@@ -22,10 +22,9 @@ const Users = () => {
   const [usersData, setUsersData] = useState({
     fields: {
       username: "Username",
+      name: "Name",
       email: "Email",
-      role: "Role",
-      is_active: "Status",
-      last_login: "Last Login",
+      phone: "Phone",
     },
     data: [],
     isLoading: true,
@@ -33,7 +32,6 @@ const Users = () => {
       create: true,
       edit: true,
       delete: true,
-      view: true,
     },
   });
 
@@ -55,11 +53,8 @@ const Users = () => {
         id: user.id,
         username: user.username || "Unknown User",
         email: user.email || "No email",
-        role: user.role || "User",
-        is_active: user.is_active ? "Active" : "Inactive",
-        last_login: user.last_login
-          ? new Date(user.last_login).toLocaleString()
-          : "Never",
+        name: user.name || "No name",
+        phone: user.phone || "No phone",
         actions: (
           <div className="action-cell">
             <button

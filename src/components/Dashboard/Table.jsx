@@ -174,6 +174,12 @@ const Table = ({
                 navigate(`/product/${item.id}`);
               } else if (page === "blogs") {
                 navigate(`/blog/${item.id}`);
+              } else if (page === "order") {
+                navigate(`/dashboard/orders/${item.id}`);
+              } else if (page === "event") {
+                navigate(`/dashboard/events/${item.id}`);
+              } else if (page === "contactRequest") {
+                navigate("/dashboard/contact-requests/" + item.id);
               }
             }}
           >

@@ -30,8 +30,6 @@ const ContactDetails = () => {
     options: {
       create: false,
       edit: true,
-      delete: true,
-      view: true,
     },
   });
 

@@ -216,7 +216,7 @@ function EditUserPage() {
             />
           </div>
 
-          <div className="form-row checkboxes">
+          {/* <div className="form-row checkboxes">
             <div className="form-group checkbox-group">
               <input
                 type="checkbox"
@@ -238,7 +238,7 @@ function EditUserPage() {
               />
               <label htmlFor="is_active">Active Account</label>
             </div>
-          </div>
+          </div> */}
         </div>
 
         <div className="form-actions">

@@ -34,8 +34,8 @@ const FabricCategories = () => {
       if (response.data.results) {
         // Transform API data to match table structure
         const transformedData = response.data.results.map((category) => ({
-          id: category.id,
           name: category.name || "Unnamed",
+          id: category.id,
           description: category.description || "No description",
           image_preview: category.image_url ? (
             <div
