@@ -3,12 +3,17 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, useTexture, Center } from "@react-three/drei";
 import * as THREE from "three";
 import "./model.css";
+import { normalizeCloudFrontUrl } from "../util";
 
 THREE.Cache.enabled = true;
 
 // Split Model into Textured and NonTextured variants to avoid conditional hooks
 const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
-  const texture = useTexture(textureUrl);
+  const normalizedTextureUrl = useMemo(
+    () => normalizeCloudFrontUrl(textureUrl),
+    [textureUrl]
+  );
+  const texture = useTexture(normalizedTextureUrl);
   texture.encoding = THREE.sRGBEncoding;
   texture.colorSpace = "srgb-linear"; // Ensures colors are accurate
   const modelRef = useRef();

@@ -545,4 +545,17 @@ const theme = {
   },
 };
 
+export const normalizeCloudFrontUrl = (url) => {
+  if (!url) return url;
+
+  // Extract the base URL and path
+  const [baseUrl, ...pathParts] = url.split("/corlee/uploads/");
+
+  // If there's no duplicate, return original URL
+  if (pathParts.length <= 1) return url;
+
+  // Take only the last path part to avoid duplicates
+  return `${baseUrl}/corlee/uploads/${pathParts[pathParts.length - 1]}`;
+};
+
 export { mockData, theme };
