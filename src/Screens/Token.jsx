@@ -12,6 +12,7 @@ const Token = () => {
   const getinfo = async () => {
     const response = await api.get("/contact-details/");
     const data = response.data.results[0];
+    console.log("WE GOT OUR RESPONSE OF CONTACT DETAILS :", response);
     if (response.status === 200) {
       localStorage.setItem("whatsapp", data.whatsapp);
       localStorage.setItem("postal_code", data.postal_code);
