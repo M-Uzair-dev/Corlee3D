@@ -247,29 +247,6 @@ const Table = ({
               ))}
             </tbody>
           </table>
-
-          {/* Pagination Controls */}
-          {totalPages > 1 && (
-            <div className="pagination-controls">
-              <button
-                className="pagination-button"
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={currentPage === 1}
-              >
-                <FaChevronLeft />
-              </button>
-              <span className="page-info">
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                className="pagination-button"
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={currentPage === totalPages}
-              >
-                <FaChevronRight />
-              </button>
-            </div>
-          )}
         </div>
       )}
 

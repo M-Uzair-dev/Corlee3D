@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { FaEnvelope, FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaEye,
+  FaEdit,
+  FaTrash,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
-import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
+import { handleApiError, handleApiSuccess } from "../../util/errorHandler";
 
 const ContactRequests = () => {
   const navigate = useNavigate();
@@ -39,14 +46,9 @@ const ContactRequests = () => {
   const fetchContactRequests = async () => {
     try {
       setContactRequestsData((prev) => ({ ...prev, isLoading: true }));
-      console.log(
-        "Fetching contact requests on url: ",
-        `/contact-requests/all/?page=${page}&page_size=${ITEMS_PER_PAGE}`
-      );
       const response = await api.get(
         `/contact-requests/all/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
-      console.log("Contact requests response:", response.data);
 
       const transformedData = response.data.results.map((request) => ({
         id: request.id,
@@ -96,8 +98,7 @@ const ContactRequests = () => {
       }));
       setTotalPages(response.data.total_pages);
     } catch (error) {
-      console.error("Error fetching contact requests:", error);
-      toast.error("Failed to load contact requests");
+      handleApiError(error, "Failed to load contact requests");
       setContactRequestsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
@@ -117,18 +118,42 @@ const ContactRequests = () => {
 
   const handleDeleteRequest = async () => {
     try {
-      // The actual deletion is handled by the DeleteModal component
-      // We just need to refresh the list after successful deletion
+      await api.delete(`/contact-requests/${requestToDelete}/`);
+      handleApiSuccess("Contact request deleted successfully");
       fetchContactRequests();
     } catch (error) {
-      console.error("Error handling request deletion:", error);
-      toast.error("Failed to complete request deletion");
+      handleApiError(error, "Failed to delete contact request");
     }
   };
 
   const handlePageChange = (newPage) => {
     setPage(newPage);
   };
+
+  // Create pagination UI component
+  const Pagination = () => (
+    <div className="pagination-controls">
+      <button
+        className="pagination-btn"
+        onClick={() => handlePageChange(page - 1)}
+        disabled={page <= 1 || contactRequestsData.isLoading}
+      >
+        <FaChevronLeft /> Previous
+      </button>
+      <span className="pagination-info">
+        Page {page} of {totalPages}
+      </span>
+      {page < totalPages && (
+        <button
+          className="pagination-btn"
+          onClick={() => handlePageChange(page + 1)}
+          disabled={contactRequestsData.isLoading}
+        >
+          Next <FaChevronRight />
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -139,10 +164,8 @@ const ContactRequests = () => {
         page="contactRequest"
         onDelete={handleDeleteRequest}
         onRefresh={fetchContactRequests}
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
       />
+      {totalPages > 1 && <Pagination />}
 
       <DeleteModal
         isOpen={showDeleteModal}
@@ -182,6 +205,42 @@ const ContactRequests = () => {
 
         .action-btn.delete:hover {
           color: #ea4335;
+        }
+
+        .pagination-controls {
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          gap: 16px;
+          margin-top: 20px;
+          padding: 10px;
+        }
+
+        .pagination-btn {
+          background: none;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          padding: 8px 16px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          color: #333;
+          transition: all 0.2s;
+        }
+
+        .pagination-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+          background-color: #f5f5f5;
+        }
+
+        .pagination-info {
+          font-size: 14px;
+          color: #666;
         }
       `}</style>
     </>

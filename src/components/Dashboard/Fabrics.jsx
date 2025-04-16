@@ -36,7 +36,7 @@ const Fabrics = () => {
     try {
       setFabricsData((prev) => ({ ...prev, isLoading: true }));
       const response = await api.get(
-        `/fabrics/?page=${page}&page_size=${ITEMS_PER_PAGE}`
+        `/fabrics/?page=${page}&page_size=${ITEMS_PER_PAGE}&sort_by=newest`
       );
       console.log(response.data);
       if (response.data.results) {

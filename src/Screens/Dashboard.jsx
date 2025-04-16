@@ -121,12 +121,8 @@ const Dashboard = () => {
     if (path === "/dashboard/events/create") return "Create Event";
     return "Dashboard";
   };
-  const iseLoggedIn = localStorage.getItem("token") !== null;
   const isAuthenticated = localStorage.getItem("theUserIsAdmin") == "ADMIN";
-  if (!iseLoggedIn) {
-    localStorage.removeItem("theUserIsAdmin");
-    return <Navigate to="/login" />;
-  } else if (!isAuthenticated) {
+  if (!isAuthenticated) {
     return <Navigate to="/dashboard-password" />;
   }
 

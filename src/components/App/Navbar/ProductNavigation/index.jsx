@@ -112,6 +112,15 @@ function ProductNavigation(props) {
             : "main-navigation-container-nav hidden"
         }
       >
+        {true && (
+          <img
+            src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/logo.webp"
+            className="product-image-styles-nav logoimg"
+            alt="logo"
+            style={{ cursor: "pointer", zIndex: 3 }}
+            onClick={() => navigate("/")}
+          />
+        )}
         <div className="horizontal-menu-with-icons-nav">
           <div
             className="product-card-container-nav"

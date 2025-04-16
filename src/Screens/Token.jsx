@@ -11,18 +11,19 @@ const Token = () => {
 
   const getinfo = async () => {
     const response = await api.get("/contact-details/");
+    const data = response.data.results[0];
     if (response.status === 200) {
-      localStorage.setItem("whatsapp", response.data.whatsapp);
-      localStorage.setItem("postal_code", response.data.postal_code);
-      localStorage.setItem("phone", response.data.phone);
-      localStorage.setItem("longitude", response.data.longitude);
-      localStorage.setItem("line", response.data.line);
-      localStorage.setItem("latitude", response.data.latitude);
-      localStorage.setItem("instagram", response.data.instagram);
-      localStorage.setItem("facebook", response.data.facebook);
-      localStorage.setItem("email", response.data.email);
-      localStorage.setItem("country", response.data.country);
-      localStorage.setItem("address", response.data.address);
+      localStorage.setItem("whatsapp", data.whatsapp);
+      localStorage.setItem("postal_code", data.postal_code);
+      localStorage.setItem("phone", data.phone);
+      localStorage.setItem("longitude", data.longitude);
+      localStorage.setItem("line", data.line);
+      localStorage.setItem("latitude", data.latitude);
+      localStorage.setItem("instagram", data.instagram);
+      localStorage.setItem("facebook", data.facebook);
+      localStorage.setItem("email", data.email);
+      localStorage.setItem("country", data.country);
+      localStorage.setItem("address", data.address);
     }
   };
   useEffect(() => {

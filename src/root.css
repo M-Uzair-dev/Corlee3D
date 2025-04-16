@@ -6342,7 +6342,9 @@ button:hover:not(.button-with-icon2) {
   display: flex;
   align-items: center;
 }
-
+.logoimg {
+  display: none;
+}
 @media (max-width: 980px) {
   .hidden {
     transform: translateY(-100%);
@@ -6402,7 +6404,7 @@ button:hover:not(.button-with-icon2) {
     padding-top: 15px;
     margin: 0;
   }
-  .productsoptionsdivinnav > *:nth-child(2) {
+  .productsoptionsdivinnav > *:nth-child(3) {
     border-top: 1px solid rgba(0, 0, 0, 0.177);
     margin-top: 30px;
   }
@@ -6411,5 +6413,20 @@ button:hover:not(.button-with-icon2) {
   }
   .noheight {
     transform: translateY(-100%);
+  }
+  .contact-info-text-style-nav {
+    font-family: "Artnoova", sans-serif !important;
+    font-size: 23px !important;
+    font-weight: 500 !important;
+    margin-right: 10px;
+  }
+  .svg-container-nav {
+    margin-left: 10px;
+  }
+  .logoimg {
+    display: block;
+    position: absolute;
+    top: 50px;
+    left: 20px;
   }
 }

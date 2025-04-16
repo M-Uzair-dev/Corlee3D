@@ -22,11 +22,6 @@ const DashboardPassword = () => {
       toast.error("Invalid credentials");
     }
   };
-  const iseLoggedIn = localStorage.getItem("token") !== null;
-  if (!iseLoggedIn) {
-    localStorage.removeItem("theUserIsAdmin");
-    return <Navigate to="/login" />;
-  }
 
   return (
     <div className="password-screen">

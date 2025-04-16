@@ -46,10 +46,11 @@ const Orders = () => {
   const fetchOrders = async () => {
     try {
       setOrdersData((prev) => ({ ...prev, isLoading: true }));
+
       const response = await api.get(
         `/orders/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
-      console.log(response.data);
+      console.log("response : ", response.data);
       if (response.data.results) {
         const transformedData = response.data.results.map((order) => ({
           id: order.id,
@@ -57,7 +58,7 @@ const Orders = () => {
           customer_email: order.user.email || "No email",
           customer_phone: order.user.phone || "No phone",
           order_date: order.order_date
-            ? new Date(order.created_at).toLocaleDateString()
+            ? new Date(order.order_date).toLocaleDateString()
             : "N/A",
           order_items: order?.items?.length || 0,
           actions: (

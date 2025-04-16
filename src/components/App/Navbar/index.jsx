@@ -288,6 +288,15 @@ function Navbar(props) {
         }}
       >
         <div className="productsoptionsdivinnav">
+          {true && (
+            <img
+              src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/logo.webp"
+              className="product-image-styles-nav logoimg"
+              alt="logo"
+              style={{ cursor: "pointer", zIndex: 3 }}
+              onClick={() => navigate("/")}
+            />
+          )}
           <div className="closeicon2">
             <div className="clodeiconiner" onClick={() => setShowprod(false)}>
               <svg
@@ -332,6 +341,7 @@ function Navbar(props) {
                 onClick={() => {
                   navigate("/products");
                   setShowprod(false);
+                  setOpen(false);
                 }}
               >
                 <div className="textdivinnavproductdropdown">
@@ -361,6 +371,7 @@ function Navbar(props) {
                     "/products/Best Selling/ All of Corlee's best seling products."
                   );
                   setShowprod(false);
+                  setOpen(false);
                 }}
                 onMouseEnter={() => {
                   if (window.innerWidth > 750) {
@@ -391,6 +402,7 @@ function Navbar(props) {
                     onClick={() => {
                       navigate(`/products/${categ.name}/${categ.description}`);
                       setShowprod(false);
+                      setOpen(false);
                     }}
                     onMouseEnter={() => {
                       if (window.innerWidth > 750) {
@@ -463,6 +475,7 @@ function Navbar(props) {
                     onClick={() => {
                       navigate(`/product/${product.id}/`);
                       setShowprod(false);
+                      setOpen(false);
                     }}
                   >
                     <div
@@ -472,7 +485,7 @@ function Navbar(props) {
                         backgroundSize: "cover",
                       }}
                     ></div>
-                    <div className="textdropdowninnav">{product.finish}</div>
+                    <div className="textdropdowninnav">{product.title}</div>
                   </div>
                 ))}
               {products.length < 6 &&
@@ -481,11 +494,11 @@ function Navbar(props) {
                     <div
                       className="imagedivinproductdropdown"
                       style={{
-                        backgroundColor: "rgb(0,0,0, 0.1)",
+                        // backgroundColor: "rgb(0,0,0, 0.1)",
                         backgroundSize: "cover",
                       }}
                     ></div>
-                    <div className="textdropdowninnav">Empty</div>
+                    <div className="textdropdowninnav"></div>
                   </div>
                 ))}
             </>
