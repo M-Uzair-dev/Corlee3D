@@ -13,36 +13,55 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
   const [hasTextureError, setHasTextureError] = useState(false);
   const [modelError, setModelError] = useState(false);
 
+  // Log the original and normalized URLs for debugging
   const normalizedTextureUrl = useMemo(() => {
     try {
-      return normalizeCloudFrontUrl(textureUrl);
+      console.log("Original textureUrl:", textureUrl);
+      const normalized = normalizeCloudFrontUrl(textureUrl);
+      console.log("Normalized textureUrl:", normalized);
+      return normalized;
     } catch (error) {
       console.error("Error normalizing texture URL:", error);
+      setHasTextureError(true);
+      handleApiError(error, "Failed to normalize texture URL");
       return textureUrl;
     }
   }, [textureUrl]);
 
-  const texture = useTexture(
-    normalizedTextureUrl,
-    (texture) => {
-      texture.encoding = THREE.sRGBEncoding;
-      texture.colorSpace = "srgb-linear";
-      texture.crossOrigin = "anonymous";
-    },
-    (error) => {
-      console.error("Error loading texture:", error);
-      setHasTextureError(true);
-      handleApiError(error, "Failed to load model texture");
-    }
-  );
+  // Proper error handling for texture loading
+  let texture;
+  try {
+    texture = useTexture(normalizedTextureUrl);
+
+    // Apply texture settings after successful load
+    useEffect(() => {
+      if (texture) {
+        texture.encoding = THREE.sRGBEncoding;
+        texture.colorSpace = "srgb-linear";
+        texture.crossOrigin = "anonymous";
+        texture.needsUpdate = true;
+      }
+    }, [texture]);
+  } catch (error) {
+    console.error("Error loading texture:", error);
+    setHasTextureError(true);
+    handleApiError(error, "Failed to load model texture");
+  }
 
   const modelRef = useRef();
   const materialRef = useRef();
 
+  // Only create material if texture loaded successfully
   const { material, size } = useMemo(() => {
+    if (!texture || hasTextureError) {
+      return {
+        material: new THREE.MeshStandardMaterial({ color: "red" }),
+        size: new THREE.Vector3(1, 1, 1),
+      };
+    }
+
     const box = new THREE.Box3().setFromObject(gltf.scene);
     const size = new THREE.Vector3();
-
     box.getSize(size);
 
     const mat = new THREE.MeshStandardMaterial({
@@ -55,22 +74,16 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
     mat.map.needsUpdate = true;
 
     return { material: mat, size };
-  }, [gltf, texture, tileSize]);
-  const clonedScene = useMemo(() => {
-    const cloned = gltf.scene.clone();
-    cloned.traverse((child) => {
-      if (child.isMesh) child.material = material;
-    });
-    return cloned;
-  }, [gltf, material]);
+  }, [gltf, texture, tileSize, hasTextureError]);
 
-  useEffect(
-    () => () => {
-      material.dispose();
-      texture.dispose();
-    },
-    [texture]
-  );
+  // Clean up resources
+  useEffect(() => {
+    return () => {
+      if (material?.map) material.map.dispose();
+      if (material) material.dispose();
+      if (texture) texture.dispose();
+    };
+  }, [material, texture]);
 
   if (hasTextureError || modelError) {
     return (
@@ -82,6 +95,14 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
       </Center>
     );
   }
+
+  const clonedScene = useMemo(() => {
+    const cloned = gltf.scene.clone();
+    cloned.traverse((child) => {
+      if (child.isMesh) child.material = material;
+    });
+    return cloned;
+  }, [gltf, material]);
 
   return (
     <Center key={modelUrl}>
