@@ -4,18 +4,38 @@ import { OrbitControls, useGLTF, useTexture, Center } from "@react-three/drei";
 import * as THREE from "three";
 import "./model.css";
 import { normalizeCloudFrontUrl } from "../util";
+import { handleApiError } from "../util/errorHandler";
 
 THREE.Cache.enabled = true;
 
 // Split Model into Textured and NonTextured variants to avoid conditional hooks
 const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
-  const normalizedTextureUrl = useMemo(
-    () => normalizeCloudFrontUrl(textureUrl),
-    [textureUrl]
+  const [hasTextureError, setHasTextureError] = useState(false);
+  const [modelError, setModelError] = useState(false);
+
+  const normalizedTextureUrl = useMemo(() => {
+    try {
+      return normalizeCloudFrontUrl(textureUrl);
+    } catch (error) {
+      console.error("Error normalizing texture URL:", error);
+      return textureUrl;
+    }
+  }, [textureUrl]);
+
+  const texture = useTexture(
+    normalizedTextureUrl,
+    (texture) => {
+      texture.encoding = THREE.sRGBEncoding;
+      texture.colorSpace = "srgb-linear";
+      texture.crossOrigin = "anonymous";
+    },
+    (error) => {
+      console.error("Error loading texture:", error);
+      setHasTextureError(true);
+      handleApiError(error, "Failed to load model texture");
+    }
   );
-  const texture = useTexture(normalizedTextureUrl);
-  texture.encoding = THREE.sRGBEncoding;
-  texture.colorSpace = "srgb-linear"; // Ensures colors are accurate
+
   const modelRef = useRef();
   const materialRef = useRef();
 
@@ -52,6 +72,17 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
     [texture]
   );
 
+  if (hasTextureError || modelError) {
+    return (
+      <Center key={modelUrl}>
+        <mesh scale={scale}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color="red" />
+        </mesh>
+      </Center>
+    );
+  }
+
   return (
     <Center key={modelUrl}>
       <primitive ref={modelRef} object={clonedScene} scale={scale} />
@@ -60,6 +91,8 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
 };
 
 const NonTexturedModel = ({ gltf, scale, tileSize, modelUrl }) => {
+  const [modelError, setModelError] = useState(false);
+
   const modelRef = useRef();
   const material = useMemo(
     () => new THREE.MeshStandardMaterial({ color: "gray" }),
@@ -73,6 +106,17 @@ const NonTexturedModel = ({ gltf, scale, tileSize, modelUrl }) => {
     });
     return cloned;
   }, [gltf, material]);
+
+  if (modelError) {
+    return (
+      <Center key={modelUrl}>
+        <mesh scale={scale}>
+          <boxGeometry args={[1, 1, 1]} />
+          <meshStandardMaterial color="red" />
+        </mesh>
+      </Center>
+    );
+  }
 
   return (
     <Center key={modelUrl}>
