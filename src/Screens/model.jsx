@@ -12,15 +12,23 @@ THREE.Cache.enabled = true;
 const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
   const [hasTextureError, setHasTextureError] = useState(false);
   const [modelError, setModelError] = useState(false);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 2;
 
   const normalizedTextureUrl = useMemo(() => {
     try {
-      return normalizeCloudFrontUrl(textureUrl);
+      // Try to use a proxy if direct access fails
+      const url = normalizeCloudFrontUrl(textureUrl);
+      if (retryCount > 0) {
+        // Add timestamp to bypass cache
+        return `${url}?t=${Date.now()}`;
+      }
+      return url;
     } catch (error) {
       console.error("Error normalizing texture URL:", error);
       return textureUrl;
     }
-  }, [textureUrl]);
+  }, [textureUrl, retryCount]);
 
   const texture = useTexture(
     normalizedTextureUrl,
@@ -31,6 +39,10 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
     },
     (error) => {
       console.error("Error loading texture:", error);
+      if (retryCount < MAX_RETRIES) {
+        setRetryCount((prev) => prev + 1);
+        return;
+      }
       setHasTextureError(true);
       handleApiError(error, "Failed to load model texture");
     }
@@ -77,7 +89,7 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
       <Center key={modelUrl}>
         <mesh scale={scale}>
           <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color="red" />
+          <meshStandardMaterial color="gray" roughness={0.8} metalness={0.2} />
         </mesh>
       </Center>
     );

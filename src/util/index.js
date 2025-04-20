@@ -548,14 +548,28 @@ const theme = {
 export const normalizeCloudFrontUrl = (url) => {
   if (!url) return url;
 
-  // Extract the base URL and path
-  const [baseUrl, ...pathParts] = url.split("/corlee/uploads/");
+  try {
+    // If the URL is already a CloudFront URL, return it as is
+    if (url.includes("cloudfront.net")) {
+      return url;
+    }
 
-  // If there's no duplicate, return original URL
-  if (pathParts.length <= 1) return url;
+    // If the URL is relative, prepend the CloudFront base URL
+    if (url.startsWith("/")) {
+      return `https://d1emfok2hfg9f.cloudfront.net${url}`;
+    }
 
-  // Take only the last path part to avoid duplicates
-  return `${baseUrl}/corlee/uploads/${pathParts[pathParts.length - 1]}`;
+    // If the URL is absolute but not CloudFront, try to proxy it
+    if (url.startsWith("http")) {
+      // Add CORS proxy if needed
+      return `https://cors-anywhere.herokuapp.com/${url}`;
+    }
+
+    return url;
+  } catch (error) {
+    console.error("Error normalizing URL:", error);
+    return url;
+  }
 };
 
 export { mockData, theme };
