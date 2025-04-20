@@ -189,18 +189,6 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
 
 const FabricModel = ({ textureUrl, modelUrl, scale, loadingText }) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
-  const preloaded = useRef(new Set());
-
-  useEffect(() => {
-    if (!preloaded.current.has(modelUrl)) {
-      useGLTF.preload(modelUrl);
-      preloaded.current.add(modelUrl);
-    }
-    if (textureUrl && !preloaded.current.has(textureUrl)) {
-      useTexture.preload(textureUrl);
-      preloaded.current.add(textureUrl);
-    }
-  }, [modelUrl, textureUrl]);
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
