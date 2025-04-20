@@ -649,11 +649,28 @@ function EditFabricPage() {
                   <div className="image-preview">
                     {colorImage.primary_image ? (
                       imageDetails[colorImage.primary_image] ? (
-                        <img
-                          src={imageDetails[colorImage.primary_image]?.file_url}
-                          alt="Primary"
-                          className="preview-image"
-                        />
+                        <>
+                          <img
+                            src={
+                              imageDetails[colorImage.primary_image]?.file_url
+                            }
+                            alt="Primary"
+                            className="preview-image"
+                          />
+                          <button
+                            className="remove-preview-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleColorImageChange(
+                                index,
+                                "primary_image",
+                                null
+                              );
+                            }}
+                          >
+                            ×
+                          </button>
+                        </>
                       ) : (
                         <div className="selected-image">Loading image...</div>
                       )
@@ -675,11 +692,22 @@ function EditFabricPage() {
                   <div className="image-preview">
                     {colorImage.aux_image1 ? (
                       imageDetails[colorImage.aux_image1] ? (
-                        <img
-                          src={imageDetails[colorImage.aux_image1]?.file_url}
-                          alt="Additional 1"
-                          className="preview-image"
-                        />
+                        <>
+                          <img
+                            src={imageDetails[colorImage.aux_image1]?.file_url}
+                            alt="Additional 1"
+                            className="preview-image"
+                          />
+                          <button
+                            className="remove-preview-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleColorImageChange(index, "aux_image1", null);
+                            }}
+                          >
+                            ×
+                          </button>
+                        </>
                       ) : (
                         <div className="selected-image">Loading image...</div>
                       )
@@ -701,11 +729,22 @@ function EditFabricPage() {
                   <div className="image-preview">
                     {colorImage.aux_image2 ? (
                       imageDetails[colorImage.aux_image2] ? (
-                        <img
-                          src={imageDetails[colorImage.aux_image2]?.file_url}
-                          alt="Additional 2"
-                          className="preview-image"
-                        />
+                        <>
+                          <img
+                            src={imageDetails[colorImage.aux_image2]?.file_url}
+                            alt="Additional 2"
+                            className="preview-image"
+                          />
+                          <button
+                            className="remove-preview-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleColorImageChange(index, "aux_image2", null);
+                            }}
+                          >
+                            ×
+                          </button>
+                        </>
                       ) : (
                         <div className="selected-image">Loading image...</div>
                       )
@@ -727,11 +766,22 @@ function EditFabricPage() {
                   <div className="image-preview">
                     {colorImage.aux_image3 ? (
                       imageDetails[colorImage.aux_image3] ? (
-                        <img
-                          src={imageDetails[colorImage.aux_image3]?.file_url}
-                          alt="Additional 3"
-                          className="preview-image"
-                        />
+                        <>
+                          <img
+                            src={imageDetails[colorImage.aux_image3]?.file_url}
+                            alt="Additional 3"
+                            className="preview-image"
+                          />
+                          <button
+                            className="remove-preview-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleColorImageChange(index, "aux_image3", null);
+                            }}
+                          >
+                            ×
+                          </button>
+                        </>
                       ) : (
                         <div className="selected-image">Loading image...</div>
                       )
@@ -753,11 +803,26 @@ function EditFabricPage() {
                   <div className="image-preview">
                     {colorImage.model_image ? (
                       imageDetails[colorImage.model_image] ? (
-                        <img
-                          src={imageDetails[colorImage.model_image]?.file_url}
-                          alt="Model"
-                          className="preview-image"
-                        />
+                        <>
+                          <img
+                            src={imageDetails[colorImage.model_image]?.file_url}
+                            alt="Model"
+                            className="preview-image"
+                          />
+                          <button
+                            className="remove-preview-button"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              handleColorImageChange(
+                                index,
+                                "model_image",
+                                null
+                              );
+                            }}
+                          >
+                            ×
+                          </button>
+                        </>
                       ) : (
                         <div className="selected-image">Loading image...</div>
                       )
@@ -945,6 +1010,32 @@ function EditFabricPage() {
 
         .image-preview:hover {
           box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .remove-preview-button {
+          position: absolute;
+          top: 8px;
+          right: 8px;
+          width: 24px;
+          height: 24px;
+          background: rgba(255, 0, 0, 0.8);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          padding: 0;
+          line-height: 1;
+          aspect-ratio: 1;
+          opacity: 0;
+          transition: opacity 0.2s;
+        }
+
+        .image-preview:hover .remove-preview-button {
+          opacity: 1;
         }
 
         .preview-image {

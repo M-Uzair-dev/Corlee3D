@@ -8,20 +8,68 @@ THREE.Cache.enabled = true;
 
 // Split Model into Textured and NonTextured variants to avoid conditional hooks
 const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
-  const texture = useTexture(textureUrl);
-  texture.encoding = THREE.sRGBEncoding;
-  texture.colorSpace = "srgb-linear"; // Ensures colors are accurate
+  const [texture, setTexture] = useState(null);
   const modelRef = useRef();
   const materialRef = useRef();
 
+  useEffect(() => {
+    if (!textureUrl) return;
+
+    const loadTexture = async () => {
+      try {
+        // Create a new image element
+        const img = new Image();
+        img.crossOrigin = "anonymous"; // Enable CORS
+
+        // Create a promise to handle the image loading
+        const loadPromise = new Promise((resolve, reject) => {
+          img.onload = () => resolve(img);
+          img.onerror = (error) => reject(error);
+        });
+
+        // Set the source and wait for it to load
+        img.src = textureUrl;
+        const loadedImg = await loadPromise;
+
+        // Create a canvas to draw the image
+        const canvas = document.createElement("canvas");
+        canvas.width = loadedImg.width;
+        canvas.height = loadedImg.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(loadedImg, 0, 0);
+
+        // Create a new texture from the canvas
+        const newTexture = new THREE.Texture(canvas);
+        newTexture.needsUpdate = true;
+        newTexture.encoding = THREE.sRGBEncoding;
+        newTexture.colorSpace = "srgb-linear";
+
+        setTexture(newTexture);
+      } catch (error) {
+        console.error("Error loading texture:", error);
+        // Fallback to a default texture or handle the error as needed
+      }
+    };
+
+    loadTexture();
+
+    // Cleanup
+    return () => {
+      if (texture) {
+        texture.dispose();
+      }
+    };
+  }, [textureUrl]);
+
   const { material, size } = useMemo(() => {
+    if (!texture) return { material: null, size: new THREE.Vector3() };
+
     const box = new THREE.Box3().setFromObject(gltf.scene);
     const size = new THREE.Vector3();
-
     box.getSize(size);
 
     const mat = new THREE.MeshStandardMaterial({
-      map: texture.clone(),
+      map: texture,
       roughness: 0.9,
       metalness: 0.0,
     });
@@ -31,21 +79,16 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
 
     return { material: mat, size };
   }, [gltf, texture, tileSize]);
+
   const clonedScene = useMemo(() => {
+    if (!material) return gltf.scene.clone();
+
     const cloned = gltf.scene.clone();
     cloned.traverse((child) => {
       if (child.isMesh) child.material = material;
     });
     return cloned;
   }, [gltf, material]);
-
-  useEffect(
-    () => () => {
-      material.dispose();
-      texture.dispose();
-    },
-    [texture]
-  );
 
   return (
     <Center key={modelUrl}>

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ImageUploader from "./ImageUploader";
 import { api } from "../config/api";
+import { toast } from "sonner";
 
 const MediaGalleryPopup = ({ isOpen, setIsOpen, onSelectImage }) => {
   const [images, setImages] = useState([]);
@@ -12,6 +13,9 @@ const MediaGalleryPopup = ({ isOpen, setIsOpen, onSelectImage }) => {
   const [hasMore, setHasMore] = useState(true);
   const [totalCount, setTotalCount] = useState(0);
   const [pageSize] = useState(8); // Number of images per page
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [imageToDelete, setImageToDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   // Fetch images when the component mounts
   useEffect(() => {
@@ -88,6 +92,43 @@ const MediaGalleryPopup = ({ isOpen, setIsOpen, onSelectImage }) => {
     fetchImages(1);
   };
 
+  // Handle delete button click
+  const handleDeleteClick = (e, imageId) => {
+    e.stopPropagation(); // Prevent triggering image selection
+    setImageToDelete(imageId);
+    setShowDeleteModal(true);
+  };
+
+  // Handle delete confirmation
+  const handleDeleteConfirm = async () => {
+    if (!imageToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await api.delete(`/media/${imageToDelete}/delete/`);
+      if (response.status === 204) {
+        // Remove the deleted image from the list
+        setImages(images.filter((img) => img.id !== imageToDelete));
+        setTotalCount((prev) => prev - 1);
+        toast.success("Image deleted successfully");
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.error || "Failed to delete image";
+      toast.error(errorMessage);
+    } finally {
+      setIsDeleting(false);
+      setShowDeleteModal(false);
+      setImageToDelete(null);
+    }
+  };
+
+  // Handle delete cancel
+  const handleDeleteCancel = () => {
+    setShowDeleteModal(false);
+    setImageToDelete(null);
+  };
+
   // If the popup is not open, don't render anything
   if (!isOpen) return null;
 
@@ -132,6 +173,12 @@ const MediaGalleryPopup = ({ isOpen, setIsOpen, onSelectImage }) => {
                 onClick={() => handleImageSelect(image.id)}
               >
                 <img src={image.file_url} alt={`Image ${image.id}`} />
+                <button
+                  className="delete-button"
+                  onClick={(e) => handleDeleteClick(e, image.id)}
+                >
+                  ×
+                </button>
                 {selectedImageId === image.id && (
                   <div className="selection-indicator">✓</div>
                 )}
@@ -147,6 +194,35 @@ const MediaGalleryPopup = ({ isOpen, setIsOpen, onSelectImage }) => {
             <button className="load-more-button" onClick={handleLoadMore}>
               Load More
             </button>
+          )}
+
+          {/* Delete Confirmation Modal */}
+          {showDeleteModal && (
+            <div className="delete-modal-overlay">
+              <div className="delete-modal">
+                <h3>Delete Image</h3>
+                <p>
+                  Are you sure you want to delete this image? This action cannot
+                  be undone.
+                </p>
+                <div className="delete-modal-buttons">
+                  <button
+                    className="cancel-button"
+                    onClick={handleDeleteCancel}
+                    disabled={isDeleting}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    className="delete-confirm-button"
+                    onClick={handleDeleteConfirm}
+                    disabled={isDeleting}
+                  >
+                    {isDeleting ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </div>
+            </div>
           )}
 
           <div className="media-gallery-footer">
@@ -349,6 +425,83 @@ const MediaGalleryPopup = ({ isOpen, setIsOpen, onSelectImage }) => {
 
         .load-more-button:hover {
           background: #e8f0fe;
+        }
+
+        .delete-button {
+          position: absolute;
+          top: 8px;
+          left: 8px;
+          width: 24px;
+          height: 24px;
+          background: rgba(255, 0, 0, 0.8);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          opacity: 0;
+          transition: opacity 0.2s;
+          padding: 0;
+          line-height: 1;
+          aspect-ratio: 1;
+        }
+
+        .media-item:hover .delete-button {
+          opacity: 1;
+        }
+
+        .delete-modal-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0, 0, 0, 0.5);
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 1001;
+        }
+
+        .delete-modal {
+          background: white;
+          padding: 20px;
+          border-radius: 8px;
+          width: 90%;
+          max-width: 400px;
+        }
+
+        .delete-modal h3 {
+          margin: 0 0 10px 0;
+          color: #333;
+        }
+
+        .delete-modal p {
+          margin: 0 0 20px 0;
+          color: #666;
+        }
+
+        .delete-modal-buttons {
+          display: flex;
+          justify-content: flex-end;
+          gap: 10px;
+        }
+
+        .delete-confirm-button {
+          background: #dc3545;
+          color: white;
+          border: none;
+          padding: 8px 16px;
+          border-radius: 4px;
+          cursor: pointer;
+        }
+
+        .delete-confirm-button:disabled {
+          background: #ccc;
+          cursor: not-allowed;
         }
       `}</style>
     </div>
