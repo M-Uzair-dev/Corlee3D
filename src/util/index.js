@@ -549,25 +549,26 @@ export const normalizeCloudFrontUrl = (url) => {
   if (!url) return url;
 
   try {
-    // If the URL is already a CloudFront URL, return it as is
+    // If it's already a CloudFront URL, return it with CORS proxy
     if (url.includes("cloudfront.net")) {
-      return url;
+      // Use a reliable CORS proxy for WebGL textures
+      return `https://corsproxy.io/?${encodeURIComponent(url)}`;
     }
 
-    // If the URL is relative, prepend the CloudFront base URL
+    // If it's a relative URL, prepend CloudFront base URL
     if (url.startsWith("/")) {
-      return `https://d1emfok2hfg9f.cloudfront.net${url}`;
+      const cloudfrontUrl = `https://d1emfok2hfg9f.cloudfront.net${url}`;
+      return `https://corsproxy.io/?${encodeURIComponent(cloudfrontUrl)}`;
     }
 
-    // If the URL is absolute but not CloudFront, try to proxy it
+    // If it's an absolute URL but not CloudFront, add CORS proxy
     if (url.startsWith("http")) {
-      // Add CORS proxy if needed
-      return `https://cors-anywhere.herokuapp.com/${url}`;
+      return `https://corsproxy.io/?${encodeURIComponent(url)}`;
     }
 
     return url;
   } catch (error) {
-    console.error("Error normalizing URL:", error);
+    console.error("Error normalizing CloudFront URL:", error);
     return url;
   }
 };
