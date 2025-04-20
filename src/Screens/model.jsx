@@ -3,51 +3,14 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, useGLTF, useTexture, Center } from "@react-three/drei";
 import * as THREE from "three";
 import "./model.css";
-import { normalizeCloudFrontUrl } from "../util";
-import { handleApiError } from "../util/errorHandler";
 
 THREE.Cache.enabled = true;
 
 // Split Model into Textured and NonTextured variants to avoid conditional hooks
 const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
-  const [hasTextureError, setHasTextureError] = useState(false);
-  const [modelError, setModelError] = useState(false);
-  const [retryCount, setRetryCount] = useState(0);
-  const MAX_RETRIES = 2;
-
-  const normalizedTextureUrl = useMemo(() => {
-    try {
-      // Try to use a proxy if direct access fails
-      const url = normalizeCloudFrontUrl(textureUrl);
-      if (retryCount > 0) {
-        // Add timestamp to bypass cache
-        return `${url}?t=${Date.now()}`;
-      }
-      return url;
-    } catch (error) {
-      console.error("Error normalizing texture URL:", error);
-      return textureUrl;
-    }
-  }, [textureUrl, retryCount]);
-
-  const texture = useTexture(
-    normalizedTextureUrl,
-    (texture) => {
-      texture.encoding = THREE.sRGBEncoding;
-      texture.colorSpace = "srgb-linear";
-      texture.crossOrigin = "anonymous";
-    },
-    (error) => {
-      console.error("Error loading texture:", error);
-      if (retryCount < MAX_RETRIES) {
-        setRetryCount((prev) => prev + 1);
-        return;
-      }
-      setHasTextureError(true);
-      handleApiError(error, "Failed to load model texture");
-    }
-  );
-
+  const texture = useTexture(textureUrl);
+  texture.encoding = THREE.sRGBEncoding;
+  texture.colorSpace = "srgb-linear"; // Ensures colors are accurate
   const modelRef = useRef();
   const materialRef = useRef();
 
@@ -84,17 +47,6 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
     [texture]
   );
 
-  if (hasTextureError || modelError) {
-    return (
-      <Center key={modelUrl}>
-        <mesh scale={scale}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color="gray" roughness={0.8} metalness={0.2} />
-        </mesh>
-      </Center>
-    );
-  }
-
   return (
     <Center key={modelUrl}>
       <primitive ref={modelRef} object={clonedScene} scale={scale} />
@@ -103,8 +55,6 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
 };
 
 const NonTexturedModel = ({ gltf, scale, tileSize, modelUrl }) => {
-  const [modelError, setModelError] = useState(false);
-
   const modelRef = useRef();
   const material = useMemo(
     () => new THREE.MeshStandardMaterial({ color: "gray" }),
@@ -118,17 +68,6 @@ const NonTexturedModel = ({ gltf, scale, tileSize, modelUrl }) => {
     });
     return cloned;
   }, [gltf, material]);
-
-  if (modelError) {
-    return (
-      <Center key={modelUrl}>
-        <mesh scale={scale}>
-          <boxGeometry args={[1, 1, 1]} />
-          <meshStandardMaterial color="red" />
-        </mesh>
-      </Center>
-    );
-  }
 
   return (
     <Center key={modelUrl}>
@@ -189,6 +128,18 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
 
 const FabricModel = ({ textureUrl, modelUrl, scale, loadingText }) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const preloaded = useRef(new Set());
+
+  useEffect(() => {
+    if (!preloaded.current.has(modelUrl)) {
+      useGLTF.preload(modelUrl);
+      preloaded.current.add(modelUrl);
+    }
+    if (textureUrl && !preloaded.current.has(textureUrl)) {
+      useTexture.preload(textureUrl);
+      preloaded.current.add(textureUrl);
+    }
+  }, [modelUrl, textureUrl]);
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>

@@ -545,32 +545,4 @@ const theme = {
   },
 };
 
-export const normalizeCloudFrontUrl = (url) => {
-  if (!url) return url;
-
-  try {
-    // If it's already a CloudFront URL, return it with CORS proxy
-    if (url.includes("cloudfront.net")) {
-      // Use a reliable CORS proxy for WebGL textures
-      return `https://corsproxy.io/?${encodeURIComponent(url)}`;
-    }
-
-    // If it's a relative URL, prepend CloudFront base URL
-    if (url.startsWith("/")) {
-      const cloudfrontUrl = `https://d1emfok2hfg9f.cloudfront.net${url}`;
-      return `https://corsproxy.io/?${encodeURIComponent(cloudfrontUrl)}`;
-    }
-
-    // If it's an absolute URL but not CloudFront, add CORS proxy
-    if (url.startsWith("http")) {
-      return `https://corsproxy.io/?${encodeURIComponent(url)}`;
-    }
-
-    return url;
-  } catch (error) {
-    console.error("Error normalizing CloudFront URL:", error);
-    return url;
-  }
-};
-
 export { mockData, theme };
