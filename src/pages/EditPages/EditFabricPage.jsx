@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { useNavigate, useParams } from "react-router-dom";
 import MediaGalleryPopup from "../../components/MediaGalleryPopup";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
+import { handleApiError } from "../../util/errorHandling";
 import "./EditPages.css";
 
 function EditFabricPage() {
@@ -16,6 +17,11 @@ function EditFabricPage() {
     composition: "",
     weight: "",
     finish: "",
+    title_mandarin: "",
+    description_mandarin: "",
+    composition_mandarin: "",
+    weight_mandarin: "",
+    finish_mandarin: "",
     product_category: "",
     is_hot_selling: false,
     color_images: [
@@ -33,6 +39,7 @@ function EditFabricPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
   const [productCategories, setProductCategories] = useState([]);
   const [colorCategories, setColorCategories] = useState([]);
   const [imageDetails, setImageDetails] = useState({});
@@ -205,6 +212,11 @@ function EditFabricPage() {
           composition: fabricData?.composition || "",
           weight: fabricData?.weight || "",
           finish: fabricData?.finish || "",
+          title_mandarin: fabricData?.title_mandarin || "",
+          description_mandarin: fabricData?.description_mandarin || "",
+          composition_mandarin: fabricData?.composition_mandarin || "",
+          weight_mandarin: fabricData?.weight_mandarin || "",
+          finish_mandarin: fabricData?.finish_mandarin || "",
           product_category: productCategoryId,
           is_hot_selling: fabricData?.is_hot_selling || false,
           color_images: formattedColorImages,
@@ -356,6 +368,7 @@ function EditFabricPage() {
 
     setIsSubmitting(true);
     setErrorMessage("");
+    setFieldErrors({});
 
     try {
       // Transform form data for API
@@ -366,6 +379,11 @@ function EditFabricPage() {
         composition: formData.composition,
         weight: formData.weight,
         finish: formData.finish,
+        title_mandarin: formData.title_mandarin,
+        description_mandarin: formData.description_mandarin,
+        composition_mandarin: formData.composition_mandarin,
+        weight_mandarin: formData.weight_mandarin,
+        finish_mandarin: formData.finish_mandarin,
         product_category: parseInt(formData.product_category, 10),
         is_hot_selling: formData.is_hot_selling,
         color_images: formData.color_images
@@ -404,51 +422,8 @@ function EditFabricPage() {
       navigate("/dashboard/fabrics");
     } catch (error) {
       console.error("Error updating fabric:", error);
-      console.error("Error details:", {
-        message: error?.message,
-        status: error?.response?.status,
-        statusText: error?.response?.statusText,
-        responseData: error?.response?.data,
-        endpoint: `/fabrics/${id}/update/`,
-      });
-
-      // Try to extract the most helpful error message
-      let errorMsg;
-      if (error?.response?.data) {
-        if (typeof error.response.data === "string") {
-          errorMsg = error.response.data;
-        } else if (typeof error.response.data === "object") {
-          const errorData = error.response.data;
-          if (errorData.detail) {
-            errorMsg = errorData.detail;
-          } else if (errorData.message) {
-            errorMsg = errorData.message;
-          } else {
-            // Check for field-specific errors
-            const fieldErrors = Object.entries(errorData)
-              .filter(
-                ([key, value]) =>
-                  typeof value === "string" || Array.isArray(value)
-              )
-              .map(([key, value]) => {
-                const errorValue = Array.isArray(value)
-                  ? value.join(", ")
-                  : value;
-                return `${key}: ${errorValue}`;
-              });
-
-            if (fieldErrors.length > 0) {
-              errorMsg = fieldErrors.join("\n");
-            } else {
-              errorMsg = JSON.stringify(errorData);
-            }
-          }
-        }
-      } else {
-        errorMsg = error?.message || "An unknown error occurred";
-      }
-
-      setErrorMessage(`Failed to update fabric: ${errorMsg}`);
+      // Use the standardized error handling utility
+      handleApiError(error, "Fabric", setErrorMessage, setFieldErrors, true);
       toast.error("Error updating fabric");
     } finally {
       setIsSubmitting(false);
@@ -504,7 +479,26 @@ function EditFabricPage() {
                 value={formData.title}
                 onChange={handleInputChange}
                 required
+                className={fieldErrors.title ? "input-error" : ""}
               />
+              {fieldErrors.title && (
+                <div className="field-error">{fieldErrors.title}</div>
+              )}
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="title_mandarin">Title (Mandarin)</label>
+              <input
+                type="text"
+                id="title_mandarin"
+                name="title_mandarin"
+                value={formData.title_mandarin}
+                onChange={handleInputChange}
+                className={fieldErrors.title_mandarin ? "input-error" : ""}
+              />
+              {fieldErrors.title_mandarin && (
+                <div className="field-error">{fieldErrors.title_mandarin}</div>
+              )}
             </div>
 
             <div className="form-group">
@@ -516,7 +510,11 @@ function EditFabricPage() {
                 value={formData.item_code}
                 onChange={handleInputChange}
                 required
+                className={fieldErrors.item_code ? "input-error" : ""}
               />
+              {fieldErrors.item_code && (
+                <div className="field-error">{fieldErrors.item_code}</div>
+              )}
             </div>
           </div>
 
@@ -528,14 +526,18 @@ function EditFabricPage() {
               value={formData.product_category}
               onChange={handleInputChange}
               required
+              className={fieldErrors.product_category ? "input-error" : ""}
             >
               <option value="">Select a category</option>
               {productCategories.map((category) => (
                 <option key={category.id} value={category.id}>
-                  {category?.name}
+                  {category.name}
                 </option>
               ))}
             </select>
+            {fieldErrors.product_category && (
+              <div className="field-error">{fieldErrors.product_category}</div>
+            )}
           </div>
 
           <div className="form-group">
@@ -544,6 +546,17 @@ function EditFabricPage() {
               id="description"
               name="description"
               value={formData.description}
+              onChange={handleInputChange}
+              rows="4"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description_mandarin">Description (Mandarin)</label>
+            <textarea
+              id="description_mandarin"
+              name="description_mandarin"
+              value={formData.description_mandarin}
               onChange={handleInputChange}
               rows="4"
             />
@@ -563,6 +576,20 @@ function EditFabricPage() {
             </div>
 
             <div className="form-group">
+              <label htmlFor="composition_mandarin">
+                Composition (Mandarin)
+              </label>
+              <input
+                type="text"
+                id="composition_mandarin"
+                name="composition_mandarin"
+                value={formData.composition_mandarin}
+                onChange={handleInputChange}
+                placeholder="棉质100%"
+              />
+            </div>
+
+            <div className="form-group">
               <label htmlFor="weight">Weight</label>
               <input
                 type="text"
@@ -575,6 +602,20 @@ function EditFabricPage() {
             </div>
 
             <div className="form-group">
+              <label htmlFor="weight_mandarin">Weight (Mandarin)</label>
+              <input
+                type="text"
+                id="weight_mandarin"
+                name="weight_mandarin"
+                value={formData.weight_mandarin}
+                onChange={handleInputChange}
+                placeholder="200克/平方米"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
               <label htmlFor="finish">Finish</label>
               <input
                 type="text"
@@ -583,6 +624,18 @@ function EditFabricPage() {
                 value={formData.finish}
                 onChange={handleInputChange}
                 placeholder="e.g., Soft, Matte"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="finish_mandarin">Finish (Mandarin)</label>
+              <input
+                type="text"
+                id="finish_mandarin"
+                name="finish_mandarin"
+                value={formData.finish_mandarin}
+                onChange={handleInputChange}
+                placeholder="柔软，哑光"
               />
             </div>
           </div>

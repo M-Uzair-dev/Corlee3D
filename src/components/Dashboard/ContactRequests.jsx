@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { FaEnvelope, FaEye, FaEdit, FaTrash } from "react-icons/fa";
+import {
+  FaEnvelope,
+  FaEye,
+  FaEdit,
+  FaTrash,
+  FaChevronLeft,
+  FaChevronRight,
+} from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
@@ -44,7 +51,7 @@ const ContactRequests = () => {
         `/contact-requests/all/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
       const response = await api.get(
-        `/contact-requests/all/?page=${page}&page_size=${ITEMS_PER_PAGE}`
+        `/contact-requests/all/?page=${page}&page_size=${ITEMS_PER_PAGE}&dashboard=true`
       );
       console.log("Contact requests response:", response.data);
 
@@ -126,9 +133,42 @@ const ContactRequests = () => {
     }
   };
 
-  const handlePageChange = (newPage) => {
-    setPage(newPage);
+  const handlePrevPage = () => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
   };
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
+  };
+
+  // Create pagination UI component
+  const Pagination = () => (
+    <div className="pagination-controls">
+      <button
+        className="pagination-btn"
+        onClick={handlePrevPage}
+        disabled={page <= 1 || contactRequestsData.isLoading}
+      >
+        <FaChevronLeft /> Previous
+      </button>
+      <span className="pagination-info">
+        Page {page} of {totalPages}
+      </span>
+      {page < totalPages && (
+        <button
+          className="pagination-btn"
+          onClick={handleNextPage}
+          disabled={contactRequestsData.isLoading}
+        >
+          Next <FaChevronRight />
+        </button>
+      )}
+    </div>
+  );
 
   return (
     <>
@@ -139,10 +179,9 @@ const ContactRequests = () => {
         page="contactRequest"
         onDelete={handleDeleteRequest}
         onRefresh={fetchContactRequests}
-        currentPage={page}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
       />
+
+      {totalPages > 1 && <Pagination />}
 
       <DeleteModal
         isOpen={showDeleteModal}
@@ -182,6 +221,40 @@ const ContactRequests = () => {
 
         .action-btn.delete:hover {
           color: #ea4335;
+        }
+
+        .pagination-controls {
+          display: flex;
+          gap: 8px;
+          justify-content: center;
+          align-items: center;
+          margin-top: 20px;
+        }
+
+        .pagination-btn {
+          background: none;
+          border: 1px solid #ddd;
+          border-radius: 4px;
+          padding: 8px 12px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          transition: background-color 0.2s;
+        }
+
+        .pagination-btn:hover:not(:disabled) {
+          background-color: #f5f5f5;
+        }
+
+        .pagination-btn:disabled {
+          opacity: 0.5;
+          cursor: not-allowed;
+        }
+
+        .pagination-info {
+          font-size: 14px;
+          color: #666;
         }
       `}</style>
     </>

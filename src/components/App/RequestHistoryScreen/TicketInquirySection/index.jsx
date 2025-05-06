@@ -9,6 +9,7 @@ import GeneralInquiry from "./GeneralInquiry";
 import { TailSpin } from "react-loader-spinner";
 
 function TicketInquirySection({ ticketInquiriesData }) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [data, setData] = useState([]);
   const [noData, setNoData] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -44,8 +45,8 @@ function TicketInquirySection({ ticketInquiriesData }) {
       const response = await api.get("/contact-requests/");
       console.log("History Response :", response);
       if (response.status === 200) {
-        if (response?.data?.contact_requests?.length > 0) {
-          setData(response.data.contact_requests);
+        if (response?.data?.results?.length > 0) {
+          setData(response.data.results);
           setNoData(false);
           setLoading(false);
         } else {
@@ -102,16 +103,23 @@ function TicketInquirySection({ ticketInquiriesData }) {
             }}
           >
             <h3 style={{ textAlign: "center", fontSize: "20px" }}>
-              Nothing in history
+              {isMandarin ? "没有历史记录" : "No history found"}
             </h3>
           </div>
         ) : (
           <>
             {" "}
             <div className="resultsfound">
-              <p>
-                {data?.length} {data?.length > 1 ? "results" : "result"} found
-              </p>
+              {isMandarin ? (
+                <p>
+                  {data?.length} {data?.length > 1 ? "个结果" : "个结果"} 已找到
+                </p>
+              ) : (
+                <p>
+                  {data?.length} {data?.length > 1 ? "results" : "result"}
+                  found
+                </p>
+              )}
             </div>
             {data.map((item, index) =>
               item.request_type == "general" ? (

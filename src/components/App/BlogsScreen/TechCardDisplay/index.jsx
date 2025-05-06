@@ -1,6 +1,7 @@
 import "./style.css";
 
 function TechCardDisplay(blog) {
+  const isMandarin = localStorage.getItem("isMandarin");
   function formatDate(inputDate) {
     const date = new Date(inputDate);
     const months = [
@@ -51,10 +52,18 @@ function TechCardDisplay(blog) {
 
   return (
     <div className="tech-card-container">
-      <p className="tech-category-subtitle-text-style">{blog.category_name}</p>
-      <p className="tech-card-subtitle-text-style">{blog.title}</p>
+      <p className="tech-category-subtitle-text-style">
+        {isMandarin && blog.category_name_mandarin
+          ? blog.category_name_mandarin
+          : blog.category_name}
+      </p>
+      <p className="tech-card-subtitle-text-style">
+        {isMandarin && blog.title_mandarin ? blog.title_mandarin : blog.title}
+      </p>
       <p className="tech-category-card-text">
-        {removeHTMLTags(blog.content.replace(/\n/g, ""))}
+        {isMandarin && blog.content_mandarin
+          ? removeHTMLTags(blog.content_mandarin.replace(/\n/g, ""))
+          : removeHTMLTags(blog.content.replace(/\n/g, ""))}
       </p>
       <div className="article-meta-container">
         <img

@@ -2,10 +2,17 @@ import "./style.css";
 import messages from "./messages.json";
 
 function StoryDisplay() {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="story-box">
-      <p className="golden-heading">{messages["how_started"]}</p>
-      <p className="hero-title">{messages["story__commitment_excellence"]}</p>
+      <p className="golden-heading">
+        {isMandarin ? "如何开始" : "How it started"}
+      </p>
+      <p className="hero-title">
+        {isMandarin
+          ? "我们的故事与对卓越的承诺"
+          : "Our Story & Commitment to Excellence"}
+      </p>
     </div>
   );
 }

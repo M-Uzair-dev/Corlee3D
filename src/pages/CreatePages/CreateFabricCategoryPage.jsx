@@ -11,6 +11,8 @@ function CreateFabricCategoryPage() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
+    name_mandarin: "",
+    description_mandarin: "",
     image: null,
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -59,6 +61,8 @@ function CreateFabricCategoryPage() {
       const payload = {
         name: formData.name,
         description: formData.description || "",
+        name_mandarin: formData.name_mandarin || "",
+        description_mandarin: formData.description_mandarin || "",
         image: formData.image,
       };
 
@@ -116,6 +120,18 @@ function CreateFabricCategoryPage() {
           </div>
 
           <div className="form-group">
+            <label htmlFor="name_mandarin">Category Name (Mandarin)</label>
+            <input
+              type="text"
+              id="name_mandarin"
+              name="name_mandarin"
+              value={formData.name_mandarin}
+              onChange={handleInputChange}
+              placeholder="e.g., 棉布，丝绸，亚麻布"
+            />
+          </div>
+
+          <div className="form-group">
             <label htmlFor="description">Description</label>
             <textarea
               id="description"
@@ -124,6 +140,18 @@ function CreateFabricCategoryPage() {
               onChange={handleInputChange}
               rows="4"
               placeholder="Enter category description (optional)"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description_mandarin">Description (Mandarin)</label>
+            <textarea
+              id="description_mandarin"
+              name="description_mandarin"
+              value={formData.description_mandarin}
+              onChange={handleInputChange}
+              rows="4"
+              placeholder="输入类别描述（可选）"
             />
           </div>
         </div>

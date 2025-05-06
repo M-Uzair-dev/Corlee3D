@@ -24,6 +24,9 @@ function CreateEventPage() {
     url: "",
     email: "",
     phone: "",
+    title_mandarin: "",
+    description_mandarin: "",
+    location_mandarin: "",
   });
 
   const handleInputChange = (e) => {
@@ -76,6 +79,9 @@ function CreateEventPage() {
         url: formData.url,
         email: formData.email,
         phone: formData.phone,
+        title_mandarin: formData.title_mandarin,
+        description_mandarin: formData.description_mandarin,
+        location_mandarin: formData.location_mandarin,
       };
 
       console.log("Create Event Page - Sending payload:", payload);
@@ -137,6 +143,20 @@ function CreateEventPage() {
 
           <div className="form-row">
             <div className="form-group">
+              <label htmlFor="title_mandarin">Event Title (Mandarin)</label>
+              <input
+                type="text"
+                id="title_mandarin"
+                name="title_mandarin"
+                value={formData.title_mandarin}
+                onChange={handleInputChange}
+                placeholder="输入活动标题"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
               <label htmlFor="description">Description</label>
               <textarea
                 id="description"
@@ -145,6 +165,22 @@ function CreateEventPage() {
                 onChange={handleInputChange}
                 rows="4"
                 placeholder="Describe the event"
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="description_mandarin">
+                Description (Mandarin)
+              </label>
+              <textarea
+                id="description_mandarin"
+                name="description_mandarin"
+                value={formData.description_mandarin}
+                onChange={handleInputChange}
+                rows="4"
+                placeholder="描述活动"
               />
             </div>
           </div>
@@ -184,6 +220,20 @@ function CreateEventPage() {
                 onChange={handleInputChange}
                 placeholder="Enter event location"
                 required
+              />
+            </div>
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label htmlFor="location_mandarin">Location (Mandarin)</label>
+              <input
+                type="text"
+                id="location_mandarin"
+                name="location_mandarin"
+                value={formData.location_mandarin}
+                onChange={handleInputChange}
+                placeholder="输入活动地点"
               />
             </div>
           </div>

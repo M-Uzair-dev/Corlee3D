@@ -6,10 +6,18 @@ import "./style.css";
 import messages from "./messages.json";
 
 function DynamicContentDisplay(data) {
+  const isMandarin = localStorage.getItem("isMandarin");
   console.log(data);
   return (
     <div className="content-container  content-container-in-single-blog">
-      <p dangerouslySetInnerHTML={{ __html: data.content }}></p>
+      <p
+        dangerouslySetInnerHTML={{
+          __html:
+            isMandarin && data.content_mandarin
+              ? data.content_mandarin
+              : data.content,
+        }}
+      ></p>
     </div>
   );
 }

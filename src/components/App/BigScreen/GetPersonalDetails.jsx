@@ -4,6 +4,7 @@ import { TailSpin } from "react-loader-spinner";
 import { api } from "../../../config/api";
 import { toast } from "sonner";
 const GetPersonalDetails = (props) => {
+  const isMandarin = localStorage.getItem("isMandarin");
   const user = props.user;
   const [name, setName] = React.useState(user.name);
   const [companyname, setCompanyname] = React.useState(user.company_name);
@@ -12,7 +13,9 @@ const GetPersonalDetails = (props) => {
   const change = async () => {
     try {
       if (name === "" || companyname === "") {
-        toast.error("Please fill all the fields");
+        toast.error(
+          isMandarin ? "請填寫所有欄位" : "Please fill all the fields"
+        );
         return;
       }
       setLoading(true);
@@ -21,21 +24,23 @@ const GetPersonalDetails = (props) => {
         company_name: companyname,
       });
       if (response.status === 200) {
-        toast.success("Details updated successfully");
+        toast.success(isMandarin ? "更新成功" : "Details updated successfully");
 
         props.setUser({ ...user, name: name, company_name: companyname });
         props.setGetUserDetails("");
         setLoading(false);
       } else {
         toast.error(
-          response.data[Object.keys(response.data)[0]] || "Something went wrong"
+          response.data[Object.keys(response.data)[0]] ||
+            (isMandarin ? "發生錯誤" : "Something went wrong")
         );
         setLoading(false);
         props.setGetUserDetails("");
       }
     } catch (e) {
       toast.error(
-        e.data[Object.keys(response.data)[0]] || "Something went wrong"
+        e.data[Object.keys(response.data)[0]] ||
+          (isMandarin ? "發生錯誤" : "Something went wrong")
       );
       props.setGetUserDetails("");
       setLoading(false);
@@ -83,25 +88,29 @@ const GetPersonalDetails = (props) => {
             />
           </svg>
         </div>
-        <h1>Personal Details</h1>
-        <p>Update Your company details</p>
+        <h1>{isMandarin ? "個人詳細資料" : "Personal Details"}</h1>
+        <p>
+          {isMandarin ? "更新您的公司詳細資料" : "Update Your company details"}
+        </p>
         <div className="inputs">
           <div className="oneinput">
-            <label htmlFor="name">Name</label>
+            <label htmlFor="name">{isMandarin ? "姓名" : "Name"}</label>
             <input
               type="text"
               id="name"
-              placeholder="Name"
+              placeholder={isMandarin ? "姓名" : "Name"}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
           <div className="oneinput">
-            <label htmlFor="cname">Company name</label>
+            <label htmlFor="cname">
+              {isMandarin ? "公司名稱" : "Company name"}
+            </label>
             <input
               type="text"
               id="cname"
-              placeholder="Company name"
+              placeholder={isMandarin ? "公司名稱" : "Company name"}
               value={companyname}
               onChange={(e) => setCompanyname(e.target.value)}
             />
@@ -130,6 +139,8 @@ const GetPersonalDetails = (props) => {
               wrapperStyle={{}}
               wrapperClass=""
             />
+          ) : isMandarin ? (
+            "更新"
           ) : (
             "Update"
           )}

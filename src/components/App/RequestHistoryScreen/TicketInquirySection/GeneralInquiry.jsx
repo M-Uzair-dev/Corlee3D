@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const GeneralInquiry = (props) => {
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate();
   return (
     <div
@@ -12,17 +13,23 @@ const GeneralInquiry = (props) => {
       }}
     >
       <div className="infotext">
-        <p className="ticket">Ticket Number : {props.item.request_number}</p>
-        <p className="inqtext">General Inquiry</p>
+        <p className="ticket">
+          {isMandarin ? "票号" : "Ticket Number"} : {props.item.request_number}
+        </p>
+        <p className="inqtext">{isMandarin ? "一般查询" : "General Inquiry"}</p>
       </div>
       <div className="otherdata">
         <div className="productinqtextdiv">
-          <div className="headingofproduct">{props.item.subject}</div>
+          <div className="headingofproduct">
+            {isMandarin ? "主题" : "Subject"} : {props.item.subject}
+          </div>
           <p className="productdesc">{props.item.message}</p>
         </div>
       </div>{" "}
       <div className="datediv">
-        <p className="datep">{props.date}</p>
+        <p className="datep">
+          {isMandarin ? "日期" : "Date"} : {props.date}
+        </p>
       </div>
     </div>
   );

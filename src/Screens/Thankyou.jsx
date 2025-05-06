@@ -3,12 +3,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { toast } from "sonner";
 
 const Thankyou = () => {
+  const isMandarin = localStorage.getItem("isMandarin");
   const { id } = useParams();
   const navigate = useNavigate();
   const [myState, setMystate] = useState(0);
   const copyToClipboard = () => {
     navigator.clipboard.writeText(id);
-    toast.success("Copied to clipboard");
+    toast.success(isMandarin ? "已複製" : "Copied to clipboard");
   };
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -38,14 +39,22 @@ const Thankyou = () => {
             />
           </svg>
         </div>
-        <h1>Thank You</h1>
-        <h3>Your request has been submitted successfuly.</h3>
-        <p className="request">Request number</p>
+        <h1>{isMandarin ? "感谢您" : "Thank You"}</h1>
+        <h3>
+          {isMandarin
+            ? "您的请求已成功提交"
+            : "Your request has been submitted successfuly."}
+        </h3>
+        <p className="request">{isMandarin ? "请求编号" : "Request number"}</p>
         <div className="copydiv">
           <div className="codediv">
             <p>#{id}</p>
           </div>
-          <div className="copybuttondiv" onClick={() => copyToClipboard(id)}>
+          <div
+            className="copybuttondiv"
+            style={{ minWidth: "max-content" }}
+            onClick={() => copyToClipboard(id)}
+          >
             <svg
               width="16"
               height="18"
@@ -68,14 +77,25 @@ const Thankyou = () => {
                 stroke-linejoin="round"
               />
             </svg>
-            Copy
+            <p
+              style={{
+                width: "80px !important",
+                display: "block",
+                textWrap: "nowrap",
+              }}
+            >
+              {isMandarin ? "复制" : "Copy"}
+            </p>
           </div>
         </div>
         <p>
-          We have recieved your email. We are looking into yor request and will
-          get back to you as soon as possible.
+          {isMandarin
+            ? "我们已经收到您的电子邮件。我们正在研究您的请求，并将在尽快回复您。"
+            : "We have recieved your email. We are looking into yor request and will get back to you as soon as possible."}
         </p>
-        <button onClick={() => navigate("/")}>Great</button>
+        <button onClick={() => navigate("/")}>
+          {isMandarin ? "好" : "Great"}
+        </button>
       </div>
     </div>
   );

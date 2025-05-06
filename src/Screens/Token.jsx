@@ -25,6 +25,13 @@ const Token = () => {
       localStorage.setItem("email", data.email);
       localStorage.setItem("country", data.country);
       localStorage.setItem("address", data.address);
+      localStorage.setItem("city", data.city);
+      localStorage.setItem("county", data.county);
+      localStorage.setItem("country", data.country);
+      localStorage.setItem("address_mandarin", data.address_mandarin);
+      localStorage.setItem("city_mandarin", data.city_mandarin);
+      localStorage.setItem("county_mandarin", data.county_mandarin);
+      localStorage.setItem("country_mandarin", data.country_mandarin);
     }
   };
   useEffect(() => {

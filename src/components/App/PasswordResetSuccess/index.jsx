@@ -7,6 +7,8 @@ import { useState } from "react";
 import { api } from "../../../config/api";
 
 function ComponentYouSelected(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
+
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const verify = async () => {
@@ -14,19 +16,21 @@ function ComponentYouSelected(props) {
       setLoading(true);
       const response = await api.get(`/verify-email/${props.token}/`);
       if (response.status == 200) {
-        await toast.success("Email verified Successfully");
+        await toast.success(
+          isMandarin ? "電子郵件已驗證成功" : "Email verified Successfully"
+        );
         localStorage.setItem("emailnotverified", "false");
 
         setLoading(false);
         navigate("/");
         window.location.reload();
       } else {
-        await toast.success("An error occured !");
+        await toast.success(isMandarin ? "發生錯誤" : "An error occured !");
         setLoading(false);
         navigate("/");
       }
     } catch (e) {
-      await toast.success("An error occured !");
+      await toast.success(isMandarin ? "發生錯誤" : "An error occured !");
       setLoading(false);
       navigate("/");
     }
@@ -44,11 +48,17 @@ function ComponentYouSelected(props) {
             }}
             disabled={loading}
           >
-            {loading
+            {isMandarin
+              ? loading
+                ? "加载中..."
+                : props.email
+                ? "验证"
+                : "返回登录"
+              : loading
               ? "Loading..."
               : props.email
               ? "Verify"
-              : messages["return_login"]}
+              : "Return to login"}
           </button>
         </div>
       </div>

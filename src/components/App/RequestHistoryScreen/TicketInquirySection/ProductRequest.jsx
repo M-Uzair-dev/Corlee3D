@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const ProductRequest = (props) => {
+  const isMandarin = localStorage.getItem("isMandarin");
   const item = props.item;
   const [counter, setCounter] = useState(0);
   const navigate = useNavigate();
@@ -32,10 +33,11 @@ const ProductRequest = (props) => {
   useEffect(() => {
     const tempimages = item.related_order.items.map((orderItem) => {
       const image = orderItem.fabric.color_images.find(
-        (colorImage) => colorImage.color === orderItem.color
+        (colorImage) => colorImage.color_display_name === orderItem.color
       );
       return image ? image.primary_image_url : null;
     });
+    console.log("tempimages", tempimages);
     setImages(tempimages.filter(Boolean)); // Filter out any null values
   }, [item]);
 
@@ -48,8 +50,12 @@ const ProductRequest = (props) => {
       }}
     >
       <div className="infotext">
-        <p className="ticket">Ticket Number : {item.request_number}</p>
-        <p className="inqtext">Products Request</p>
+        <p className="ticket">
+          {isMandarin ? "票号" : "Ticket Number"} : {item.request_number}
+        </p>
+        <p className="inqtext">
+          {isMandarin ? "产品请求" : "Products Request"}
+        </p>
       </div>
       <div className="otherdata2">
         <div
@@ -91,7 +97,9 @@ const ProductRequest = (props) => {
         </div>
       </div>{" "}
       <div className="datediv">
-        <p className="datep">{props.date}</p>
+        <p className="datep">
+          {isMandarin ? "日期" : "Date"} : {props.date}
+        </p>
       </div>
     </div>
   );

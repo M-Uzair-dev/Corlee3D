@@ -2,6 +2,7 @@ import "./style.css";
 import messages from "./messages.json";
 
 function TechInfoBox(data) {
+  const isMandarin = localStorage.getItem("isMandarin");
   function formatDate(inputDate) {
     const date = new Date(inputDate);
     const months = [
@@ -28,8 +29,14 @@ function TechInfoBox(data) {
   return (
     <div className="technology-card">
       <div className="technology-card2">
-        <p className="tech-title-bold">{data.category_name}</p>
-        <p className="tech-lauda-bold">{data.title}</p>
+        <p className="tech-title-bold">
+          {isMandarin && data.category_name_mandarin
+            ? data.category_name_mandarin
+            : data.category_name}
+        </p>
+        <p className="tech-lauda-bold">
+          {isMandarin && data.title_mandarin ? data.title_mandarin : data.title}
+        </p>
         <div className="technology-card1">
           <img
             src={

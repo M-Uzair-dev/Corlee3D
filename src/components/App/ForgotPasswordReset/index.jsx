@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 
 function FPReset(props) {
   const navigate = useNavigate();
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div
       style={{
@@ -28,7 +29,7 @@ function FPReset(props) {
             onClick={() => navigate("/login")}
             style={{ cursor: "pointer" }}
           >
-            {messages["lt_login"]}
+            {isMandarin ? "<- 登录" : "<- Login"}
           </p>
         </div>
       </div>

@@ -4,9 +4,10 @@ import "./style.css";
 import { api } from "../../../../config/api";
 import { toast } from "sonner";
 import { TailSpin } from "react-loader-spinner";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function StylishDisplay(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate(props);
   const [loading, setLoading] = useState(false);
   const [showLoginPopup, setshowLoginPopup] = useState(false);
@@ -16,6 +17,34 @@ function StylishDisplay(props) {
   const [selectedImage, setSelectedImage] = useState(
     props.color_images[0].primary_image_url
   );
+  const [preloadedImages, setPreloadedImages] = useState({});
+
+  // Preload all color images when component mounts
+  useEffect(() => {
+    const preloadImages = async () => {
+      const imageCache = {};
+
+      // Create promises for all images
+      const preloadPromises = props.color_images.map((colorImage) => {
+        return new Promise((resolve) => {
+          const img = new Image();
+          img.src = colorImage.primary_image_url;
+          img.onload = () => {
+            imageCache[colorImage.color] = colorImage.primary_image_url;
+            resolve();
+          };
+          img.onerror = () => resolve(); // Resolve even on error to prevent hanging
+        });
+      });
+
+      // Wait for all images to load
+      await Promise.all(preloadPromises);
+      setPreloadedImages(imageCache);
+    };
+
+    preloadImages();
+  }, [props.color_images]);
+
   const addToCart = async (e) => {
     try {
       e.stopPropagation();
@@ -31,10 +60,20 @@ function StylishDisplay(props) {
         quantity: "1",
       });
       if (response.status === 200) {
-        toast.success("Item added to bag");
+        toast(isMandarin ? "產品已添加到購物車" : "Item added to bag", {
+          action: {
+            label: isMandarin ? "查看購物車" : "View Bag",
+            onClick: () => navigate("/user/bag"),
+          },
+        });
         setLoading(false);
       } else if (response.status === 201) {
-        toast.success("Item added to bag");
+        toast(isMandarin ? "產品已添加到購物車" : "Item added to bag", {
+          action: {
+            label: isMandarin ? "查看購物車" : "View Bag",
+            onClick: () => navigate("/user/bag"),
+          },
+        });
         props.setRefresh(Date.now());
         setLoading(false);
       }
@@ -53,6 +92,8 @@ function StylishDisplay(props) {
       style={{
         backgroundImage: `url(${selectedImage})`,
         cursor: "pointer",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
       }}
     >
       <TrendyDisplay {...props} setshowLoginPopup={setshowLoginPopup} />
@@ -173,8 +214,14 @@ function StylishDisplay(props) {
                 />
               </svg>
             </div>
-            <h1>Login Required</h1>
-            <p>This action requires login.</p>
+            <h1
+              className={isMandarin ? "loginpopupheader" : "loginpopupheader2"}
+            >
+              {isMandarin ? "需要登录" : "Login Required"}
+            </h1>
+            <p>
+              {isMandarin ? "此操作需要登录。" : "This action requires login."}
+            </p>
             <div className="buttonsinloginpopup">
               <button
                 onClick={(e) => {
@@ -182,7 +229,7 @@ function StylishDisplay(props) {
                   navigate("/login");
                 }}
               >
-                Login
+                {isMandarin ? "登录" : "Login"}
               </button>
               <button
                 onClick={(e) => {
@@ -190,12 +237,19 @@ function StylishDisplay(props) {
                   setshowLoginPopup(false);
                 }}
               >
-                No, I'm cool
+                {isMandarin ? "不，谢谢" : "No, I'm cool"}
               </button>
             </div>
           </div>
         </div>
       )}
+
+      {/* Hidden div to preload all images */}
+      <div style={{ display: "none" }}>
+        {props.color_images.map((colorImage, index) => (
+          <img key={index} src={colorImage.primary_image_url} alt="preload" />
+        ))}
+      </div>
     </div>
   );
 }

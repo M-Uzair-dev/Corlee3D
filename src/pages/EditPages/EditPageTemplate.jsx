@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Edit from "../../components/Edit";
 import { api } from "../../config/api";
 import { toast } from "sonner"; // Assuming you use sonner for notifications
+import { handleApiError } from "../../util/errorHandling";
 import "./EditPages.css";
 
 // Sample mock data for testing - will be replaced with API calls later
@@ -92,6 +93,7 @@ const EditPageTemplate = ({
   const [isLoadingData, setIsLoadingData] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -110,6 +112,7 @@ const EditPageTemplate = ({
     const fetchData = async () => {
       setIsLoadingData(true);
       setErrorMessage(null);
+      setFieldErrors({});
       try {
         const response = await api.get(`${fetchEndpoint}/${id}`);
         setData(response.data);
@@ -128,6 +131,7 @@ const EditPageTemplate = ({
   const handleSubmit = async (formData) => {
     setIsSubmitting(true);
     setErrorMessage(null);
+    setFieldErrors({});
 
     // Simulate API call with timeout
     setTimeout(() => {
@@ -143,8 +147,7 @@ const EditPageTemplate = ({
       toast.success(`${entityName} updated successfully`);
       navigate(redirectPath);
     } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message;
-      setErrorMessage(`Failed to update ${entityName}: ${errorMsg}`);
+      handleApiError(error, entityName, setErrorMessage, setFieldErrors, true);
       toast.error(`Error updating ${entityName}`);
       setIsSubmitting(false);
     }
@@ -166,6 +169,7 @@ const EditPageTemplate = ({
         isLoading={isSubmitting}
         isLoadingData={isLoadingData}
         errorMessage={errorMessage}
+        fieldErrors={fieldErrors}
       />
     </div>
   );

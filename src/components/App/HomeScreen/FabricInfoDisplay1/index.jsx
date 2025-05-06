@@ -6,11 +6,13 @@ import RealizationDisplay from "../RealizationDisplay";
 import SvgIcon1 from "./icons/SvgIcon1";
 import "./style.css";
 import messages from "./messages.json";
+import messages2 from "./messages2.json";
 import { useNavigate } from "react-router-dom";
 import arrow from "../../../../../public/pngegg.png";
 
 function FabricInfoDisplay1({ fabricInfoOptions }) {
   const navigate = useNavigate();
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="global-fashion-fabric-styles">
       <FabricDescriptionSection />
@@ -27,7 +29,9 @@ function FabricInfoDisplay1({ fabricInfoOptions }) {
               navigate("/about");
             }}
           >
-            {messages["discover_more"]}
+            {isMandarin
+              ? messages2["discover_more"]
+              : messages["discover_more"]}
             <SvgIcon1 className="svg-container3" />
           </button>
           <ImageContainer3 />
@@ -42,10 +46,14 @@ function FabricInfoDisplay1({ fabricInfoOptions }) {
       <div className="custom-fabric-features-section">
         <div className="custom-fabric-description-container">
           <p className="majestic-heading1">
-            {messages["we_analyzeltbr_gtwe_refineltbr_gtwe_innovate"]}
+            {isMandarin
+              ? messages2["we_analyzeltbr_gtwe_refineltbr_gtwe_innovate"]
+              : messages["we_analyzeltbr_gtwe_refineltbr_gtwe_innovate"]}
           </p>
           <p className="custom-fabric-description-style">
-            {messages["we_trusted_partner_offering_crafted_custom_functio"]}
+            {isMandarin
+              ? messages2["we_trusted_partner_offering_crafted_custom_functio"]
+              : messages["we_trusted_partner_offering_crafted_custom_functio"]}
           </p>
           <p
             className="hero-text-underline"
@@ -54,7 +62,8 @@ function FabricInfoDisplay1({ fabricInfoOptions }) {
             }}
             onClick={() => navigate("/about")}
           >
-            About us <img className="arrow arrowdiff" src={arrow} alt="arrow" />
+            {isMandarin ? messages2["about_us_gt"] : messages["about_us_gt"]}
+            <img className="arrow arrowdiff" src={arrow} alt="arrow" />
           </p>
         </div>
         <FabricDisplayRenderer fabricInfoOptions={fabricInfoOptions} />

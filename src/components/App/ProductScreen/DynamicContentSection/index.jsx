@@ -7,6 +7,7 @@ import { TailSpin } from "react-loader-spinner";
 import StylishProductDisplay from "../StylishProductDisplay";
 
 function DynamicContentSection(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [color, setColor] = useState([]);
@@ -69,6 +70,8 @@ function DynamicContentSection(props) {
                 wrapperStyle={{}}
                 wrapperClass=""
               />
+            ) : isMandarin ? (
+              "加载更多"
             ) : (
               "Load More"
             )}

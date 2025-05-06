@@ -2,6 +2,7 @@ import "./style.css";
 import messages from "./messages.json";
 
 function VisionBlock() {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="vision-container">
       <img
@@ -9,7 +10,9 @@ function VisionBlock() {
         alt=""
         className="vision-icon"
       />
-      <p className="visionary-heading">{messages["vision"]}</p>
+      <p className="visionary-heading">
+        {isMandarin ? "我们的愿景" : "Our Vision"}
+      </p>
     </div>
   );
 }

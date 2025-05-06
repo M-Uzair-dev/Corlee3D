@@ -10,6 +10,7 @@ export function EventCardWidget3({
   dynamicContentWithShowMoreButton7,
   event,
 }) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [showMore, setShowMore] = useState(false);
   const [isTruncated, setIsTruncated] = useState(false);
   const textRef = useRef(null);
@@ -106,14 +107,14 @@ END:VCALENDAR
                 className="text-link-style"
                 onClick={() => setShowMore(false)}
               >
-                show Less
+                {isMandarin ? "显示较少" : "Show Less"}
               </span>
             ) : (
               <span
                 className="text-link-style"
                 onClick={() => setShowMore(true)}
               >
-                show more
+                {isMandarin ? "显示更多" : "Show More"}
               </span>
             )
           ) : null}
@@ -129,7 +130,9 @@ END:VCALENDAR
             }}
           >
             <SvgIcon1 className="svg-container1" />
-            {event.location}
+            {isMandarin && event.location_mandarin
+              ? event.location_mandarin
+              : event.location}
           </button>
           <button
             className="button-with-icon eventbuttonwithicon"

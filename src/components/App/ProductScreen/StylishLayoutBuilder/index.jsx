@@ -6,6 +6,7 @@ import { api } from "../../../../config/api";
 import { toast } from "sonner";
 
 function StylishLayoutBuilder(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const name = props.name;
   const searchterm = props.searchterm;
   const [products, setProducts] = useState([]);
@@ -26,37 +27,35 @@ function StylishLayoutBuilder(props) {
             filtercolorstring + `${index === 0 ? "" : ","}${color}`;
         });
       }
-
       console.log(
         `/fabrics/?${
           name || searchterm
             ? `keyword=${
                 searchterm
                   ? searchterm
-                  : name === "Best Selling"
+                  : name === "Hot Selling" || name == "热卖"
                   ? "best_selling"
                   : name
               }`
             : ""
-        }${props.color?.length > 0 ? `${filtercolorstring}` : ""}${
-          props.sort ? `&sort_by=${props.sort}` : ""
-        }${props.page ? `&page=${props.page}` : ""}`
+        }${props.color?.length > 0 ? `${filtercolorstring}` : ""}${`&sort_by=${
+          props.sort ? props.sort : "newest"
+        }`}${props.page ? `&page=${props.page}` : ""}`
       );
-
       const response = await api.get(
         `/fabrics/?${
           name || searchterm
             ? `keyword=${
                 searchterm
                   ? searchterm
-                  : name === "Best Selling"
+                  : name === "Hot Selling" || name == "热卖"
                   ? "best_selling"
                   : name
               }`
             : ""
-        }${props.color?.length > 0 ? `${filtercolorstring}` : ""}${
-          props.sort ? `&sort_by=${props.sort}` : ""
-        }${props.page ? `&page=${props.page}` : ""}`
+        }${props.color?.length > 0 ? `${filtercolorstring}` : ""}${`&sort_by=${
+          props.sort ? props.sort : "newest"
+        }`}${props.page ? `&page=${props.page}` : ""}`
       );
 
       if (response.data.results.length > 0) {
@@ -78,7 +77,9 @@ function StylishLayoutBuilder(props) {
       }
       setLoading(false);
     } catch (e) {
-      toast.error("Something went wrong");
+      toast.error(
+        e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+      );
       console.log(e);
       setLoading(false);
     }
@@ -114,13 +115,15 @@ function StylishLayoutBuilder(props) {
           props.setLoading(false);
         } catch (e) {
           if (e.response.data.detail === "Invalid page.") {
-            toast.error("No more products");
+            toast.error(isMandarin ? "沒有更多產品" : "No more products");
           }
           props.setLoading(false);
         }
       }
     } catch (e) {
-      toast.error("Something went wrong.");
+      toast.error(
+        e.message || (isMandarin ? "發生錯誤" : "Something went wrong.")
+      );
       console.log(e);
       setLoading(false);
     }

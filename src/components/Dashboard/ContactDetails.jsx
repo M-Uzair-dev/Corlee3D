@@ -14,10 +14,14 @@ const ContactDetails = () => {
       phone: "Phone",
       email: "Email",
       address: "Address",
+      address_mandarin: "Address Mandarin",
       city: "City",
+      city_mandarin: "City Mandarin",
       county: "County",
+      county_mandarin: "County Mandarin",
       postal_code: "Postal Code",
       country: "Country",
+      country_mandarin: "Country Mandarin",
       latitude: "Latitude",
       longitude: "Longitude",
       facebook: "Facebook",
@@ -62,6 +66,11 @@ const ContactDetails = () => {
         instagram: item.instagram || "Not specified",
         whatsapp: item.whatsapp || "Not specified",
         line: item.line || "Not specified",
+        address_mandarin: item.address_mandarin || "Not specified",
+        city_mandarin: item.city_mandarin || "Not specified",
+        county_mandarin: item.county_mandarin || "Not specified",
+        country_mandarin: item.country_mandarin || "Not specified",
+
         actions: (
           <div className="action-cell">
             <button

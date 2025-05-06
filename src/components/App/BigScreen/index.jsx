@@ -10,6 +10,7 @@ import GetAddress from "./GetAddress";
 import { useNavigate } from "react-router-dom";
 
 function BagScreenMainComp(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState({});
@@ -38,7 +39,9 @@ function BagScreenMainComp(props) {
       }
     } catch (e) {
       console.log(e);
-      toast.error(e.message || "Something went wrong");
+      toast.error(
+        e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+      );
       setLoading(false);
     }
   };
@@ -49,43 +52,50 @@ function BagScreenMainComp(props) {
   const checkout = async () => {
     try {
       if (!user.name) {
-        toast.error("Name cannot be empty");
+        toast.error(isMandarin ? "姓名不能為空" : "Name cannot be empty");
         return;
       } else if (!user.company_name) {
-        toast.error("Company name cannot be empty");
+        toast.error(
+          isMandarin ? "公司名稱不能為空" : "Company name cannot be empty"
+        );
         return;
       } else if (!user.phone) {
-        toast.error("Phone cannot be empty");
+        toast.error(isMandarin ? "電話號碼不能為空" : "Phone cannot be empty");
         return;
       } else if (!user.email) {
-        toast.error("Email cannot be empty");
+        toast.error(isMandarin ? "電子郵件不能為空" : "Email cannot be empty");
         return;
       } else if (!user.address) {
-        toast.error("Address cannot be empty");
+        toast.error(isMandarin ? "地址不能為空" : "Address cannot be empty");
         return;
       }
       if (products.length === 0) {
-        toast.error("No products in bag.");
+        toast.error(isMandarin ? "購物車中沒有產品" : "No products in bag.");
         return;
       }
       setCheckoutLoading(true);
       const response = await api.post("/checkout/");
       if (response.status === 201) {
         setCheckoutLoading(false);
-        toast.success("Order placed successfully");
+        toast.success(
+          isMandarin ? "訂單已成功提交" : "Order placed successfully"
+        );
         setProducts([]);
         setProductslen(0);
         navigate(`/thankyou/${response.data.request_number}`);
         props.setRefresh(Date.now());
       } else {
-        toast.error(response.data[Object.keys(response.data)[0]]);
+        toast.error(
+          response.data[Object.keys(response.data)[0]] ||
+            (isMandarin ? "發生錯誤" : "Something went wrong")
+        );
         setCheckoutLoading(false);
       }
     } catch (e) {
       toast.error(
         `${Object.keys(e.response.data)[0]} : ${
           e.response.data[Object.keys(e.response.data)[0]]
-        }` || "Something went wrong"
+        }` || (isMandarin ? "發生錯誤" : "Something went wrong")
       );
       setCheckoutLoading(false);
     }
@@ -106,7 +116,7 @@ function BagScreenMainComp(props) {
 
   return (
     <>
-      <h1 className="bag">Bag</h1>
+      <h1 className="bag">{isMandarin ? "購物車" : "Bag"}</h1>
       {loading ? (
         <div
           className="tailspin"
@@ -133,22 +143,32 @@ function BagScreenMainComp(props) {
         <div className="bagpage">
           <div className="leftdiv">
             <div className="headingdiv">
-              <h1>Shopping bag</h1>
+              <h1>{isMandarin ? "購物車" : "Shopping bag"}</h1>
               <p>
                 {!noProducts ? productslen : 0}{" "}
-                {productslen > 1 || noProducts ? "items" : "item"}
+                {isMandarin
+                  ? productslen > 1 || noProducts
+                    ? "件"
+                    : "件"
+                  : productslen > 1 || noProducts
+                  ? "items"
+                  : "item"}
               </p>
             </div>
             <div className="headingsdiv">
-              <p className="productdetails">Product Details</p>
-              <p className="quantity">
-                Quantity <span>{"(yd)"}</span>
+              <p className="productdetails">
+                {isMandarin ? "產品詳細資料" : "Product Details"}
               </p>
-              <p className="color">Color</p>
+              <p className="quantity">
+                {isMandarin ? "數量" : "Quantity"} <span>{"(yd)"}</span>
+              </p>
+              <p className="color">{isMandarin ? "顏色" : "Color"}</p>
             </div>
             <div className="productsinbagdiv">
               {noProducts ? (
-                <h2>No products in bag</h2>
+                <h2>
+                  {isMandarin ? "購物車中沒有產品" : "No products in bag"}
+                </h2>
               ) : (
                 products?.map((item, index) => (
                   <Productinbag
@@ -190,13 +210,15 @@ function BagScreenMainComp(props) {
                     </svg>
                   </div>
                   <div className="textdivinbagdetails">
-                    <p>Personal Details</p>
+                    <p>{isMandarin ? "個人詳細資料" : "Personal Details"}</p>
                     <p>{user.name || "Empty"}</p>
                     <p>{user.company_name || "Empty"}</p>
                   </div>
                 </div>
                 <div className="rightsidecontent">
-                  <p onClick={() => setGetUserDetails("personal")}>Change</p>
+                  <p onClick={() => setGetUserDetails("personal")}>
+                    {isMandarin ? "更改" : "Change"}
+                  </p>
                 </div>
               </div>
               <div className="detaildiv">
@@ -222,13 +244,15 @@ function BagScreenMainComp(props) {
                     </svg>
                   </div>
                   <div className="textdivinbagdetails">
-                    <p>Contact Details</p>
+                    <p>{isMandarin ? "聯絡詳細資料" : "Contact Details"}</p>
                     <p>{user.phone || "Empty"}</p>
                     <p>{user.email || "Empty"}</p>
                   </div>
                 </div>
                 <div className="rightsidecontent">
-                  <p onClick={() => setGetUserDetails("contact")}>Change</p>
+                  <p onClick={() => setGetUserDetails("contact")}>
+                    {isMandarin ? "更改" : "Change"}
+                  </p>
                 </div>
               </div>
               <div className="detaildiv">
@@ -254,12 +278,14 @@ function BagScreenMainComp(props) {
                     </svg>
                   </div>
                   <div className="textdivinbagdetails">
-                    <p>Shipping to</p>
+                    <p>{isMandarin ? "運送至" : "Shipping to"}</p>
                     <p>{user.address || "Empty"}</p>
                   </div>
                 </div>
                 <div className="rightsidecontent">
-                  <p onClick={() => setGetUserDetails("address")}>Change</p>
+                  <p onClick={() => setGetUserDetails("address")}>
+                    {isMandarin ? "更改" : "Change"}
+                  </p>
                 </div>
               </div>
             </div>
@@ -298,6 +324,8 @@ function BagScreenMainComp(props) {
                     wrapperStyle={{}}
                     wrapperClass=""
                   />
+                ) : isMandarin ? (
+                  "結帳"
                 ) : (
                   "Checkout"
                 )}

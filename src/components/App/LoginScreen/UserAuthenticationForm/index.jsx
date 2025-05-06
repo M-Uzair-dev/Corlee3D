@@ -9,6 +9,7 @@ import { api, setAuthToken } from "../../../../config/api";
 import { toast } from "sonner";
 
 function UserAuthenticationForm() {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -33,7 +34,7 @@ function UserAuthenticationForm() {
         console.log(response);
         setAuthToken(token);
         navigate("/");
-        toast.success("Login Successful");
+        toast.success(isMandarin ? "登錄成功" : "Login Successful");
       } else {
         setError(response.data[Object.keys(response.data)[0]]);
       }
@@ -42,7 +43,7 @@ function UserAuthenticationForm() {
       toast.error(
         `${Object.keys(error.response.data)[0]} : ${
           error.response.data[Object.keys(error.response.data)[0]]
-        }` || "Something went wrong"
+        }` || (isMandarin ? "發生錯誤" : "Something went wrong")
       );
       setLoading(false);
     }
@@ -73,7 +74,7 @@ function UserAuthenticationForm() {
               <img className="hidden-icon img-content-66044729" />
             </div>
             <label htmlFor="remember-me" className="remember-me-label">
-              {messages["remember_me"]}
+              {isMandarin ? "记住我" : "Remember me"}
             </label>
           </div>
           <p
@@ -85,7 +86,7 @@ function UserAuthenticationForm() {
               cursor: "pointer",
             }}
           >
-            {messages["forgot_password"]}
+            {isMandarin ? "忘记密码？" : "Forgot password?"}
           </p>
         </div>
         <button
@@ -93,12 +94,20 @@ function UserAuthenticationForm() {
           onClick={handleSubmit}
           disabled={loading}
         >
-          {loading ? "loading..." : messages["login"]}
+          {loading
+            ? isMandarin
+              ? "加载中..."
+              : "Loading..."
+            : isMandarin
+            ? "登录"
+            : "Login"}
         </button>
         {error && <p className="error-message">{error}</p>}
       </form>
       <div className="account-info-container">
-        <p className="account-info-text-style">{messages["dont_account"]}</p>
+        <p className="account-info-text-style">
+          {isMandarin ? "没有账户？" : "Don't have an account?"}
+        </p>
         <p
           className="sign-up-link-style"
           style={{ cursor: "pointer" }}
@@ -106,7 +115,7 @@ function UserAuthenticationForm() {
             navigate("/signup");
           }}
         >
-          {messages["sign_up"]}
+          {isMandarin ? "注册" : "Sign up"}
         </p>
       </div>
     </div>

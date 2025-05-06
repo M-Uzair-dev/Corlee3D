@@ -20,6 +20,12 @@
   gap: 20px;
 }
 
+.spinner-container-small {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .spinner {
   width: 60px;
   height: 60px;
@@ -27,6 +33,21 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.spinner-small {
+  width: 16px !important;
+  height: 16px !important;
+  margin: 0;
+  display: inline-flex;
+}
+
+.spinner-small .spinner-circle {
+  border-width: 2px;
+}
+
+.spinner-small .spinner-border {
+  border-width: 2px;
 }
 
 .spinner-circle {

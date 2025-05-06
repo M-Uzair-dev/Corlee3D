@@ -7,11 +7,12 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 function RenderEventDisplayWidgets({ eventDisplayWidgetArgs }) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate();
   const [events, setEvents] = useState([]);
   const [page, setPage] = useState(1);
   const [noEvents, setNoEvents] = useState(false);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   function formatDate(inputDate) {
     // Create a new Date object from the input string
     const date = new Date(inputDate);
@@ -44,8 +45,8 @@ function RenderEventDisplayWidgets({ eventDisplayWidgetArgs }) {
       if (e.status === 404) {
         page == 1 ? setNoEvents(true) : setNoEvents(false);
         page === 1
-          ? toast.error("No events found")
-          : toast.error("No more events");
+          ? toast.error(isMandarin ? "沒有事件" : "No events found")
+          : toast.error(isMandarin ? "沒有更多事件" : "No more events");
       }
       navigate("/");
       setLoading(false);
@@ -57,15 +58,29 @@ function RenderEventDisplayWidgets({ eventDisplayWidgetArgs }) {
   return (
     <div className="event-card-container1">
       {loading ? (
-        <h1 style={{ textAlign: "center" }}>Loading...</h1>
+        <h1 style={{ textAlign: "center" }}>
+          {isMandarin ? "加载中..." : "Loading..."}
+        </h1>
+      ) : noEvents ? (
+        <h1 style={{ textAlign: "center" }}>
+          {isMandarin ? "没有更多事件" : "No more events"}
+        </h1>
       ) : (
         events.map((event, index) => {
           return (
             <EventDisplayWidget2
               eventYear5={formatDate(event.date)[1]}
               eventDate5={formatDate(event.date)[0]}
-              eventDescription7={`${event.title}`}
-              dynamicContentWithShowMoreButton7={event.description}
+              eventDescription7={`${
+                isMandarin && event.title_mandarin
+                  ? event.title_mandarin
+                  : event.title
+              }`}
+              dynamicContentWithShowMoreButton7={
+                isMandarin && event.description_mandarin
+                  ? event.description_mandarin
+                  : event.description
+              }
               imgContent9={event.photo_url}
               key={index}
               event={event}

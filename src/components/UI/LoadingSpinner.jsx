@@ -5,14 +5,17 @@ const LoadingSpinner = ({
   text = "Loading...",
   fullPage = false,
   overlay = false,
+  small = false,
 }) => {
+  const spinnerClassName = small ? "spinner spinner-small" : "spinner";
+
   const content = (
-    <div className="spinner-container">
-      <div className="spinner">
+    <div className={small ? "spinner-container-small" : "spinner-container"}>
+      <div className={spinnerClassName}>
         <div className="spinner-circle"></div>
         <div className="spinner-border"></div>
       </div>
-      {text && <div className="spinner-text">{text}</div>}
+      {text && !small && <div className="spinner-text">{text}</div>}
     </div>
   );
 

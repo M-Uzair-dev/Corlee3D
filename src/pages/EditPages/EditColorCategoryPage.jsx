@@ -9,6 +9,7 @@ function EditColorCategoryPage() {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     display_name: "",
+    display_name_mandarin: "",
     color: "#FF0000",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -24,6 +25,7 @@ function EditColorCategoryPage() {
 
         setFormData({
           display_name: colorData.display_name || "",
+          display_name_mandarin: colorData.display_name_mandarin || "",
           color: colorData.color || "#FF0000",
         });
       } catch (error) {
@@ -106,7 +108,7 @@ function EditColorCategoryPage() {
           <h3>Color Category Details</h3>
 
           <div className="form-group">
-            <label htmlFor="display_name">Display Name *</label>
+            <label htmlFor="display_name">Display Name</label>
             <input
               type="text"
               id="display_name"
@@ -115,6 +117,20 @@ function EditColorCategoryPage() {
               onChange={handleInputChange}
               required
               placeholder="e.g., Navy Blue, Crimson Red"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="display_name_mandarin">
+              Display Name (Mandarin)
+            </label>
+            <input
+              type="text"
+              id="display_name_mandarin"
+              name="display_name_mandarin"
+              value={formData.display_name_mandarin}
+              onChange={handleInputChange}
+              placeholder="e.g., 海军蓝，深红色"
             />
           </div>
 

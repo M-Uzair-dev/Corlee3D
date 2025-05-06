@@ -10,6 +10,7 @@ import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 
 function CustomerInformationForm(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -26,12 +27,16 @@ function CustomerInformationForm(props) {
   const handlesubmit = async () => {
     try {
       if (!localStorage.getItem("token")) {
-        toast.error("Please login to continue");
+        toast.error(isMandarin ? "請先登入以繼續" : "Please login to continue");
         navigate("/login");
         return;
       }
       if (localStorage.getItem("Company") === "false") {
-        toast.error("Please enter your company details continue");
+        toast.error(
+          isMandarin
+            ? "請輸入您的公司詳細資料以繼續"
+            : "Please enter your company details to continue"
+        );
         navigate("/addCompanyDetails");
         return;
       }
@@ -40,20 +45,22 @@ function CustomerInformationForm(props) {
       const res = await api.post("/contact/", { ...data });
       console.log(res);
       if (res.status === 200) {
-        toast.success("Form submitted successfully");
+        toast.success(
+          isMandarin ? "表單提交成功" : "Form submitted successfully"
+        );
         setData({});
         window.scrollTo(0, 0);
         setLoading(false);
         navigate(`/thankyou/${res.data.request_number}`);
       } else {
-        toast.error("Form submission failed");
+        toast.error(isMandarin ? "表單提交失敗" : "Form submission failed");
         setLoading(false);
       }
     } catch (e) {
       toast.error(
         `${Object.keys(e.response.data)[0]} : ${
           e.response.data[Object.keys(e.response.data)[0]]
-        }` || "Something went wrong"
+        }` || (isMandarin ? "發生錯誤" : "Something went wrong")
       );
       setLoading(false);
     }
@@ -65,7 +72,7 @@ function CustomerInformationForm(props) {
           {data.request_type === "product" && (
             <div className="horizontal-centered-label-container">
               <label htmlFor="name" className="bold-black-label">
-                Item Code
+                {isMandarin ? "产品代码" : "Item Code"}
               </label>
               <input
                 name="item_code"
@@ -84,14 +91,14 @@ function CustomerInformationForm(props) {
         <div className="fullwidth-container">
           <div className="horizontal-centered-label-container">
             <label htmlFor="name" className="bold-black-label">
-              Subject
+              {isMandarin ? "主题" : "Subject"}
             </label>
             <input
               name="subject"
               onChange={handleChange}
               value={data.subject}
               id="name"
-              placeholder="i.e Jone Doe"
+              placeholder={isMandarin ? "i.e 产品代码" : "i.e Item Code"}
               type="text"
               className="input-with-label-style input-style-f62::placeholder"
             />
@@ -106,7 +113,7 @@ function CustomerInformationForm(props) {
             {/* Input with Label Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
             <div className="horizontal-centered-label-container">
               <label htmlFor="email" className="bold-black-label">
-                {messages["email"]}
+                {isMandarin ? "电子邮件" : "Email"}
               </label>
               <input
                 id="email"
@@ -123,7 +130,7 @@ function CustomerInformationForm(props) {
             {/* Input with Label Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
             <div className="horizontal-centered-label-container">
               <label htmlFor="email" className="bold-black-label">
-                Phone Number
+                {isMandarin ? "电话号码" : "Phone Number"}
               </label>
               <input
                 id="email"
@@ -150,7 +157,7 @@ function CustomerInformationForm(props) {
               }
             />
             <p className="sample-request-button-style">
-              {messages["request_sample"]}
+              {isMandarin ? "请求样品" : "Request Sample"}
             </p>
           </div>
         )}
@@ -160,7 +167,13 @@ function CustomerInformationForm(props) {
         onClick={handlesubmit}
         disabled={loading}
       >
-        {loading ? "Submitting..." : "Submit"}
+        {loading
+          ? isMandarin
+            ? "提交中..."
+            : "Submitting..."
+          : isMandarin
+          ? "提交"
+          : "Submit"}
       </button>
     </>
   );

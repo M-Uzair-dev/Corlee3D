@@ -5,13 +5,14 @@ import { api } from "../../../config/api";
 
 const GetAddress = (props) => {
   const user = props.user;
+  const isMandarin = localStorage.getItem("isMandarin");
   const [address, setAddress] = React.useState(user.address);
   const [loading, setLoading] = useState(false);
   const update = async () => {
     try {
       setLoading(true);
       if (address === "") {
-        toast.error("Address cannot be empty");
+        toast.error(isMandarin ? "地址不能為空" : "Address cannot be empty");
         setLoading(false);
         return;
       }
@@ -19,18 +20,20 @@ const GetAddress = (props) => {
         address,
       });
       if (response.status === 200) {
-        toast.success("Details updated successfully");
+        toast.success(isMandarin ? "更新成功" : "Details updated successfully");
         props.setUser({ ...user, address: address });
         props.setGetUserDetails("");
       } else {
         toast.error(
-          response.data[Object.keys(response.data)[0]] || "Something went wrong"
+          response.data[Object.keys(response.data)[0]] ||
+            (isMandarin ? "發生錯誤" : "Something went wrong")
         );
         props.setGetUserDetails("");
       }
     } catch (e) {
       toast.error(
-        e.data[Object.keys(response.data)[0]] || "Something went wrong"
+        e.data[Object.keys(response.data)[0]] ||
+          (isMandarin ? "發生錯誤" : "Something went wrong")
       );
       props.setGetUserDetails("");
       setLoading(false);
@@ -77,15 +80,17 @@ const GetAddress = (props) => {
             />
           </svg>
         </div>
-        <h1>Shipping Details</h1>
-        <p>Update Your shipping details</p>
+        <h1>{isMandarin ? "運送詳細資料" : "Shipping Details"}</h1>
+        <p>
+          {isMandarin ? "更新您的運送詳細資料" : "Update Your shipping details"}
+        </p>
         <div className="inputs addressinputs">
           <div className="oneinput">
-            <label htmlFor="name">Address</label>
+            <label htmlFor="name">{isMandarin ? "地址" : "Address"}</label>
             <input
               type="text"
               id="name"
-              placeholder="Address"
+              placeholder={isMandarin ? "地址" : "Address"}
               value={address}
               onChange={(e) => setAddress(e.target.value)}
             />
@@ -112,6 +117,8 @@ const GetAddress = (props) => {
               wrapperStyle={{}}
               wrapperClass=""
             />
+          ) : isMandarin ? (
+            "更新"
           ) : (
             "Update"
           )}

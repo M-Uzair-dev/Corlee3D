@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { TailSpin } from "react-loader-spinner";
 
 function TicketInfoSection(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -39,7 +40,7 @@ function TicketInfoSection(props) {
   const fetchData = async () => {
     try {
       setLoading(true);
-      const res = await api.get(`/contact-requests/${props.id}/`);
+      const res = await api.get(`/contact-requests/all/${props.id}/`);
       console.log("Ticket Info Response :", res);
       if (res.status === 200) {
         setData({
@@ -48,14 +49,18 @@ function TicketInfoSection(props) {
         });
         setLoading(false);
       } else {
-        toast.error("Something went wrong");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+        );
         setLoading(false);
-        navigate("/");
+        // navigate("/");
       }
     } catch (e) {
-      toast.error("Something went wrong");
+      toast.error(
+        e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+      );
       setLoading(false);
-      navigate("/");
+      // navigate("/");
     }
   };
   useEffect(() => {
@@ -88,7 +93,7 @@ function TicketInfoSection(props) {
         <>
           <div className="ticket-details-container1">
             <p className="ticket-number-text-style">
-              {messages["ticket_number"]}
+              {isMandarin ? "票号" : "Ticket Number"}
             </p>
             <p className="ticket-number-style">
               {data.contact_request?.request_number}
@@ -98,9 +103,15 @@ function TicketInfoSection(props) {
               {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
               <button className="button-general-inquiry-style">
                 {props.product
-                  ? "Product Inquiry"
+                  ? isMandarin
+                    ? "产品查询"
+                    : "Product Inquiry"
                   : props.request
-                  ? "Products Request"
+                  ? isMandarin
+                    ? "产品请求"
+                    : "Products Request"
+                  : isMandarin
+                  ? "一般查询"
                   : "General Inquiry"}
               </button>
               <p className="date-label">
@@ -126,7 +137,7 @@ function TicketInfoSection(props) {
                             i === 0 ? { display: "block" } : { display: "none" }
                           }
                         >
-                          Product Details
+                          {isMandarin ? "产品详情" : "Product Details"}
                         </p>
 
                         <div className="productinquiryproductdiv">
@@ -136,7 +147,8 @@ function TicketInfoSection(props) {
                               style={{
                                 backgroundImage: `url(${
                                   e?.fabric?.color_images?.filter(
-                                    (item) => item.color === e.color
+                                    (item) =>
+                                      item.color_display_name === e.color
                                   )[0]?.primary_image_url
                                 })`,
                                 backgroundSize: "cover",
@@ -145,12 +157,19 @@ function TicketInfoSection(props) {
                             <div className="imagestext">
                               {" "}
                               <p>{e.fabric.item_code}</p>
-                              <p>{e.fabric.product_category_name}</p>
+                              <p>
+                                {isMandarin &&
+                                e.fabric.product_category_name_mandarin
+                                  ? e.fabric.product_category_name_mandarin
+                                  : e.fabric.product_category_name}
+                              </p>
                             </div>
                           </div>
                           <div className="productdetailsdiv">
                             <div className="colordiv">
-                              <p className="color">Color </p>
+                              <p className="color">
+                                {isMandarin ? "颜色" : "Color"}
+                              </p>
 
                               <div
                                 className="colorcircle"
@@ -159,7 +178,8 @@ function TicketInfoSection(props) {
                               ></div>
                             </div>
                             <p className="quantityofproduct">
-                              Quantity <span>{text}</span>
+                              {isMandarin ? "数量" : "Quantity"}
+                              <span>{text}</span>
                             </p>
                             <p className="priceofproduct">{e.quantity}</p>
                           </div>
@@ -178,7 +198,7 @@ function TicketInfoSection(props) {
                   </p>
                   {props.product ? (
                     <div className="productinquiryproductsection">
-                      <p>Product Details</p>
+                      <p>{isMandarin ? "产品详情" : "Product Details"}</p>
 
                       <div className="productinquiryproductdiv">
                         <div className="productsimageandtextdiv">
@@ -195,16 +215,21 @@ function TicketInfoSection(props) {
                               {data?.contact_request?.related_fabric?.item_code}
                             </p>
                             <p>
-                              {
-                                data?.contact_request?.related_fabric
-                                  ?.product_category_name
-                              }
+                              {isMandarin &&
+                              data?.contact_request?.related_fabric
+                                ?.product_category_name_mandarin
+                                ? data?.contact_request?.related_fabric
+                                    ?.product_category_name_mandarin
+                                : data?.contact_request?.related_fabric
+                                    ?.product_category_name}
                             </p>
                           </div>
                         </div>
                         <div className="productdetailsdiv">
                           <div className="colordiv">
-                            <p className="color">Color </p>
+                            <p className="color">
+                              {isMandarin ? "颜色" : "Color"}
+                            </p>
                             {data?.contact_request?.related_fabric?.color_images?.map(
                               (e, i) => (
                                 <div
@@ -216,7 +241,8 @@ function TicketInfoSection(props) {
                             )}
                           </div>
                           <p className="quantityofproduct">
-                            Quantity <span>{text}</span>
+                            {isMandarin ? "数量" : "Quantity"}
+                            <span>{text}</span>
                           </p>
                           <p className="priceofproduct">2</p>
                         </div>

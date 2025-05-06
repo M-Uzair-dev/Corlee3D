@@ -6,6 +6,7 @@ import { api } from "../../../../config/api";
 import { useNavigate } from "react-router-dom";
 
 function TrendyDisplay(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [isFavourite, setIsFavourite] = useState(props.is_favorite);
 
   const toggleFav = async (event) => {
@@ -38,7 +39,9 @@ function TrendyDisplay(props) {
         style={!props.is_hot_selling ? { display: "none" } : {}}
       >
         <p className="hot-selling-text-emoji">🔥</p>
-        <p className="hot-selling-text-style">{messages["hot_selling"]}</p>
+        <p className="hot-selling-text-style">
+          {isMandarin ? "热销" : "Hot Selling"}
+        </p>
       </div>
     </div>
   );

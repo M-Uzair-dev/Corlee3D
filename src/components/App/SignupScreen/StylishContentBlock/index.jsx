@@ -3,12 +3,13 @@ import "./style.css";
 import messages from "./messages.json";
 
 function StylishContentBlock(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="flex-container-with-icon1">
       <input
         type="text"
         className="id-label-text-style"
-        placeholder="Name"
+        placeholder={isMandarin ? "姓名" : "Name"}
         name="name"
         onChange={props.onChange}
         value={props.value}

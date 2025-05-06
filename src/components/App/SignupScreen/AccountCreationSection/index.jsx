@@ -3,9 +3,12 @@ import "./style.css";
 import messages from "./messages.json";
 
 function AccountCreationSection() {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="account-creation-form-container">
-      <p className="hero-title inSignup">{messages["create_account"]}</p>
+      <p className="hero-title inSignup">
+        {isMandarin ? "创建账户" : "Create account"}
+      </p>
       <UserSignupSection />
     </div>
   );

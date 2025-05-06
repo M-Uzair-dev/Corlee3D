@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Edit from "../../components/Edit";
 import { api } from "../../config/api";
 import { toast } from "sonner"; // Assuming you use sonner for notifications
+import { handleApiError } from "../../util/errorHandling";
 import "./CreatePages.css";
 
 const CreatePageTemplate = ({
@@ -13,11 +14,13 @@ const CreatePageTemplate = ({
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
+  const [fieldErrors, setFieldErrors] = useState({});
   const navigate = useNavigate();
 
   const handleSubmit = async (formData) => {
     setIsSubmitting(true);
     setErrorMessage(null);
+    setFieldErrors({});
 
     // Simulate API call with timeout
     setTimeout(() => {
@@ -33,8 +36,7 @@ const CreatePageTemplate = ({
       toast.success(`${entityName} created successfully`);
       navigate(redirectPath);
     } catch (error) {
-      const errorMsg = error.response?.data?.message || error.message;
-      setErrorMessage(`Failed to create ${entityName}: ${errorMsg}`);
+      handleApiError(error, entityName, setErrorMessage, setFieldErrors, false);
       toast.error(`Error creating ${entityName}`);
       setIsSubmitting(false);
     }
@@ -56,6 +58,7 @@ const CreatePageTemplate = ({
         isLoading={isSubmitting}
         isLoadingData={false}
         errorMessage={errorMessage}
+        fieldErrors={fieldErrors}
       />
     </div>
   );

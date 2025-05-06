@@ -2948,16 +2948,16 @@ body {
   position: fixed;
   top: 0;
   left: 0;
-  background-color: rgba(0, 0, 0, 0.5);
   z-index: 1000000;
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: flex-end;
-  transition: 0.3s all ease;
+  transition: 0.3s all ease !important;
+  transform: translateY(0%);
 }
 .contacttext {
-  background-color: white;
+  background-color: rgb(255, 255, 255);
   height: 100vh;
   width: 500px;
   margin: 0;
@@ -2965,6 +2965,7 @@ body {
   overflow: hidden;
   box-sizing: border-box;
   padding: 50px;
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, 0.478);
 }
 .maintoptext {
   display: flex;
@@ -3024,7 +3025,6 @@ body {
   text-decoration: underline 2px solid black;
 }
 .opacityzero {
-  opacity: 0 !important;
   pointer-events: none;
 }
 .singlecalldetail {
@@ -3162,7 +3162,7 @@ body {
 .relatedproductdivinnav {
   min-width: 200px;
 }
-@media (max-width: 750px) {
+@media (max-width: 980px) {
   .relatedproductsdivinnav,
   .verticallineinnavdropdownofproducts {
     display: none;
@@ -3254,7 +3254,7 @@ body {
   top: 0;
   left: 0;
   width: 100vw;
-  max-width: 350px;
+  max-width: 400px;
   height: 100vh;
   background-color: white;
   z-index: 10000;
@@ -4493,7 +4493,7 @@ body {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.658);
-  z-index: 1000000;
+  z-index: 10000000000;
 }
 .loginpopup,
 .loginpopup > * {
@@ -4532,7 +4532,6 @@ body {
 }
 .loginpopuswrapper h1::after {
   font-size: 55px;
-  content: "Login Required";
   position: absolute;
   top: 3px;
   left: 2px;
@@ -4541,6 +4540,12 @@ body {
   z-index: 1;
   color: transparent;
   -webkit-text-stroke: 1px rgb(27, 27, 27);
+}
+.loginpopupheader2::after {
+  content: "Login Required";
+}
+.loginpopupheader::after {
+  content: "需要登录";
 }
 .loginpopuswrapper p {
   margin: 0 0 20px 0;
@@ -6345,6 +6350,29 @@ button:hover:not(.button-with-icon2) {
 .logoimg {
   display: none;
 }
+
+@media (max-width: 768px) {
+  .table-responsive table {
+    width: 100%;
+    min-width: 0px;
+  }
+  .table-responsive td {
+    width: 100%;
+    max-width: none;
+    min-width: 0px;
+  }
+  .action-cell::before {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .header-title {
+    margin-left: 30px !important;
+  }
+}
+.contact-row svg {
+  display: none;
+}
 @media (max-width: 980px) {
   .hidden {
     transform: translateY(-100%);
@@ -6416,7 +6444,7 @@ button:hover:not(.button-with-icon2) {
   }
   .contact-info-text-style-nav {
     font-family: "Artnoova", sans-serif !important;
-    font-size: 23px !important;
+    font-size: 20px !important;
     font-weight: 500 !important;
     margin-right: 10px;
   }
@@ -6426,7 +6454,86 @@ button:hover:not(.button-with-icon2) {
   .logoimg {
     display: block;
     position: absolute;
-    top: 50px;
-    left: 20px;
+    top: 45px;
+    right: 15px;
   }
+  .contact-info-container-nav,
+  .product-card-container-nav {
+    position: relative;
+  }
+  .contact-row svg,
+  .product-card-container-nav svg {
+    display: block;
+    height: 13px;
+    position: absolute;
+    top: 50%;
+    right: 30px;
+    transform: translateY(-50%) rotate(-90deg) !important;
+    transform-origin: center !important;
+  }
+  .svg-container-nav {
+    transform: none !important;
+  }
+  .clearicon,
+  .clodeiconiner {
+    position: absolute;
+    left: 20px !important;
+    border: none !important;
+    scale: 1.5 !important;
+  }
+  .closeicon {
+    position: absolute;
+    left: -30px !important;
+    top: -10px;
+    border: none !important;
+    scale: 1.5 !important;
+    fill: rgb(102, 102, 102);
+  }
+  .eventsnavbar .contact-info-text-style-nav,
+  .eventsnavbar .productsoptiondivinnav h1 {
+    color: black !important;
+  }
+  .eventsnavbar .productsoptiondivinnav p {
+    color: rgba(0, 0, 0, 0.629) !important;
+  }
+  .eventsnavbar .contact-info-text-style-nav svg,
+  .eventsnavbar .product-card-container-nav svg,
+  .eventsnavbar .logoimg {
+    filter: invert(0) !important;
+  }
+}
+.noemailband {
+  z-index: 10;
+  position: relative;
+}
+
+/* Scale SVG icons in action buttons to 1.5 */
+.material-button2 svg,
+.fabric-range-section .button-with-icon svg,
+.colordropdownitems .button-with-icon svg,
+.eventbuttonwithicon svg,
+.blog-post-container-blogs .button-with-icon svg,
+.button-with-icon3-blogs svg,
+.contact-buttons-container .button-with-icon svg {
+  scale: 1.5;
+}
+
+/* Dashboard action buttons consistency fixes */
+.action-btn {
+  width: 36px !important;
+  height: 36px !important;
+  display: inline-flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.action-icon,
+.action-btn svg {
+  scale: 1 !important;
+  width: 18px !important;
+  height: 18px !important;
+}
+.product-gallery-row {
+  width: calc(100% - 50px) !important;
+  padding: 0 !important;
 }

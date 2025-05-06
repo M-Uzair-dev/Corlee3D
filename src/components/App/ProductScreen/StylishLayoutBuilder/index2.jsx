@@ -6,6 +6,7 @@ import { api } from "../../../../config/api";
 import { toast } from "sonner";
 
 function StylishLayoutBuilder(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [noProducts, setNoproducts] = useState(false);
@@ -85,7 +86,7 @@ function StylishLayoutBuilder(props) {
                 maxWidth: "20000px !important",
               }}
             >
-              No products in favourites
+              {isMandarin ? "沒有收藏的產品" : "No products in favourites"}
             </p>
           )}
         </>

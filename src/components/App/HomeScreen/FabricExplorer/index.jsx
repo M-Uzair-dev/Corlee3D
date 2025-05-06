@@ -10,6 +10,7 @@ function FabricExplorer() {
   const [categs, setCategs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentcount, setCurrentCount] = useState(0);
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate();
   const getCategories = async () => {
     try {
@@ -71,10 +72,15 @@ function FabricExplorer() {
     <>
       <div className="fabric-range-section">
         <div className="fabric-types-section">
-          <p className="fabric-type-heading">Range of fabric types we offer!</p>
+          <p className="fabric-type-heading">
+            {isMandarin
+              ? "我们提供多种面料类型！"
+              : "Range of fabric types we offer!"}
+          </p>
           <p className="fabric-type-description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit
-            assumenda .
+            {isMandarin
+              ? "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit assumenda ."
+              : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit assumenda ."}
           </p>
         </div>
         <div className="fabric-type-range-container">
@@ -118,7 +124,9 @@ function FabricExplorer() {
         {categs?.map((e, i) => (
           <div className="mainwrapperofmaterial" key={i}>
             <div className="material-button-container">
-              <p className="material-heading">{e.name}</p>
+              <p className="material-heading">
+                {isMandarin && e.name_mandarin ? e.name_mandarin : e.name}
+              </p>
 
               {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
               <button
@@ -135,7 +143,7 @@ function FabricExplorer() {
                 }}
                 disabled={loading}
               >
-                Explore more
+                {isMandarin ? "了解更多" : "Explore more"}
                 <SvgIcon1 className="svg-container5" />
               </button>
             </div>

@@ -3,8 +3,10 @@ import SectionRenderer from "../SectionRenderer";
 import ImageContainer from "../ImageContainer";
 import "./style.css";
 import messages from "./messages.json";
+import messages2 from "./messages2.json";
 
 function ContentDisplayWidget({ possibleSectionTitles }) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="vertical-centered-container">
       <div className="vertical-flex-container">
@@ -12,25 +14,37 @@ function ContentDisplayWidget({ possibleSectionTitles }) {
           <div className="story-section-container">
             <StoryDisplay />
             <p className="narrative-text-style">
-              {messages["lrem_ipsum_tis_kvasiposade_poment_vtirade_ding_eft"]}
+              {isMandarin
+                ? messages2[
+                    "lrem_ipsum_tis_kvasiposade_poment_vtirade_ding_eft"
+                  ]
+                : messages[
+                    "lrem_ipsum_tis_kvasiposade_poment_vtirade_ding_eft"
+                  ]}
             </p>
             <div className="statistic-cards-group">
               <div className="statistic-card">
                 <p className="standout-text">27+</p>
                 <p className="info-card-text-style">
-                  {messages["production_experience"]}
+                  {isMandarin
+                    ? messages2["production_experience"]
+                    : messages["production_experience"]}
                 </p>
               </div>
               <div className="statistic-card">
                 <p className="standout-text">600+</p>
                 <p className="info-card-text-style">
-                  {messages["clients_worldwide"]}
+                  {isMandarin
+                    ? messages2["clients_worldwide"]
+                    : messages["clients_worldwide"]}
                 </p>
               </div>
               <div className="statistic-card">
                 <p className="standout-text">4.9</p>
                 <p className="info-card-text-style">
-                  {messages["stars_rating"]}
+                  {isMandarin
+                    ? messages2["stars_rating"]
+                    : messages["stars_rating"]}
                 </p>
               </div>
             </div>

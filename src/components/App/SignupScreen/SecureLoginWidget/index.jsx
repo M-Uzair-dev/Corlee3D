@@ -3,12 +3,13 @@ import "./style.css";
 import messages from "./messages.json";
 
 function SecureLoginWidget(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="flex-container-with-icon1">
       <input
         type="text"
         className="id-label-text-style"
-        placeholder="Password"
+        placeholder={isMandarin ? "密码" : "Password"}
         name="password"
         onChange={props.onChange}
         value={props.value}

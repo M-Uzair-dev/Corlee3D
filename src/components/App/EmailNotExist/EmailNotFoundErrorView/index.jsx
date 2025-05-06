@@ -3,15 +3,20 @@ import "./style.css";
 import messages from "./messages.json";
 
 function EmailNotFoundErrorView(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="email-not-found-message-container">
       <div className="email-not-found-container2">
         <SvgIcon1 className="svg-container" />
       </div>
-      <p className="error-message-title">Email does not exist.</p>
+      <p className="error-message-title">
+        {isMandarin ? "邮箱不存在" : "Email does not exist."}
+      </p>
       <p className="email-not-found-message1">
         <span>
-          {messages["we_unable_find_email_you_entered_seems_like_there_"]}
+          {isMandarin
+            ? "我们无法找到您输入的电子邮件，似乎您输入的电子邮件不存在。"
+            : "We are unable to find the email you entered, it seems like the email you entered does not exist."}
         </span>
         <span className="email-not-found-message">{props.email}</span>
       </p>

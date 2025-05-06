@@ -5,6 +5,7 @@ import messages from "./messages.json";
 import { useNavigate } from "react-router-dom";
 
 function FPEnterEmail() {
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate();
   return (
     <div className="password-reset-form-container1-email">
@@ -22,7 +23,7 @@ function FPEnterEmail() {
                 navigate(-1);
               }}
             >
-              {messages["lt_login"]}
+              {isMandarin ? "返回登录" : "Back to login"}
             </p>
           </div>
         </div>

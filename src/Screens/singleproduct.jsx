@@ -13,8 +13,8 @@ import "../index.css";
 import "./model.css";
 
 const singleproduct = () => {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [model, setModel] = useState("/models/shirt.glb");
-  let text = "(by yard)";
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -31,6 +31,7 @@ const singleproduct = () => {
   const [colors, setColors] = useState([]);
   const [textures, setTextures] = useState([]);
 
+  let text = "(by yard)";
   const navigate = useNavigate();
 
   const togglefav = async () => {
@@ -101,32 +102,40 @@ const singleproduct = () => {
       });
       if (response.status === 201 || response.status === 200) {
         if (go) {
-          toast.success("Ready to checkout");
           navigate("/user/bag");
         } else {
-          toast.success("Item added to bag");
+          toast(isMandarin ? "商品已加入購物車" : "Item added to bag", {
+            action: {
+              label: isMandarin ? "查看購物車" : "View Bag",
+              onClick: () => navigate("/user/bag"),
+            },
+          });
         }
         setButtonloading(0);
         setRefresh((prev) => prev + 1);
       } else {
         setButtonloading(0);
-        toast.error("Something went wrong");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+        );
       }
     } catch (err) {
       setButtonloading(0);
-      toast.error("Something went wrong");
+      toast.error(
+        e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+      );
     }
   };
 
   const [loadingText, setLoadingText] = useState("Initializing...");
 
   const texts = [
-    "Loading assets...",
-    "Assembling the scene...",
-    "Polishing details...",
-    "Finalizing textures...",
-    "Rendering the scene...",
-    "Almost there...",
+    isMandarin ? "加载资产..." : "Loading assets...",
+    isMandarin ? "组装场景..." : "Assembling the scene...",
+    isMandarin ? "打磨细节..." : "Polishing details...",
+    isMandarin ? "最终化纹理..." : "Finalizing textures...",
+    isMandarin ? "渲染场景..." : "Rendering the scene...",
+    isMandarin ? "快完成了..." : "Almost there...",
   ];
 
   useEffect(() => {
@@ -222,11 +231,23 @@ const singleproduct = () => {
                   console.log(colors);
                 }}
               >
-                {product.title}
+                {isMandarin && product.title_mandarin
+                  ? product.title_mandarin
+                  : product.title}
               </h1>
-              <p className="functionaltext">{product.product_category_name}</p>
-              <p className="functionaltext2">{product.description}</p>
-              <p className="colorsinproduct">Colors</p>
+              <p className="functionaltext">
+                {isMandarin && product.product_category_name_mandarin
+                  ? product.product_category_name_mandarin
+                  : product.product_category_name}
+              </p>
+              <p className="functionaltext2">
+                {isMandarin && product.description_mandarin
+                  ? product.description_mandarin
+                  : product.description}
+              </p>
+              <p className="colorsinproduct">
+                {isMandarin ? "颜色" : "Colors"}
+              </p>
               <div className="colorsinproduct">
                 {product.color_images.map((item, index) => (
                   <div
@@ -262,7 +283,7 @@ const singleproduct = () => {
                 ))}
               </div>
               <p className="quantitydivinproduct">
-                Quantity <span>{text}</span>{" "}
+                {isMandarin ? "數量" : "Quantity"} <span>{text}</span>{" "}
               </p>
               <div className="quantitydiv inproduct">
                 <button
@@ -310,7 +331,7 @@ const singleproduct = () => {
                           fill="white"
                         />
                       </svg>
-                      Add to Bag
+                      {isMandarin ? "加入購物車" : "Add to Bag"}
                     </>
                   )}
                 </button>
@@ -332,7 +353,7 @@ const singleproduct = () => {
                       wrapperClass=""
                     />
                   ) : (
-                    "Check out"
+                    `${isMandarin ? "結帳" : "Check out"}`
                   )}
                 </button>
               </div>
@@ -342,30 +363,42 @@ const singleproduct = () => {
       </div>
       <div className="horizontaldiv">
         <div className="onedivofproduct">
-          <p className="mainkeytext">Item Code</p>
+          <p className="mainkeytext">{isMandarin ? "商品編號" : "Item Code"}</p>
           <div className="maintextans">
             {!loading ? product.item_code : "loading..."}
           </div>
         </div>
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
-          <p className="mainkeytext">Composition</p>
+          <p className="mainkeytext">{isMandarin ? "成分" : "Composition"}</p>
           <div className="maintextans">
-            {!loading ? product.composition : "loading..."}
+            {!loading
+              ? isMandarin && product.composition_mandarin
+                ? product.composition_mandarin
+                : product.composition
+              : "loading..."}
           </div>
         </div>
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
-          <p className="mainkeytext">Weight</p>
+          <p className="mainkeytext">{isMandarin ? "重量" : "Weight"}</p>
           <div className="maintextans">
-            {!loading ? product.weight + "g" : "loading..."}
+            {!loading
+              ? isMandarin && product.weight_mandarin
+                ? product.weight_mandarin + "g"
+                : product.weight + "g"
+              : "loading..."}
           </div>
         </div>
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
-          <p className="mainkeytext">Finish</p>
+          <p className="mainkeytext">{isMandarin ? "完成" : "Finish"}</p>
           <div className="maintextans">
-            {!loading ? product.finish : "loading..."}
+            {!loading
+              ? isMandarin && product.finish_mandarin
+                ? product.finish_mandarin
+                : product.finish
+              : "loading..."}
           </div>
         </div>
         <div className="lineinproducts"></div>
@@ -376,7 +409,7 @@ const singleproduct = () => {
               navigate(`/contact/${product.item_code}`);
             }}
           >
-            Need Support ?
+            {isMandarin ? "需要支持？" : "Need Support ?"}
           </div>
         </div>
       </div>
@@ -387,18 +420,22 @@ const singleproduct = () => {
             <div className="modelicon">
               <img src="/3d.png" alt="3d model icon" />
             </div>
-            <h1>Preview This Fabric in 3D</h1>
+            <h1>
+              {isMandarin
+                ? "预览这款面料的3D效果"
+                : "Preview This Fabric in 3D"}
+            </h1>
             <p>
-              Explore how this fabric looks on a shirt, pants, or other clothing
-              items with our interactive 3D model. Rotate and view it from
-              different angles to see every detail before making a choice.
+              {isMandarin
+                ? "探索这款面料在衬衫、裤子或其他服装上的外观，我们的交互式3D模型可以旋转和从不同角度查看，以便在做出选择之前看到每个细节。"
+                : "Explore how this fabric looks on a shirt, pants, or other clothing items with our interactive 3D model. Rotate and view it from different angles to see every detail before making a choice."}
             </p>
             <button
               onClick={() => {
                 setHide(false);
               }}
             >
-              View in 3D
+              {isMandarin ? "查看3D效果" : "View in 3D"}
             </button>
           </div>
         )}
@@ -535,8 +572,14 @@ const singleproduct = () => {
                 />
               </svg>
             </div>
-            <h1>Login Required</h1>
-            <p>This action requires login.</p>
+            <h1
+              className={isMandarin ? "loginpopupheader" : "loginpopupheader2"}
+            >
+              {isMandarin ? "需要登录" : "Login Required"}
+            </h1>
+            <p>
+              {isMandarin ? "此操作需要登录。" : "This action requires login."}
+            </p>
             <div className="buttonsinloginpopup">
               <button
                 onClick={(e) => {
@@ -544,7 +587,7 @@ const singleproduct = () => {
                   navigate("/login");
                 }}
               >
-                Login
+                {isMandarin ? "登录" : "Login"}
               </button>
               <button
                 onClick={(e) => {
@@ -552,7 +595,7 @@ const singleproduct = () => {
                   setshowLoginPopup(false);
                 }}
               >
-                No, I'm cool
+                {isMandarin ? "不，谢谢" : "No, I'm cool"}
               </button>
             </div>
           </div>

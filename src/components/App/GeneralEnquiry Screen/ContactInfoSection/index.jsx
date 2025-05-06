@@ -2,12 +2,14 @@ import MessageContainer from "../MessageContainer";
 import "./style.css";
 import messages from "./messages.json";
 
-function ContactInfoSection( props) {
+function ContactInfoSection(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="contact-details-container">
-      <p className="contact-details-heading mb40">{messages["contact_details"]}</p>
+      <p className="contact-details-heading mb40">
+        {isMandarin ? "联系详情" : "Contact Details"}
+      </p>
       <MessageContainer {...props} />
-      
     </div>
   );
 }

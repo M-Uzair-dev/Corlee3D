@@ -18,6 +18,8 @@ function EditBlogPage() {
   const [formData, setFormData] = useState({
     title: "",
     content: "",
+    title_mandarin: "",
+    content_mandarin: "",
     author: "",
     photo: null,
     category: "",
@@ -55,6 +57,8 @@ function EditBlogPage() {
       setFormData({
         title: response.data.title || "",
         content: response.data.content || "",
+        title_mandarin: response.data.title_mandarin || "",
+        content_mandarin: response.data.content_mandarin || "",
         author: user?.id || "",
         photo: response.data.image_id || null,
         category: category?.id || "",
@@ -108,6 +112,13 @@ function EditBlogPage() {
     setFormData((prev) => ({
       ...prev,
       content,
+    }));
+  };
+
+  const handleContentMandarinChange = (content) => {
+    setFormData((prev) => ({
+      ...prev,
+      content_mandarin: content,
     }));
   };
 
@@ -180,10 +191,51 @@ function EditBlogPage() {
           </div>
 
           <div className="form-group">
+            <label htmlFor="title_mandarin">Title (Mandarin)</label>
+            <input
+              type="text"
+              id="title_mandarin"
+              name="title_mandarin"
+              value={formData.title_mandarin}
+              onChange={handleInputChange}
+              placeholder="Enter blog title in Mandarin"
+            />
+          </div>
+
+          <div className="form-group">
             <label htmlFor="content">Content *</label>
             <ReactQuill
               value={formData.content}
               onChange={handleContentChange}
+              modules={{
+                toolbar: [
+                  [{ header: [1, 2, 3, 4, 5, 6, false] }],
+                  ["bold", "italic", "underline", "strike"],
+                  [{ list: "ordered" }, { list: "bullet" }],
+                  ["link", "image"],
+                  ["clean"],
+                ],
+              }}
+              formats={[
+                "header",
+                "bold",
+                "italic",
+                "underline",
+                "strike",
+                "list",
+                "bullet",
+                "link",
+                "image",
+              ]}
+              style={{ height: "400px", marginBottom: "50px" }}
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="content_mandarin">Content (Mandarin)</label>
+            <ReactQuill
+              value={formData.content_mandarin}
+              onChange={handleContentMandarinChange}
               modules={{
                 toolbar: [
                   [{ header: [1, 2, 3, 4, 5, 6, false] }],

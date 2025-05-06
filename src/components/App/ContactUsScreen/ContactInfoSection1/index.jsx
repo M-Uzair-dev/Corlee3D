@@ -2,6 +2,7 @@ import "./style.css";
 import messages from "./messages.json";
 
 function ContactInfoSection1() {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="contact-info-section2">
       <div className="contact-info-container2">
@@ -11,7 +12,7 @@ function ContactInfoSection1() {
           className="image-container"
         />
       </div>
-      <p className="hero-title">{messages["call_us"]}</p>
+      <p className="hero-title">{isMandarin ? "联系我们" : "Call Us"}</p>
       <p className="contact-info-text-style">{localStorage.getItem("phone")}</p>
     </div>
   );

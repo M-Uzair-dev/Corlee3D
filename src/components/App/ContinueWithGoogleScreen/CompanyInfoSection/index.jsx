@@ -8,6 +8,7 @@ import { api } from "../../../../config/api";
 import { useNavigate } from "react-router-dom";
 
 function CompanyInfoSection() {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [data, setData] = useState({
     company_name: "",
   });
@@ -16,25 +17,31 @@ function CompanyInfoSection() {
   const handleClick = async () => {
     try {
       if (!data) {
-        toast.error("Please fill all the fields");
+        toast.error(
+          isMandarin ? "請填寫所有必填欄位" : "Please fill all the fields"
+        );
         return;
       }
       if (!data.company_name) {
-        toast.error("Company Name is required");
+        toast.error(
+          isMandarin ? "公司名稱是必填欄位" : "Company Name is required"
+        );
         return;
       } else {
         setLoading(true);
         const response = await api.patch("/user/", data);
         console.log(response);
         if (response.status === 200) {
-          toast.success("Details updated successfully");
+          toast.success(
+            isMandarin ? "詳細資料已成功更新" : "Details updated successfully"
+          );
           localStorage.setItem("Company", "true");
           setLoading(false);
           navigate("/");
         } else {
           toast.error(
             response.data[Object.keys(response.data)[0]] ||
-              "Something went wrong"
+              (isMandarin ? "發生錯誤" : "Something went wrong")
           );
           setLoading(false);
         }
@@ -42,17 +49,22 @@ function CompanyInfoSection() {
       setLoading(false);
     } catch (e) {
       console.log(e);
-      toast.error(e.data[Object.keys(e.data)[0]] || "Something went wrong");
+      toast.error(
+        e.data[Object.keys(e.data)[0]] ||
+          (isMandarin ? "發生錯誤" : "Something went wrong")
+      );
       setLoading(false);
     }
   };
   return (
     <div className="company-details-container4">
-      <p className="company-details-title">{messages["company_details"]}</p>
+      <p className="company-details-title">
+        {isMandarin ? "公司详情" : "Company Details"}
+      </p>
       <div className="company-details-container2">
         <input
           type="text"
-          placeholder="Company name"
+          placeholder={isMandarin ? "公司名称" : "Company name"}
           className="company-title-text-style"
           value={data.company_name}
           style={{
@@ -71,7 +83,7 @@ function CompanyInfoSection() {
         <div className="flexbox-item">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder="Phone"
+            placeholder={isMandarin ? "电话" : "Phone"}
             value={data.phone}
             onChange={(e) => setData({ ...data, phone: e.target.value })}
             type="text"
@@ -81,7 +93,7 @@ function CompanyInfoSection() {
         <div className="flex-grow-shrink-basis-margin-left">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder="Mobile phone"
+            placeholder={isMandarin ? "手机" : "Mobile phone"}
             value={data.mobile_phone}
             onChange={(e) => setData({ ...data, mobile_phone: e.target.value })}
             type="text"
@@ -97,7 +109,13 @@ function CompanyInfoSection() {
         }}
         disabled={loading}
       >
-        {loading ? "Loading..." : "Create Account"}
+        {loading
+          ? isMandarin
+            ? "加载中..."
+            : "Loading..."
+          : isMandarin
+          ? "创建账户"
+          : "Create Account"}
       </button>
     </div>
   );

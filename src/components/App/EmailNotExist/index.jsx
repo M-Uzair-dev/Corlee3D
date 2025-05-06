@@ -5,6 +5,7 @@ import Container from "../../UI/Container";
 import { useNavigate } from "react-router-dom";
 
 function ComponentYouSelected(params) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate();
   return (
     <Container style={{ background: "whitesmoke" }}>
@@ -20,7 +21,7 @@ function ComponentYouSelected(params) {
                   navigate("/login");
                 }}
               >
-                {messages["return_login"]}
+                {isMandarin ? "返回登录" : "Return to login"}
               </button>
             </div>
           </div>

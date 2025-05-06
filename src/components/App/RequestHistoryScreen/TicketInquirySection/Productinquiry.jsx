@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 
 const Productinquiry = (props) => {
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate();
   const item = props.item;
   return (
@@ -13,8 +14,10 @@ const Productinquiry = (props) => {
       }}
     >
       <div className="infotext">
-        <p className="ticket">Ticket Number : {item.request_number}</p>
-        <p className="inqtext">Product Inquiry</p>
+        <p className="ticket">
+          {isMandarin ? "票号" : "Ticket Number"} : {item.request_number}
+        </p>
+        <p className="inqtext">{isMandarin ? "产品查询" : "Product Inquiry"}</p>
       </div>
       <div className="otherdata">
         <div className="imgdiv">
@@ -31,12 +34,16 @@ const Productinquiry = (props) => {
           </div>
         </div>
         <div className="productinqtextdiv">
-          <div className="headingofproduct">{item.subject}</div>
+          <div className="headingofproduct">
+            {isMandarin ? "主题" : "Subject"} : {item.subject}
+          </div>
           <p className="productdesc">{item.message}</p>
         </div>
       </div>{" "}
       <div className="datediv">
-        <p className="datep">{props.date}</p>
+        <p className="datep">
+          {isMandarin ? "日期" : "Date"} : {props.date}
+        </p>
       </div>
     </div>
   );

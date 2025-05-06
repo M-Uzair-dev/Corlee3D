@@ -12,6 +12,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function UserRegistrationLayout({ loading, setLoading }) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [formData, setFormData] = useState({});
   const [error, setError] = useState("");
   const navigate = useNavigate();
@@ -58,7 +59,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
         <input
           type="text"
           className="id-label-text-style"
-          placeholder="Company Name"
+          placeholder={isMandarin ? "公司名称" : "Company Name"}
           name="company_name"
           onChange={handleChange}
           value={formData.company_name}
@@ -72,7 +73,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
         <div className="flexbox-item">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder="Phone"
+            placeholder={isMandarin ? "电话" : "Phone"}
             type="text"
             className="input-field-with-border input-style-f62::placeholder"
             name="phone"
@@ -83,7 +84,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
         <div className="flex-grow-shrink-basis">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder="Mobile phone"
+            placeholder={isMandarin ? "手机" : "Mobile phone"}
             type="text"
             className="input-field-with-border input-style-f62::placeholder"
             name="mobile_phone"
@@ -98,7 +99,13 @@ function UserRegistrationLayout({ loading, setLoading }) {
         disabled={loading}
         onClick={handlesubmit}
       >
-        {loading ? "loading..." : messages["create_account"]}
+        {loading
+          ? isMandarin
+            ? "加载中..."
+            : "Loading..."
+          : isMandarin
+          ? "创建账户"
+          : "Create account"}
       </button>
       {error && <p className="error-message">{error}</p>}
     </div>

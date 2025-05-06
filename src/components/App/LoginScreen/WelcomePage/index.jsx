@@ -10,6 +10,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function WelcomePage() {
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   async function logGoogleLoginInfo() {
@@ -31,14 +32,20 @@ function WelcomePage() {
         setAuthToken(token);
         if (!response.data.user.company_name) {
           navigate("/addCompanyDetails");
-          toast.success("Please enter your company details");
+          toast.success(
+            isMandarin
+              ? "請輸入您的公司詳細資料"
+              : "Please enter your company details"
+          );
           localStorage.setItem("Company", "false");
         } else {
           navigate("/");
-          toast.success("Login successful.");
+          toast.success(isMandarin ? "登錄成功" : "Login successful.");
         }
       } else {
-        toast.error("Something went wrong");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+        );
       }
       setLoading(false);
     } catch (error) {
@@ -50,9 +57,9 @@ function WelcomePage() {
   return (
     <div className="hero-section2">
       <div className="central-content-panel">
-        <p className="hero-title-text-style">{messages["welcome_corlee"]}</p>
+        <p className="hero-title-text-style">{isMandarin ? "登录" : "Login"}</p>
         <p className="central-text-block">
-          {messages["lrem_ipsum_suledes_plankning_till_heterossade_tosn"]}
+          {isMandarin ? "请登录以继续" : "Please login to continue"}
         </p>
         <button
           className="button-with-icon"
@@ -60,7 +67,13 @@ function WelcomePage() {
           disabled={loading}
         >
           <SvgIcon1 className="svg-container" />
-          {loading ? "loading..." : messages["login_google"]}
+          {loading
+            ? isMandarin
+              ? "加载中..."
+              : "Loading..."
+            : isMandarin
+            ? "使用 Google 登录"
+            : "Login with google"}
         </button>
         <StylishContentBlock />
         <UserAuthenticationForm />

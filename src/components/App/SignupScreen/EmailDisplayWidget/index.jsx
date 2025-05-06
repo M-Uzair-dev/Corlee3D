@@ -3,12 +3,13 @@ import "./style.css";
 import messages from "./messages.json";
 
 function EmailDisplayWidget(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="flex-container-with-icon">
       <input
         type="text"
         className="id-label-text-style"
-        placeholder="Email"
+        placeholder={isMandarin ? "邮箱" : "Email"}
         name="email"
         onChange={props.onChange}
         value={props.value}

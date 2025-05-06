@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useDebounce } from "../../BigScreen/useDebounce";
 
 function ContentDisplayWidgetGenerator() {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loading2, setLoading2] = useState(true);
@@ -35,13 +36,14 @@ function ContentDisplayWidgetGenerator() {
     try {
       setLoading(true);
       setPage(1);
-      let response = await api.get(
+      console.log(
+        "Fetching : ",
         `/blogs/?${searchterm ? `search=${searchterm}` : ""}${
           localsort && param !== "nosort"
             ? `&ordering=${
-                localsort === "newest"
+                localsort === "newest" || localsort === "最新"
                   ? "-created_at"
-                  : localsort === "oldest"
+                  : localsort === "oldest" || localsort === "最旧"
                   ? "created_at"
                   : "-view_count"
               }`
@@ -54,6 +56,26 @@ function ContentDisplayWidgetGenerator() {
             : ""
         }&page=${page}`
       );
+      let response = await api.get(
+        `/blogs/?${searchterm ? `search=${searchterm}` : ""}${
+          localsort && param !== "nosort"
+            ? `&ordering=${
+                localsort === "newest" || localsort === "最新"
+                  ? "-created_at"
+                  : localsort === "oldest" || localsort === "最旧"
+                  ? "created_at"
+                  : "-view_count"
+              }`
+            : ""
+        }${
+          localcateg.length > 0
+            ? `&category=${localcateg
+                .filter((item) => item !== param)
+                .join(",")}`
+            : ""
+        }&page=${page}`
+      );
+      console.log("BLOGS : ", response);
       if (response.status === 200) {
         if (response.data.results.length > 0) {
           setBlogs(response.data.results);
@@ -64,7 +86,9 @@ function ContentDisplayWidgetGenerator() {
           setLoading(false);
         }
       } else {
-        toast.error("Something went wrong !");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong !")
+        );
         navigate("/");
         setLoading(false);
       }
@@ -73,7 +97,9 @@ function ContentDisplayWidgetGenerator() {
         setNoBlogs(true);
         setLoading(false);
       } else {
-        toast.error("Something went wrong !");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong !")
+        );
         setLoading(false);
         navigate("/");
       }
@@ -84,13 +110,13 @@ function ContentDisplayWidgetGenerator() {
       if (page === 1) return;
 
       setLoading3(true);
-      let response = await api.get(
+      console.log(
         `/blogs/?${searchterm ? `search=${searchterm}` : ""}${
           localsort
             ? `&ordering=${
-                localsort === "newest"
+                localsort === "newest" || localsort === "最新"
                   ? "-created_at"
-                  : localsort === "oldest"
+                  : localsort === "oldest" || localsort === "最旧"
                   ? "created_at"
                   : "-view_count"
               }`
@@ -99,27 +125,45 @@ function ContentDisplayWidgetGenerator() {
           localcateg.length > 0 ? `&category=${localcateg.join(",")}` : ""
         }&page=${page}`
       );
-      console.log(response);
+      let response = await api.get(
+        `/blogs/?${searchterm ? `search=${searchterm}` : ""}${
+          localsort
+            ? `&ordering=${
+                localsort === "newest" || localsort === "最新"
+                  ? "-created_at"
+                  : localsort === "oldest" || localsort === "最旧"
+                  ? "created_at"
+                  : "-view_count"
+              }`
+            : ""
+        }${
+          localcateg.length > 0 ? `&category=${localcateg.join(",")}` : ""
+        }&page=${page}`
+      );
       if (response.status === 200) {
         if (response.data.results.length > 0) {
           setBlogs((prev) => [...prev, ...response.data.results]);
           setLoading3(false);
         } else {
-          toast.error("No more blogs");
+          toast.error(isMandarin ? "沒有更多博客" : "No more blogs");
           setLoading3(false);
         }
       } else {
-        toast.error("Something went wrong !");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong !")
+        );
         navigate("/");
         setLoading3(false);
       }
     } catch (e) {
       console.log(e);
       if (e.response.data.detail === "Invalid page.") {
-        toast.error("No more blogs");
+        toast.error(isMandarin ? "沒有更多博客" : "No more blogs");
         setLoading3(false);
       } else {
-        toast.error("Something went wrong !");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong !")
+        );
         setLoading3(false);
         navigate("/");
       }
@@ -162,9 +206,13 @@ function ContentDisplayWidgetGenerator() {
   };
   return (
     <div className="blog-post-container-blogs">
-      <p className="hero-title-text-style-blogs">{messages["blogs"]}</p>
+      <p className="hero-title-text-style-blogs">
+        {isMandarin ? "我们的博客" : "OUR BLOGS"}
+      </p>
       <p className="blog-post-content-text-style-blogs">
-        {messages["lrem_ipsum_tis_kvasiposade_poment_vtirade_ding_eft"]}
+        {isMandarin
+          ? "我们分享行业见解、趋势分析和创新解决方案，帮助您在面料批发领域保持领先地位。"
+          : "We share industry insights, trend analysis, and innovative solutions to help you stay ahead in the fabric wholesale industry."}
       </p>
 
       <>
@@ -221,7 +269,7 @@ function ContentDisplayWidgetGenerator() {
               onClick={() => setShowfilter(!showfilter)}
             >
               <SvgIcon5 className="svg-container6-blogs" />
-              {messages["filter"]}
+              {isMandarin ? "过滤" : "Filter"}
             </button>
           </div>
         </div>
@@ -247,7 +295,9 @@ function ContentDisplayWidgetGenerator() {
             />
           </div>
         ) : noBlogs ? (
-          <h1 style={{ textAlign: "center" }}>No blogs</h1>
+          <h1 style={{ textAlign: "center" }}>
+            {isMandarin ? "没有博客" : "No blogs"}
+          </h1>
         ) : (
           <>
             <ContentRenderer blogs={blogs} />
@@ -318,13 +368,13 @@ function ContentDisplayWidgetGenerator() {
                 />
               </svg>
             </div>
-            <h1>Filter Items</h1>
+            <h1>{isMandarin ? "过滤项目" : "Filter Items"}</h1>
             <div className="sortbydiv">
               <div
                 className="maintopvisiblediv"
                 onClick={() => setShowsort(!showsort)}
               >
-                <p>Sort by</p>
+                <p>{isMandarin ? "排序" : "Sort by"}</p>
                 <svg
                   width="14"
                   height="9"
@@ -352,45 +402,45 @@ function ContentDisplayWidgetGenerator() {
               >
                 <p
                   onClick={() => {
-                    localsort === "newest"
+                    localsort === "newest" || localsort === "最新"
                       ? setLocalsort("")
-                      : setLocalsort("newest");
+                      : setLocalsort(isMandarin ? "最新" : "newest");
                   }}
                   style={
-                    localsort === "newest"
+                    localsort === "newest" || localsort === "最新"
                       ? { backgroundColor: "rgba(0, 0, 0, 0.07)" }
                       : null
                   }
                 >
-                  Newest
+                  {isMandarin ? "最新" : "Newest"}
                 </p>
                 <p
                   onClick={() => {
-                    localsort === "oldest"
+                    localsort === "oldest" || localsort === "最旧"
                       ? setLocalsort("")
-                      : setLocalsort("oldest");
+                      : setLocalsort(isMandarin ? "最旧" : "oldest");
                   }}
                   style={
-                    localsort === "oldest"
+                    localsort === "oldest" || localsort === "最旧"
                       ? { backgroundColor: "rgba(0, 0, 0, 0.07)" }
                       : null
                   }
                 >
-                  Oldest
+                  {isMandarin ? "最旧" : "Oldest"}
                 </p>
                 <p
                   onClick={() => {
-                    localsort === "popularity"
+                    localsort === "popularity" || localsort === "受欢迎"
                       ? setLocalsort("")
-                      : setLocalsort("popularity");
+                      : setLocalsort(isMandarin ? "受欢迎" : "popularity");
                   }}
                   style={
-                    localsort === "popularity"
+                    localsort === "popularity" || localsort === "受欢迎"
                       ? { backgroundColor: "rgba(0, 0, 0, 0.07)" }
                       : null
                   }
                 >
-                  Popularity
+                  {isMandarin ? "受欢迎" : "Popularity"}
                 </p>
               </div>
             </div>
@@ -403,7 +453,7 @@ function ContentDisplayWidgetGenerator() {
                   console.log(categs);
                 }}
               >
-                <p>Categories</p>
+                <p>{isMandarin ? "类别" : "Categories"}</p>
                 <svg
                   width="14"
                   height="9"
@@ -437,7 +487,7 @@ function ContentDisplayWidgetGenerator() {
                 {loading2 ? (
                   <div style={{ textAlign: "center" }}>
                     <p style={{ textAlign: "center", width: "100%" }}>
-                      Loading...
+                      {isMandarin ? "加载中..." : "Loading..."}
                     </p>
                   </div>
                 ) : (
@@ -445,17 +495,22 @@ function ContentDisplayWidgetGenerator() {
                     <div
                       key={i}
                       style={
-                        localcateg.includes(c.name)
+                        localcateg.includes(c.name) ||
+                        localcateg.includes(c.name_mandarin)
                           ? {
                               backgroundColor: "rgba(0, 0, 0, 0.07)",
                               textAlign: "center",
                             }
                           : { textAlign: "center" }
                       }
-                      onClick={() => togglecateg(c.name)}
+                      onClick={() =>
+                        togglecateg(isMandarin ? c.name_mandarin : c.name)
+                      }
                     >
                       <p style={{ textAlign: "center", width: "100%" }}>
-                        {c.name}
+                        {isMandarin && c.name_mandarin
+                          ? c.name_mandarin
+                          : c.name}
                       </p>
                     </div>
                   ))
@@ -469,7 +524,7 @@ function ContentDisplayWidgetGenerator() {
                   setShowfilter(false);
                 }}
               >
-                Apply
+                {isMandarin ? "应用" : "Apply"}
               </button>
               <button
                 onClick={() => {
@@ -479,7 +534,7 @@ function ContentDisplayWidgetGenerator() {
                   setShowfilter(false);
                 }}
               >
-                Clear All
+                {isMandarin ? "清除所有" : "Clear All"}
               </button>
             </div>
           </div>

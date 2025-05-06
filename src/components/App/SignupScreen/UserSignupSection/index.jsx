@@ -10,6 +10,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 function UserSignupSection() {
+  const isMandarin = localStorage.getItem("isMandarin");
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
@@ -33,14 +34,22 @@ function UserSignupSection() {
         setAuthToken(token);
         if (!response.data.user.company_name) {
           navigate("/addCompanyDetails");
-          toast.success("Please enter your company details");
+          toast.success(
+            isMandarin
+              ? "請輸入您的公司詳細資料"
+              : "Please enter your company details"
+          );
           localStorage.setItem("Company", "false");
         } else {
           navigate("/");
-          toast.success("Account created successfully");
+          toast.success(
+            isMandarin ? "帳戶已成功創建" : "Account created successfully"
+          );
         }
       } else {
-        toast.error("Something went wrong");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+        );
       }
       setLoading(false);
     } catch (error) {
@@ -57,12 +66,14 @@ function UserSignupSection() {
         onClick={logGoogleLoginInfo}
       >
         <SvgIcon1 className="svg-container" />
-        {messages["sign_up_google"]}
+        {isMandarin ? "使用 Google 注册" : "Sign up with google"}
       </button>
       <StylishLayout />
       <UserRegistrationLayout loading={loading} setLoading={setLoading} />
       <div className="account-actions-container">
-        <p className="login-prompt-text-style">{messages["already_account"]}</p>
+        <p className="login-prompt-text-style">
+          {isMandarin ? "已经有账户？" : "Already have an account?"}
+        </p>
         <p
           className="login-link-text-style"
           onClick={() => {
@@ -70,7 +81,7 @@ function UserSignupSection() {
           }}
           style={{ cursor: "pointer" }}
         >
-          {messages["login"]}
+          {isMandarin ? "登录" : "Login"}
         </p>
       </div>
     </div>

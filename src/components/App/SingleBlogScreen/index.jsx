@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 
 function SingleBlogComponent(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [data, setData] = useState({});
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
@@ -19,18 +20,23 @@ function SingleBlogComponent(props) {
   const loadblog = async () => {
     try {
       const response = await api.get(`/blogs/${props.id}`);
+      console.log("BLOG RESPONSE : ", response);
       setLoading(false);
       if (response.status === 200) {
         setData(response.data);
         setLoading(false);
       } else {
-        toast.error("Something went wrong");
+        toast.error(
+          e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+        );
         setLoading(false);
         navigate("/");
       }
     } catch (e) {
       setLoading(false);
-      toast.error("Something went wrong");
+      toast.error(
+        e.message || (isMandarin ? "發生錯誤" : "Something went wrong")
+      );
       setLoading(false);
       navigate("/");
     }

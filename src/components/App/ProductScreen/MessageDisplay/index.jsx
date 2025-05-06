@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { api } from "../../../../config/api";
 
 function MessageDisplay(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [showfilter, setShowfilter] = useState(false);
   const [showsort, setShowsort] = useState(false);
   const [showcolors, setShowcolors] = useState(false);
@@ -35,7 +36,12 @@ function MessageDisplay(props) {
         setLoading(false);
       }
     } catch (e) {
-      toast.error("Sometning went wong while fetching colors.");
+      toast.error(
+        e.message ||
+          (isMandarin
+            ? "發生錯誤，無法獲取顏色"
+            : "Something went wong while fetching colors.")
+      );
     }
   };
   useEffect(() => {
@@ -46,18 +52,28 @@ function MessageDisplay(props) {
     <div className="material-section">
       <p className="material-heading-text-style">
         {props.fav
-          ? "Favourites"
+          ? isMandarin
+            ? "收藏"
+            : "Favourites"
           : props.searchterm
-          ? "Search products"
+          ? isMandarin
+            ? "搜索产品"
+            : "Search products"
           : props.name
           ? props.name
+          : isMandarin
+          ? "所有产品"
           : "All Products"}
       </p>
       <p className="material-description-text-style">
         {props.fav
-          ? "lorem ipsum dolor sit amet"
+          ? isMandarin
+            ? "所有你收藏的产品都在这里"
+            : "All your favourite products are here"
           : props.searchterm
-          ? "Products matching your search : " + props.searchterm
+          ? isMandarin
+            ? "匹配你搜索的产品：" + props.searchterm
+            : "Products matching your search : " + props.searchterm
           : props.desc}
       </p>
       <button
@@ -65,7 +81,7 @@ function MessageDisplay(props) {
         onClick={() => setShowfilter(!showfilter)}
       >
         <SvgIcon1 className="svg-container4" />
-        {messages["filter"]}
+        {isMandarin ? "过滤" : "Filter"}
       </button>
       <div
         className={
@@ -91,13 +107,13 @@ function MessageDisplay(props) {
               />
             </svg>
           </div>
-          <h1>Filter Items</h1>
+          <h1>{isMandarin ? "过滤项目" : "Filter Items"}</h1>
           <div className="sortbydiv">
             <div
               className="maintopvisiblediv"
               onClick={() => setShowsort(!showsort)}
             >
-              <p>Sort by</p>
+              <p>{isMandarin ? "排序" : "Sort by"}</p>
               <svg
                 width="14"
                 height="9"
@@ -135,7 +151,7 @@ function MessageDisplay(props) {
                     : null
                 }
               >
-                Newest
+                {isMandarin ? "最新" : "Newest"}
               </p>
               <p
                 onClick={() => {
@@ -149,7 +165,7 @@ function MessageDisplay(props) {
                     : null
                 }
               >
-                Oldest
+                {isMandarin ? "最旧" : "Oldest"}
               </p>
               <p
                 onClick={() => {
@@ -163,7 +179,7 @@ function MessageDisplay(props) {
                     : null
                 }
               >
-                Most Requested
+                {isMandarin ? "最受欢迎" : "Most Requested"}
               </p>
             </div>
           </div>
@@ -174,7 +190,7 @@ function MessageDisplay(props) {
                 setShowcolors((prev) => !prev);
               }}
             >
-              <p>Colors</p>
+              <p>{isMandarin ? "颜色" : "Colors"}</p>
               <svg
                 width="14"
                 height="9"
@@ -198,7 +214,15 @@ function MessageDisplay(props) {
             <div
               className="colordropdownitems"
               style={
-                showcolors ? { height: `${60 * (colors.length / 2)}px` } : {}
+                showcolors
+                  ? {
+                      height: `${
+                        colors.length % 2 == 0
+                          ? 60 * (colors.length / 2)
+                          : 60 * ((colors.length + 1) / 2)
+                      }px`,
+                    }
+                  : {}
               }
             >
               {colors.map((color, index) => (
@@ -211,8 +235,24 @@ function MessageDisplay(props) {
                   key={index}
                   onClick={() => togglename(color.id)}
                 >
-                  <p>{color.display_name}</p>
-                  <div style={{ backgroundColor: color.color }}></div>
+                  <p
+                    style={{
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      maxWidth: "80%",
+                    }}
+                  >
+                    {isMandarin && color.display_name_mandarin
+                      ? color.display_name_mandarin
+                      : color.display_name}
+                  </p>
+                  <div
+                    style={{
+                      backgroundColor: color.color,
+                      minWidth: "20px !important",
+                    }}
+                  ></div>
                 </div>
               ))}
             </div>
@@ -226,7 +266,7 @@ function MessageDisplay(props) {
                 setShowfilter(!showfilter);
               }}
             >
-              Apply
+              {isMandarin ? "应用" : "Apply"}
             </button>
             <button
               onClick={() => {
@@ -238,7 +278,7 @@ function MessageDisplay(props) {
                 setShowfilter(!showfilter);
               }}
             >
-              Clear All
+              {isMandarin ? "清除所有" : "Clear All"}
             </button>
           </div>
         </div>

@@ -10,6 +10,7 @@ function EditBlogCategoryPage() {
   const { id } = useParams();
   const [formData, setFormData] = useState({
     name: "",
+    name_mandarin: "",
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,6 +26,7 @@ function EditBlogCategoryPage() {
 
         setFormData({
           name: categoryData.name || "",
+          name_mandarin: categoryData.name_mandarin || "",
         });
       } catch (error) {
         console.error("Error fetching blog category:", error);
@@ -112,6 +114,18 @@ function EditBlogCategoryPage() {
               onChange={handleInputChange}
               required
               placeholder="e.g., Fashion Trends, Industry News"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="name_mandarin">Category Name (Mandarin)</label>
+            <input
+              type="text"
+              id="name_mandarin"
+              name="name_mandarin"
+              value={formData.name_mandarin}
+              onChange={handleInputChange}
+              placeholder="e.g., 时尚趋势，行业新闻"
             />
           </div>
         </div>

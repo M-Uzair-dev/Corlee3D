@@ -9,6 +9,7 @@ const BlogCategories = () => {
     fields: {
       id: "ID",
       name: "Name",
+      name_mandarin: "Mandarin Name",
     },
     data: [],
     isLoading: true,
@@ -32,6 +33,7 @@ const BlogCategories = () => {
         const transformedData = response.data.map((category) => ({
           id: category.id,
           name: category.name || "Unnamed",
+          name_mandarin: category.name_mandarin || "Unnamed",
         }));
 
         setCategoriesData((prev) => ({

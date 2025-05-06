@@ -7,9 +7,12 @@ import "./style.css";
 import messages from "./messages.json";
 
 function RealizationDisplay() {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="realization-container-home">
-      <p className="majestic-heading-home">{messages["realizations"]}</p>
+      <p className="majestic-heading-home">
+        {isMandarin ? "成就" : "Realizations"}
+      </p>
       <div className="realization-container1-home">
         <div className="image-container-with-text1-home">
           <img

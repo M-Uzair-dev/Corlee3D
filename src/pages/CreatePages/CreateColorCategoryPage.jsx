@@ -1,40 +1,44 @@
 import React, { useState } from "react";
-import { api } from "../../config/api";
-import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
+import { api } from "../../config/api";
+import { handleApiError } from "../../util/errorHandling";
 import "./CreatePages.css";
 
 function CreateColorCategoryPage() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    display_name: "",
-    color: "#FF0000",
-  });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
+  const [formData, setFormData] = useState({
+    display_name: "",
+    display_name_mandarin: "",
+    color: "#FF0000",
+  });
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage("");
+    setFieldErrors({});
 
     try {
-      await api.post("/color-categories/", formData);
+      const response = await api.post("/color-categories/", formData);
       toast.success("Color category created successfully!");
       navigate("/dashboard/color-categories");
     } catch (error) {
-      console.error("Error creating color category:", error);
-      setErrorMessage(
-        error?.response?.data?.detail ||
-          "Failed to create color category. Please try again."
+      // Use the standardized error handling utility
+      handleApiError(
+        error,
+        "Color Category",
+        setErrorMessage,
+        setFieldErrors,
+        false
       );
       toast.error("Error creating color category");
     } finally {
@@ -53,16 +57,16 @@ function CreateColorCategoryPage() {
         </button>
       </div>
 
-      <h2 className="create-heading">Create Color Category</h2>
+      <h2 className="create-heading">Create New Color Category</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-      <form onSubmit={handleSubmit} className="create-form">
+      <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
           <h3>Color Category Details</h3>
 
           <div className="form-group">
-            <label htmlFor="display_name">Display Name </label>
+            <label htmlFor="display_name">Display Name</label>
             <input
               type="text"
               id="display_name"
@@ -71,11 +75,35 @@ function CreateColorCategoryPage() {
               onChange={handleInputChange}
               required
               placeholder="e.g., Navy Blue, Crimson Red"
+              className={fieldErrors.display_name ? "input-error" : ""}
             />
+            {fieldErrors.display_name && (
+              <div className="field-error">{fieldErrors.display_name}</div>
+            )}
           </div>
 
           <div className="form-group">
-            <label htmlFor="color">Color Value </label>
+            <label htmlFor="display_name_mandarin">
+              Display Name (Mandarin)
+            </label>
+            <input
+              type="text"
+              id="display_name_mandarin"
+              name="display_name_mandarin"
+              value={formData.display_name_mandarin}
+              onChange={handleInputChange}
+              placeholder="e.g., 海军蓝，深红色"
+              className={fieldErrors.display_name_mandarin ? "input-error" : ""}
+            />
+            {fieldErrors.display_name_mandarin && (
+              <div className="field-error">
+                {fieldErrors.display_name_mandarin}
+              </div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="color">Color Value *</label>
             <div className="color-picker-container">
               <input
                 type="color"
@@ -83,7 +111,9 @@ function CreateColorCategoryPage() {
                 name="color"
                 value={formData.color}
                 onChange={handleInputChange}
-                className="color-picker"
+                className={`color-picker ${
+                  fieldErrors.color ? "input-error" : ""
+                }`}
                 required
               />
               <input
@@ -92,9 +122,14 @@ function CreateColorCategoryPage() {
                 onChange={handleInputChange}
                 name="color"
                 placeholder="#RRGGBB"
-                className="color-text-input"
+                className={`color-text-input ${
+                  fieldErrors.color ? "input-error" : ""
+                }`}
               />
             </div>
+            {fieldErrors.color && (
+              <div className="field-error">{fieldErrors.color}</div>
+            )}
           </div>
         </div>
 
@@ -139,7 +174,7 @@ function CreateColorCategoryPage() {
           margin-bottom: 24px;
         }
 
-        .create-form {
+        .edit-form {
           display: flex;
           flex-direction: column;
           gap: 24px;
@@ -282,6 +317,16 @@ function CreateColorCategoryPage() {
           border-radius: 4px;
           margin-bottom: 16px;
           font-size: 14px;
+        }
+
+        .field-error {
+          color: #d32f2f;
+          font-size: 12px;
+          margin-top: 4px;
+        }
+
+        .input-error {
+          border-color: #d32f2f !important;
         }
       `}</style>
     </div>

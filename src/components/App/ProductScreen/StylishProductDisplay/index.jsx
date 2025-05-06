@@ -6,7 +6,7 @@ import arrow from "/pngegg.png";
 
 function StylishProductDisplay(props) {
   const navigate = useNavigate();
-
+  const isMandarin = localStorage.getItem("isMandarin");
   const [products, setProducts] = useState(props.products);
 
   function removeDuplicates(productsArray) {
@@ -40,7 +40,7 @@ function StylishProductDisplay(props) {
       }
     >
       <div className="relatedproducts">
-        <p>Related Products</p>
+        <p>{isMandarin ? "相关产品" : "Related Products"}</p>
       </div>
       {props.loading ? (
         <div
@@ -72,7 +72,7 @@ function StylishProductDisplay(props) {
             width: "100%",
           }}
         >
-          No Related Products
+          {isMandarin ? "没有相关产品" : "No Related Products"}
         </h1>
       ) : (
         <div className="products">

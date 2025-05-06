@@ -3,10 +3,11 @@ import "./style.css";
 import messages from "./messages.json";
 
 function FormSectionWithMessage(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="form-container">
       <p className="header-title-text-style">
-        {messages["fill_out_form_below"]}
+        {isMandarin ? "填写以下表格" : "Fill out the form below"}
       </p>
       <CustomerFormSection {...props} />
     </div>

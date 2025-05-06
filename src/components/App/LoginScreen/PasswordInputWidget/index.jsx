@@ -3,6 +3,7 @@ import SvgIcon1 from "../../ForgotPasswordReset/PasswordInputWidget/icons/SvgIco
 import { useState } from "react";
 
 function PasswordInputWidget({ name, value, onChange }) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [showPass, setShowPass] = useState(false);
   return (
     <div className="center-box">
@@ -10,7 +11,7 @@ function PasswordInputWidget({ name, value, onChange }) {
         name={name}
         value={value}
         onChange={onChange}
-        placeholder="Password"
+        placeholder={isMandarin ? "密码" : "Password"}
         type={showPass ? "text" : "password"}
         className="input-with-border-radius input-style-f62::placeholder"
       />

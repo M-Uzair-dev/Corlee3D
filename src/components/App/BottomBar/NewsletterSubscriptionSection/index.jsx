@@ -8,6 +8,7 @@ import { api } from "../../../../config/api";
 function NewsletterSubscriptionSection() {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
+  const isMandarin = localStorage.getItem("isMandarin");
   const handleClick = async () => {
     try {
       if (email === "") {
@@ -39,13 +40,13 @@ function NewsletterSubscriptionSection() {
         <div className="subscribe-section">
           <input
             className="email-subscription-text"
-            placeholder="Email here"
+            placeholder={isMandarin ? "输入您的电子邮件" : "Enter your email"}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
           />
           {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <button className="subscribe-button-style" onClick={handleClick}>
-            {loading ? "loading..." : messages["subscribe"]}
+            {loading ? "loading..." : isMandarin ? "订阅" : "Subscribe"}
           </button>
         </div>
       </div>

@@ -12,6 +12,7 @@ import { api, setAuthToken } from "../../../../config/api";
 import { useDebounce } from "../../BigScreen/useDebounce";
 
 function DynamicContentDisplay(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(0);
   const [count2, setCount2] = useState(0);
@@ -56,6 +57,11 @@ function DynamicContentDisplay(props) {
             ? "contact-info-container-nav"
             : "contact-info-container-nav hidden2"
         }
+        onClick={() => {
+          if (window.innerWidth < 980) {
+            props.changeShowcall();
+          }
+        }}
       >
         <div className="wrapperofelement">
           <div className="callout-container-nav navsearchbar searchbarhiddeninnav">
@@ -74,13 +80,29 @@ function DynamicContentDisplay(props) {
             />
           </div>
           <p
-            className="contact-info-text-style-nav"
+            className="contact-info-text-style-nav contact-row"
             style={{ cursor: "pointer" }}
             onClick={() => {
               props.changeShowcall();
             }}
           >
-            Contact
+            {isMandarin ? "联系我们" : "Contact"}
+            <svg
+              fill="none"
+              viewBox="0 0 12 12"
+              xmlns="http://www.w3.org/2000/svg"
+              x="0"
+              y="0"
+            >
+              <path
+                id="Vector_6"
+                d="M6.3977,9.3978c-0.22,0.2197 -0.576,0.2197 -0.795,0l-5.735,-5.7349c-0.22,-0.2197 -0.22,-0.5758 0,-0.7954l0.265,-0.2652c0.22,-0.2197 0.576,-0.2197 0.795,0l5.072,5.0719l5.072,-5.0719c0.22,-0.2197 0.576,-0.2197 0.796,0l0.265,0.2652c0.22,0.2196 0.22,0.5757 0,0.7954z"
+                fill="black"
+                fill-rule="evenodd"
+                xmlns="http://www.w3.org/2000/svg"
+                data-node-id="I1135:6154;992:9338"
+              ></path>
+            </svg>
           </p>
           <div className="contact-info-section-nav">
             <div
@@ -164,16 +186,32 @@ function DynamicContentDisplay(props) {
               </div>
               {show && (
                 <div className="dropdowndiv">
-                  <p onClick={() => navigate("/user/history")}>History</p>
-                  <p onClick={() => navigate("/user/favourites")}>Favourites</p>
+                  <p
+                    onClick={() => navigate("/user/history")}
+                    style={{ cursor: "pointer", minWidth: "max-content" }}
+                  >
+                    {isMandarin ? "历史" : "History"}
+                  </p>
+                  <p
+                    onClick={() => navigate("/user/favourites")}
+                    style={{ cursor: "pointer", minWidth: "max-content" }}
+                  >
+                    {isMandarin ? "收藏" : "Favourites"}
+                  </p>
                   <p
                     onClick={() => {
+                      navigate("/");
+                      const isMandarin = localStorage.getItem("isMandarin");
                       window.location.reload();
                       localStorage.clear();
                       setAuthToken(null);
+                      if (isMandarin) {
+                        localStorage.setItem("isMandarin", "true");
+                      }
                     }}
+                    style={{ cursor: "pointer", minWidth: "max-content" }}
                   >
-                    Logout
+                    {isMandarin ? "登出" : "Logout"}
                   </p>
                 </div>
               )}
@@ -243,8 +281,14 @@ function DynamicContentDisplay(props) {
                 />
               </svg>
             </div>
-            <h1>Login Required</h1>
-            <p>This action requires login.</p>
+            <h1
+              className={isMandarin ? "loginpopupheader" : "loginpopupheader2"}
+            >
+              {isMandarin ? "需要登录" : "Login Required"}
+            </h1>
+            <p>
+              {isMandarin ? "此操作需要登录。" : "This action requires login."}
+            </p>
             <div className="buttonsinloginpopup">
               <button
                 onClick={(e) => {
@@ -252,7 +296,7 @@ function DynamicContentDisplay(props) {
                   navigate("/login");
                 }}
               >
-                Login
+                {isMandarin ? "登录" : "Login"}
               </button>
               <button
                 onClick={(e) => {
@@ -260,7 +304,7 @@ function DynamicContentDisplay(props) {
                   setshowLoginPopup(false);
                 }}
               >
-                No, I'm cool
+                {isMandarin ? "不，谢谢" : "No, I'm cool"}
               </button>
             </div>
           </div>

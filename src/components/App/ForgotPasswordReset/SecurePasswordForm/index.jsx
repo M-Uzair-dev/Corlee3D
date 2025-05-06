@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { api } from "../../../../config/api";
 
 function SecurePasswordForm(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const [confirm, setConfirm] = useState("");
@@ -25,16 +26,18 @@ function SecurePasswordForm(props) {
         uid: props.uid,
       });
       if (res.status === 200) {
-        toast.success("Password reset successfully");
+        toast.success(
+          isMandarin ? "密碼重置成功" : "Password reset successfully"
+        );
         setloading(false);
         navigate("/success");
       } else {
-        toast.error("An error occured");
+        toast.error(isMandarin ? "發生錯誤" : "An error occured");
         setloading(false);
       }
     } catch (e) {
       console.log(e);
-      toast.error("An error occured");
+      toast.error(isMandarin ? "發生錯誤" : "An error occured");
       setloading(false);
     }
   };
@@ -43,7 +46,7 @@ function SecurePasswordForm(props) {
       <div className="nested-svg-container">
         <div className="flex-row-container">
           <input
-            placeholder="New Password"
+            placeholder={isMandarin ? "新密码" : "New Password"}
             type={showpassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -92,7 +95,9 @@ function SecurePasswordForm(props) {
               />
             )}
 
-            <p className="text-styler">{messages["lowercase_characters"]}</p>
+            <p className="text-styler">
+              {isMandarin ? "小写字母" : "Lowercase characters"}
+            </p>
           </div>
           <div className="text-block-container">
             {/[0-9]/.test(password) ? (
@@ -129,7 +134,7 @@ function SecurePasswordForm(props) {
               />
             )}
 
-            <p className="text-styler">{messages["numbers"]}</p>
+            <p className="text-styler">{isMandarin ? "数字" : "Numbers"}</p>
           </div>
         </div>
         <div className="vertical-text-block">
@@ -168,7 +173,9 @@ function SecurePasswordForm(props) {
               />
             )}
 
-            <p className="text-styler">{messages["uppercase_characters"]}</p>
+            <p className="text-styler">
+              {isMandarin ? "大写字母" : "Uppercase characters"}
+            </p>
           </div>
           <div className="text-block-container">
             {password.length >= 8 ? (
@@ -205,7 +212,9 @@ function SecurePasswordForm(props) {
               />
             )}
 
-            <p className="text-styler">{messages["8_characters_minimum"]}</p>
+            <p className="text-styler">
+              {isMandarin ? "8个字符最小" : "8 characters minimum"}
+            </p>
           </div>
         </div>
       </div>
@@ -213,7 +222,7 @@ function SecurePasswordForm(props) {
         {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
         <div className="flex-row-container">
           <input
-            placeholder="Confirm new password"
+            placeholder={isMandarin ? "确认新密码" : "Confirm new password"}
             type={showcpassword ? "text" : "password"}
             className="input-with-icon input-style-f62::placeholder"
             value={confirm}
@@ -259,7 +268,13 @@ function SecurePasswordForm(props) {
             : { opacity: 0.5, cursor: "not-allowed" }
         }
       >
-        {loading ? "Loading..." : messages["reset_password"]}
+        {loading
+          ? isMandarin
+            ? "加载中..."
+            : "Loading..."
+          : isMandarin
+          ? "重置密码"
+          : "Reset password"}
       </button>
     </div>
   );

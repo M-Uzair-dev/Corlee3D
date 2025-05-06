@@ -25,7 +25,7 @@ function Navbar(props) {
   const [inputState, setInputState] = useState("");
 
   const debouncedValue2 = useDebounce(inputState, 500);
-
+  const isMandarin = localStorage.getItem("isMandarin");
   useEffect(() => {
     if (debouncedValue2) {
       navigate(`/products/${debouncedValue2}`);
@@ -55,7 +55,7 @@ function Navbar(props) {
           debouncedValue
             ? "?keyword=" + debouncedValue
             : "?keyword=best_selling"
-        }`
+        }&sort_by=newest`
       );
       console.log(response);
       if (response.status === 200) {
@@ -137,8 +137,17 @@ function Navbar(props) {
         />
       </div>
       <div
-        className={showcall ? "contactScreen" : "contactScreen opacityzero"}
+        className={"contactScreen"}
         onClick={changeShowcall}
+        style={
+          showcall
+            ? {
+                transform: "translateY(0%)",
+              }
+            : {
+                transform: "translateY(-100%)",
+              }
+        }
       >
         <div
           className="contacttext"
@@ -147,8 +156,12 @@ function Navbar(props) {
           }}
         >
           <div className="maintoptext">
-            <h1>Contact Us</h1>
-            <p>We are just one message away !</p>
+            <h1>{isMandarin ? "联系我们" : "Contact Us"}</h1>
+            <p>
+              {isMandarin
+                ? "我们就在你身边！"
+                : "We are just one message away !"}
+            </p>
             <div className="closeicon" onClick={changeShowcall}>
               <svg
                 width="12"
@@ -188,7 +201,7 @@ function Navbar(props) {
                     toast.success("Phone number copied to clipboard");
                   }}
                 >
-                  Phone Call
+                  {isMandarin ? "电话" : "Phone Call"}
                 </a>{" "}
               </p>
             </div>
@@ -207,7 +220,9 @@ function Navbar(props) {
               </svg>
               {/* // whatsapp, postal_code, phone, longitude, line, latitude,
               instagram, facebook, email, country, address */}
-              <a href={`mailto:${localStorage.getItem("email")}`}>Email</a>{" "}
+              <a href={`mailto:${localStorage.getItem("email")}`}>
+                {isMandarin ? "电子邮件" : "Email"}
+              </a>{" "}
             </div>
             <div className="singlecalldetail">
               <svg
@@ -267,7 +282,7 @@ function Navbar(props) {
               }}
               className="needhelp"
             >
-              Need help ?
+              {isMandarin ? "需要帮助？" : "Need help ?"}
             </p>
           </div>
         </div>
@@ -277,12 +292,12 @@ function Navbar(props) {
           !showprod ? "productsdivinnavbar noheight" : "productsdivinnavbar"
         }
         onMouseLeave={() => {
-          if (window.innerWidth > 850) {
+          if (window.innerWidth > 980) {
             setShowprod(false);
           }
         }}
         onMouseEnter={() => {
-          if (window.innerWidth > 850) {
+          if (window.innerWidth > 980) {
             setShowprod(true);
           }
         }}
@@ -345,7 +360,7 @@ function Navbar(props) {
                 }}
               >
                 <div className="textdivinnavproductdropdown">
-                  <h1>View All</h1>
+                  <h1>{isMandarin ? "查看所有" : "View All"}</h1>
                 </div>
                 <div className="iconinproductnavdropdown">
                   <svg
@@ -368,7 +383,9 @@ function Navbar(props) {
                 className="productsoptiondivinnav"
                 onClick={() => {
                   navigate(
-                    "/products/Best Selling/ All of Corlee's best seling products."
+                    isMandarin
+                      ? "/products/热卖/科里最受欢迎的热卖面料"
+                      : "/products/Hot Selling/ All of Corlee's hot seling products."
                   );
                   setShowprod(false);
                   setOpen(false);
@@ -380,8 +397,12 @@ function Navbar(props) {
                 }}
               >
                 <div className="textdivinnavproductdropdown">
-                  <h1>Best Selling</h1>
-                  <p>Lorem ipsum dolor sit amet consectetur elit</p>
+                  <h1>{isMandarin ? "热卖" : "Hot Selling"}</h1>
+                  <p>
+                    {isMandarin
+                      ? "查看科里最受欢迎的热卖面料"
+                      : "View corlee's top hot selling fabrics"}
+                  </p>
                 </div>
                 <div
                   className="iconinproductnavdropdown"
@@ -400,7 +421,11 @@ function Navbar(props) {
                     className="productsoptiondivinnav"
                     key={index}
                     onClick={() => {
-                      navigate(`/products/${categ.name}/${categ.description}`);
+                      navigate(
+                        isMandarin
+                          ? `/products/${categ.name_mandarin}/${categ.description_mandarin}`
+                          : `/products/${categ.name}/${categ.description}`
+                      );
                       setShowprod(false);
                       setOpen(false);
                     }}
@@ -411,8 +436,16 @@ function Navbar(props) {
                     }}
                   >
                     <div className="textdivinnavproductdropdown">
-                      <h1>{categ.name}</h1>
-                      <p>{categ.description}</p>
+                      <h1>
+                        {isMandarin && categ.name_mandarin
+                          ? categ.name_mandarin
+                          : categ.name}
+                      </h1>
+                      <p>
+                        {isMandarin && categ.description_mandarin
+                          ? categ.description_mandarin
+                          : categ.description}
+                      </p>
                     </div>
                     <div
                       className="iconinproductnavdropdown"
@@ -485,7 +518,11 @@ function Navbar(props) {
                         backgroundSize: "cover",
                       }}
                     ></div>
-                    <div className="textdropdowninnav">{product.title}</div>
+                    <div className="textdropdowninnav">
+                      {isMandarin && product.title_mandarin
+                        ? product.title_mandarin
+                        : product.title}
+                    </div>
                   </div>
                 ))}
               {products.length < 6 &&

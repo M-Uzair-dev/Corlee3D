@@ -11,7 +11,7 @@ import SvgIcon3 from "../DynamicContentDisplay/icons/SvgIcon3";
 function ProductNavigation(props) {
   const navigate = useNavigate();
   const { open, setOpen } = props;
-
+  const isMandarin = localStorage.getItem("isMandarin");
   const [show, setShow] = useState(false);
   return (
     <>
@@ -87,10 +87,16 @@ function ProductNavigation(props) {
           </div>
           {show && (
             <div className="dropdowndiv">
-              <p onClick={() => navigate("/user/history")}>History</p>
-              <p onClick={() => navigate("/user/favourites")}>Favourites</p>
+              <p onClick={() => navigate("/user/history")}>
+                {isMandarin ? "历史" : "History"}
+              </p>
+              <p onClick={() => navigate("/user/favourites")}>
+                {isMandarin ? "收藏" : "Favourites"}
+              </p>
               {document.body.scrollWidth < 950 && (
-                <p onClick={() => navigate("/user/bag")}>Bag</p>
+                <p onClick={() => navigate("/user/bag")}>
+                  {isMandarin ? "购物车" : "Bag"}
+                </p>
               )}
               <p
                 onClick={() => {
@@ -99,7 +105,7 @@ function ProductNavigation(props) {
                   setAuthToken(null);
                 }}
               >
-                Logout
+                {isMandarin ? "登出" : "Logout"}
               </p>
             </div>
           )}
@@ -125,13 +131,13 @@ function ProductNavigation(props) {
           <div
             className="product-card-container-nav"
             onMouseEnter={() => {
-              if (window.innerWidth > 850) {
+              if (window.innerWidth > 980) {
                 props.changeshowprod();
                 setOpen(false);
               }
             }}
             onMouseLeave={() => {
-              if (window.innerWidth > 850) {
+              if (window.innerWidth > 980) {
                 props.changeshowprod();
                 setOpen(false);
               }
@@ -142,7 +148,7 @@ function ProductNavigation(props) {
             style={{ cursor: "pointer" }}
           >
             <p className="contact-info-text-style-nav notolive">
-              {messages["products"]}
+              {isMandarin ? "产品" : "Products"}
             </p>
             <SvgIcon1 className="svg-container-nav" showprod={props.showprod} />
           </div>
@@ -151,21 +157,21 @@ function ProductNavigation(props) {
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/events")}
           >
-            {messages["events"]}
+            {isMandarin ? "活动" : "Events"}
           </p>
           <p
             className="contact-info-text-style-nav"
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/blogs")}
           >
-            {messages["Blogs"]}
+            {isMandarin ? "博客" : "Blogs"}
           </p>
           <p
             className="contact-info-text-style-nav"
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/about")}
           >
-            {messages["about_us"]}
+            {isMandarin ? "关于我们" : "About us"}
           </p>
         </div>
         <DynamicContentDisplay

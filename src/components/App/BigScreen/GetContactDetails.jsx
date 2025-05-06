@@ -4,6 +4,7 @@ import { api } from "../../../config/api";
 import { toast } from "sonner";
 
 const GetContactDetails = (props) => {
+  const isMandarin = localStorage.getItem("isMandarin");
   const user = props.user;
 
   const [email, setEmail] = React.useState(user.email);
@@ -13,7 +14,9 @@ const GetContactDetails = (props) => {
   const update = async () => {
     try {
       if (email === "" || phone === "") {
-        toast.error("Please fill all the fields");
+        toast.error(
+          isMandarin ? "請填寫所有欄位" : "Please fill all the fields"
+        );
         return;
       }
       setLoading(true);
@@ -27,18 +30,20 @@ const GetContactDetails = (props) => {
       });
       console.log(response);
       if (response.status === 200) {
-        toast.success("Details updated successfully");
+        toast.success(isMandarin ? "更新成功" : "Details updated successfully");
         props.setUser({ ...user, email: email, phone: phone });
         props.setGetUserDetails("");
       } else {
         toast.error(
-          response.data[Object.keys(response.data)[0]] || "Something went wrong"
+          response.data[Object.keys(response.data)[0]] ||
+            (isMandarin ? "發生錯誤" : "Something went wrong")
         );
         props.setGetUserDetails("");
       }
     } catch (e) {
       toast.error(
-        e.data[Object.keys(response.data)[0]] || "Something went wrong"
+        e.data[Object.keys(response.data)[0]] ||
+          (isMandarin ? "發生錯誤" : "Something went wrong")
       );
       props.setGetUserDetails("");
       setLoading(false);
@@ -86,15 +91,17 @@ const GetContactDetails = (props) => {
             />
           </svg>
         </div>
-        <h1>Contact Details</h1>
-        <p>Update Your contact details</p>
+        <h1>{isMandarin ? "聯絡詳細資料" : "Contact Details"}</h1>
+        <p>
+          {isMandarin ? "更新您的聯絡詳細資料" : "Update Your contact details"}
+        </p>
         <div className="inputs">
           <div className="oneinput">
-            <label htmlFor="name">Email</label>
+            <label htmlFor="name">{isMandarin ? "電子郵件" : "Email"}</label>
             <input
               type="text"
               id="name"
-              placeholder="Email"
+              placeholder={isMandarin ? "電子郵件" : "Email"}
               value={email}
               onChange={(e) => {
                 setEmail(e.target.value);
@@ -102,11 +109,13 @@ const GetContactDetails = (props) => {
             />
           </div>
           <div className="oneinput">
-            <label htmlFor="cname">Phone number</label>
+            <label htmlFor="cname">
+              {isMandarin ? "電話號碼" : "Phone number"}
+            </label>
             <input
               type="text"
               id="cname"
-              placeholder="Phone number"
+              placeholder={isMandarin ? "電話號碼" : "Phone number"}
               value={phone}
               onChange={(e) => {
                 setPhone(e.target.value);
@@ -135,6 +144,8 @@ const GetContactDetails = (props) => {
               wrapperStyle={{}}
               wrapperClass=""
             />
+          ) : isMandarin ? (
+            "更新"
           ) : (
             "Update"
           )}

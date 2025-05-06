@@ -2,12 +2,13 @@ import SvgIcon1 from "./icons/SvgIcon1";
 import "./style.css";
 
 function IdentityCardView(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="flex-container-with-icon">
       <input
         type="text"
         className="id-label-text-style"
-        placeholder="ID"
+        placeholder={isMandarin ? "身份证" : "ID"}
         name="username"
         onChange={props.onChange}
         value={props.value}

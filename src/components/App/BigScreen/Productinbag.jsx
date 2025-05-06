@@ -15,6 +15,7 @@ const Productinbag = (props) => {
   const [size, setSiz] = useState(props.product.quantity);
   const [selectedColor, setSelectedColor] = useState(props.product.color);
   const [displaynone, setDisplaynone] = useState(false);
+  const isMandarin = localStorage.getItem("isMandarin");
 
   const debouncedData = useDebounce(
     useMemo(
@@ -64,7 +65,9 @@ const Productinbag = (props) => {
         const response = await api.delete(`/cart-items/${props.product.id}/`);
         if (response.status === 204) {
           console.log(response);
-          toast.success("Item removed successfully");
+          toast.success(
+            isMandarin ? "商品已成功移除" : "Item removed successfully"
+          );
           props.deleteProduct(props.product.id);
           setDisplaynone(true);
           setLoading(false);
@@ -72,7 +75,7 @@ const Productinbag = (props) => {
         }
       }
     } catch (e) {
-      toast.error(e.message || "Something went wrong");
+      toast.error(isMandarin ? "發生錯誤" : "Something went wrong");
       setLoading(false);
     }
   };
@@ -99,7 +102,9 @@ const Productinbag = (props) => {
           <div className="textinbagproduct">
             <p>{product.item_code}</p>
             <p>
-              {product.product_category_name}{" "}
+              {isMandarin && product.product_category_name_mandarin
+                ? product.product_category_name_mandarin
+                : product.product_category_name}{" "}
               <img className="arrow" src={arrow} alt="" />
               {product.finish}
             </p>

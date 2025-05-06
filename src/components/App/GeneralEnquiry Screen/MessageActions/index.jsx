@@ -3,6 +3,7 @@ import messages from "./messages.json";
 import { toast } from "sonner";
 
 function MessageActions(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <>
       <div className="contact-info-container">
@@ -12,19 +13,25 @@ function MessageActions(props) {
             className="highlighted-text"
             onClick={() => {
               navigator.clipboard.writeText(props.user.phone);
-              toast.success("Copied to clipboard");
+              toast.success(
+                isMandarin ? "已复制到剪贴板" : "Copied to clipboard"
+              );
             }}
             style={{ cursor: "pointer" }}
           >
-            {messages["copy_1"]}
+            {isMandarin ? "复制" : "Copy"}
           </p>
         </div>
       </div>{" "}
       <div className="contact-buttons-container">
         {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
-        <button className="email-button-style">{messages["send_email"]}</button>
+        <button className="email-button-style">
+          {isMandarin ? "发送邮件" : "Send Email"}
+        </button>
         {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
-        <button className="call-button-style">{messages["make_call"]}</button>
+        <button className="call-button-style">
+          {isMandarin ? "打电话" : "Make Call"}
+        </button>
       </div>
     </>
   );

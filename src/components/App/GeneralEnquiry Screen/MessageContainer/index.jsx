@@ -4,6 +4,7 @@ import messages from "./messages.json";
 import { toast } from "sonner";
 
 function MessageContainer(props) {
+  const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="contact-info-container3">
       <div className="contact-info-container2 static">
@@ -12,11 +13,13 @@ function MessageContainer(props) {
           className="highlighted-text"
           onClick={() => {
             navigator.clipboard.writeText(props.user.email);
-            toast.success("Copied to clipboard");
+            toast.success(
+              isMandarin ? "已复制到剪贴板" : "Copied to clipboard"
+            );
           }}
           style={{ cursor: "pointer" }}
         >
-          {messages["copy"]}
+          {isMandarin ? "复制" : "Copy"}
         </p>
       </div>
       <MessageActions {...props} />

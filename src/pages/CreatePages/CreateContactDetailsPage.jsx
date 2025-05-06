@@ -9,6 +9,20 @@ function CreateContactDetailsPage() {
     email: "",
     business_hours: "",
     map_location: "",
+    address_mandarin: "",
+    city_mandarin: "",
+    county_mandarin: "",
+    country_mandarin: "",
+    city: "",
+    county: "",
+    postal_code: "",
+    country: "",
+    latitude: "",
+    longitude: "",
+    facebook: "",
+    instagram: "",
+    whatsapp: "",
+    line: "",
   };
 
   return (

@@ -142,11 +142,20 @@ const Table = ({
   const renderCell = (item, column) => {
     const fieldType = fields[column];
     const value = item[column];
+    const displayLabel =
+      fields[column] || column.charAt(0).toUpperCase() + column.slice(1);
+
+    // Check if this column might contain image-related content
+    const isImageColumn =
+      column.toLowerCase().includes("image") ||
+      column.toLowerCase().includes("photo") ||
+      column.toLowerCase().includes("thumbnail") ||
+      column.toLowerCase().includes("picture");
 
     switch (fieldType) {
       case "boolean":
         return (
-          <td key={column}>
+          <td key={column} data-label={displayLabel}>
             <span
               className={`order-status ${
                 value ? "status-completed" : "status-pending"
@@ -157,14 +166,22 @@ const Table = ({
           </td>
         );
       default:
-        return <td key={column}>{value}</td>;
+        return (
+          <td
+            key={column}
+            data-label={displayLabel}
+            className={isImageColumn ? "table-image-cell" : ""}
+          >
+            {value}
+          </td>
+        );
     }
   };
 
   // Render actions cell
   const renderActions = (item) => {
     return (
-      <td className="action-cell">
+      <td className="action-cell" data-label="Actions">
         {options?.view && (
           <button
             className="action-btn view"
@@ -183,7 +200,7 @@ const Table = ({
               }
             }}
           >
-            <FaEye />
+            <FaEye className="action-icon" />
           </button>
         )}
         {options?.edit && (
@@ -192,7 +209,7 @@ const Table = ({
             title="Edit"
             onClick={() => navigate(getEditRoute(item.id))}
           >
-            <FaEdit />
+            <FaEdit className="action-icon" />
           </button>
         )}
         {options?.delete && (
@@ -201,7 +218,7 @@ const Table = ({
             title="Delete"
             onClick={() => handleDeleteClick(item)}
           >
-            <FaTrash />
+            <FaTrash className="action-icon" />
           </button>
         )}
       </td>

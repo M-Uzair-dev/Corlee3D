@@ -6,9 +6,40 @@ import SvgIcon4 from "./icons/SvgIcon4";
 import "./style.css";
 import messages from "./messages.json";
 import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 
 function BottomBar(props) {
   const navigate = useNavigate();
+  const isMandarin = localStorage.getItem("isMandarin");
+  const [showLanguageModal, setShowLanguageModal] = useState(false);
+  const [modalAnimation, setModalAnimation] = useState(false);
+
+  useEffect(() => {
+    if (showLanguageModal) {
+      setTimeout(() => {
+        setModalAnimation(true);
+      }, 10);
+    } else {
+      setModalAnimation(false);
+    }
+  }, [showLanguageModal]);
+
+  const closeModal = () => {
+    setModalAnimation(false);
+    setTimeout(() => {
+      setShowLanguageModal(false);
+    }, 300);
+  };
+
+  const handleLanguageChange = (language) => {
+    if (language === "mandarin") {
+      localStorage.setItem("isMandarin", "true");
+    } else {
+      localStorage.removeItem("isMandarin");
+    }
+    window.location.reload();
+  };
+
   return (
     <div
       className={
@@ -35,7 +66,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {messages["products"]}
+              {isMandarin ? "产品" : "Products"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -47,7 +78,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {messages["events"]}
+              {isMandarin ? "活动" : "Events"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -59,7 +90,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {messages["about_us"]}
+              {isMandarin ? "关于我们" : "About us"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -71,7 +102,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              Blogs
+              {isMandarin ? "博客" : "Blogs"}
             </p>
           </div>
           <div className="sidebar-container-bb" onClick={() => navigate("/")}>
@@ -99,13 +130,18 @@ function BottomBar(props) {
               </p>
             </div>
             <p className="contact-info-section-bb">
-              {localStorage.getItem("address")}
+              {isMandarin && localStorage.getItem("address_mandarin")
+                ? localStorage.getItem("address_mandarin")
+                : localStorage.getItem("address")}
             </p>
           </div>
         </div>
         <p className="footer-copyright-text-bb">
           <span className="brand-text-style-bb">
-            © {new Date().getFullYear()} corlee & co. All Rights Reserved.
+            © {new Date().getFullYear()}
+            {isMandarin
+              ? " corlee & co. 保留所有权利。"
+              : " corlee & co. All Rights Reserved."}
           </span>{" "}
           <a
             onClick={(e) => {
@@ -115,7 +151,7 @@ function BottomBar(props) {
             }}
             className="link-underline-white-bb"
           >
-            {messages["terms"]}
+            {isMandarin ? "条款" : "Terms"}
           </a>
           <span className="brand-text-style-bb">, </span>
           <a
@@ -126,7 +162,7 @@ function BottomBar(props) {
             }}
             className="link-underline-white-bb"
           >
-            {messages["privacy"]}
+            {isMandarin ? "隐私" : "Privacy"}
           </a>
           <span className="brand-text-style-bb"> &amp; </span>
           <a
@@ -137,9 +173,117 @@ function BottomBar(props) {
             }}
             className="link-underline-white-bb"
           >
-            {messages["accessibility"]}
+            {isMandarin ? "无障碍" : "Accessibility"}
+          </a>
+          <br />{" "}
+          <a
+            className="link-underline-white-bb"
+            style={{
+              marginTop: "5px !important",
+              display: "block",
+              cursor: "pointer",
+            }}
+            onClick={() => setShowLanguageModal(true)}
+          >
+            English / 中文
           </a>
         </p>
+
+        {showLanguageModal && (
+          <div
+            className="language-modal"
+            style={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: "rgba(0,0,0,0.7)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              zIndex: 1000,
+              opacity: modalAnimation ? 1 : 0,
+              transition: "opacity 0.3s ease",
+            }}
+            onClick={closeModal}
+          >
+            <div
+              style={{
+                backgroundColor: "#f4f4f4",
+                padding: "30px",
+                borderRadius: "16px",
+                width: "300px",
+                color: "black",
+                textAlign: "center",
+                position: "relative",
+                transform: modalAnimation
+                  ? "translateY(0)"
+                  : "translateY(30px)",
+                opacity: modalAnimation ? 1 : 0,
+                transition: "transform 0.4s ease, opacity 0.3s ease",
+                boxShadow: "0 8px 25px rgba(0,0,0,0.2)",
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "20px",
+                  alignItems: "center",
+                }}
+              >
+                <button
+                  onClick={() => handleLanguageChange("english")}
+                  style={{
+                    padding: "14px 30px",
+                    width: "100%",
+                    border: "none",
+                    backgroundColor: "black",
+                    color: "white",
+                    borderRadius: "50px",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    transition: "background-color 0.2s ease",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = "#333";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = "black";
+                  }}
+                >
+                  English
+                </button>
+                <button
+                  onClick={() => handleLanguageChange("mandarin")}
+                  style={{
+                    padding: "14px 30px",
+                    width: "100%",
+                    border: "none",
+                    backgroundColor: "black",
+                    color: "white",
+                    borderRadius: "50px",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    fontWeight: "bold",
+                    transition: "background-color 0.2s ease",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.backgroundColor = "#333";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.backgroundColor = "black";
+                  }}
+                >
+                  中文
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

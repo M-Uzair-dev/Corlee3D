@@ -15,10 +15,14 @@ function EditContactDetailsPage() {
     phone: "",
     email: "",
     address: "",
+    address_mandarin: "",
     city: "",
+    city_mandarin: "",
     county: "",
+    county_mandarin: "",
     postal_code: "",
     country: "",
+    country_mandarin: "",
     latitude: "",
     longitude: "",
     facebook: "",
@@ -137,7 +141,7 @@ function EditContactDetailsPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="address">Address *</label>
+            <label htmlFor="address">Address (English) *</label>
             <input
               type="text"
               id="address"
@@ -145,12 +149,24 @@ function EditContactDetailsPage() {
               value={formData.address}
               onChange={handleInputChange}
               required
-              placeholder="Enter address"
+              placeholder="Enter address in English"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="city">City *</label>
+            <label htmlFor="address_mandarin">Address (Mandarin)</label>
+            <input
+              type="text"
+              id="address_mandarin"
+              name="address_mandarin"
+              value={formData.address_mandarin}
+              onChange={handleInputChange}
+              placeholder="Enter address in Mandarin"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="city">City (English) *</label>
             <input
               type="text"
               id="city"
@@ -158,12 +174,24 @@ function EditContactDetailsPage() {
               value={formData.city}
               onChange={handleInputChange}
               required
-              placeholder="Enter city"
+              placeholder="Enter city in English"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="county">County *</label>
+            <label htmlFor="city_mandarin">City (Mandarin)</label>
+            <input
+              type="text"
+              id="city_mandarin"
+              name="city_mandarin"
+              value={formData.city_mandarin}
+              onChange={handleInputChange}
+              placeholder="Enter city in Mandarin"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="county">County (English) *</label>
             <input
               type="text"
               id="county"
@@ -171,7 +199,19 @@ function EditContactDetailsPage() {
               value={formData.county}
               onChange={handleInputChange}
               required
-              placeholder="Enter county"
+              placeholder="Enter county in English"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="county_mandarin">County (Mandarin)</label>
+            <input
+              type="text"
+              id="county_mandarin"
+              name="county_mandarin"
+              value={formData.county_mandarin}
+              onChange={handleInputChange}
+              placeholder="Enter county in Mandarin"
             />
           </div>
 
@@ -189,7 +229,7 @@ function EditContactDetailsPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="country">Country *</label>
+            <label htmlFor="country">Country (English) *</label>
             <input
               type="text"
               id="country"
@@ -197,7 +237,19 @@ function EditContactDetailsPage() {
               value={formData.country}
               onChange={handleInputChange}
               required
-              placeholder="Enter country"
+              placeholder="Enter country in English"
+            />
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="country_mandarin">Country (Mandarin)</label>
+            <input
+              type="text"
+              id="country_mandarin"
+              name="country_mandarin"
+              value={formData.country_mandarin}
+              onChange={handleInputChange}
+              placeholder="Enter country in Mandarin"
             />
           </div>
 
