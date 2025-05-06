@@ -213,7 +213,7 @@ function CreateFabricPage() {
     try {
       const response = await api.post("/fabrics/", apiData);
       toast.success("Fabric created successfully");
-      navigate("/admin/fabrics");
+      navigate("/dashboard/fabrics");
     } catch (error) {
       // Use the error handling utility
       handleApiError(error, "Fabric", setErrorMessage, setFieldErrors, false);

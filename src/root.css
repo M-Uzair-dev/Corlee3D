@@ -3710,7 +3710,10 @@ body {
   color: white;
   overflow: hidden;
   text-align: center;
-  z-index: 50;
+  z-index: 100;
+}
+.heartbutton {
+  z-index: -1;
 }
 .circlemust .dropdowndiv p {
   padding: 10px 20px;

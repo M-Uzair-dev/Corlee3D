@@ -106,7 +106,9 @@ const Productinbag = (props) => {
                 ? product.product_category_name_mandarin
                 : product.product_category_name}{" "}
               <img className="arrow" src={arrow} alt="" />
-              {product.finish}
+              {isMandarin && product.finish_mandarin
+                ? product.finish_mandarin
+                : product.finish}
             </p>
           </div>
 

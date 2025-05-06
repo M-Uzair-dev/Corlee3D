@@ -57,6 +57,7 @@
 }
 .wrapper {
   cursor: default;
+  z-index: 1000 !important;
 }
 
 .bottomElements {
