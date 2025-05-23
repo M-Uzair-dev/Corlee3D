@@ -21,10 +21,10 @@ const Users = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [usersData, setUsersData] = useState({
     fields: {
-      username: "Username",
-      name: "Name",
-      email: "Email",
-      phone: "Phone",
+      username: "使用者名稱",
+      name: "姓名",
+      email: "信箱",
+      phone: "電話號碼",
     },
     data: [],
     isLoading: true,
@@ -93,7 +93,7 @@ const Users = () => {
       }));
     } catch (error) {
       console.error("Error fetching users:", error);
-      toast.error("Failed to load users");
+      toast.error("載入使用者失敗");
       setUsersData((prev) => ({ ...prev, isLoading: false }));
     }
   };
@@ -135,10 +135,10 @@ const Users = () => {
         onClick={handlePrevPage}
         disabled={page <= 1 || usersData.isLoading}
       >
-        <FaChevronLeft /> Previous
+        <FaChevronLeft /> 上一頁
       </button>
       <span className="pagination-info">
-        Page {page} of {totalPages}
+        第 {page} 頁，共 {totalPages} 頁
       </span>
       {page < totalPages && (
         <button
@@ -146,7 +146,7 @@ const Users = () => {
           onClick={handleNextPage}
           disabled={usersData.isLoading}
         >
-          Next <FaChevronRight />
+          下一頁 <FaChevronRight />
         </button>
       )}
     </div>
@@ -155,7 +155,7 @@ const Users = () => {
   return (
     <>
       <PageContent
-        title="Users"
+        title="使用者"
         icon={<FaUsers />}
         data={usersData}
         page="user"

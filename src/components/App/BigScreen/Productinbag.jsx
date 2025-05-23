@@ -89,7 +89,7 @@ const Productinbag = (props) => {
           className="image"
           style={{
             backgroundImage: `url(${
-              product.color_images.filter(
+              product?.color_images?.filter(
                 (item) => item.color == selectedColor
               )[0]?.primary_image_url
             })`,
@@ -100,15 +100,15 @@ const Productinbag = (props) => {
         ></div>
         <div className="detailsofimage">
           <div className="textinbagproduct">
-            <p>{product.item_code}</p>
+            <p>{product?.item_code}</p>
             <p>
-              {isMandarin && product.product_category_name_mandarin
-                ? product.product_category_name_mandarin
-                : product.product_category_name}{" "}
+              {isMandarin && product?.product_category_name_mandarin
+                ? product?.product_category_name_mandarin
+                : product?.product_category_name}{" "}
               <img className="arrow" src={arrow} alt="" />
-              {isMandarin && product.finish_mandarin
-                ? product.finish_mandarin
-                : product.finish}
+              {isMandarin && product?.finish_mandarin
+                ? product?.finish_mandarin
+                : product?.finish}
             </p>
           </div>
 
@@ -176,7 +176,7 @@ const Productinbag = (props) => {
         </div>
       </div>
       <div className="colordiv">
-        {props.product.fabric.color_images?.map((c, i) => (
+        {props.product?.fabric?.color_images?.map((c, i) => (
           <div
             className="colors"
             style={

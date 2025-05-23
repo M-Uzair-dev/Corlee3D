@@ -34,17 +34,17 @@ const Header = ({ title }) => {
         <div className="modal-overlay" onClick={handleOverlayClick}>
           <div className="modal">
             <div className="modal-content">
-              <h3>Confirm Logout</h3>
-              <p>Are you sure you want to logout?</p>
+              <h3>確認登出</h3>
+              <p>您確定要登出嗎？</p>
               <div className="modal-buttons">
                 <button className="modal-button confirm" onClick={handleLogout}>
-                  Yes, Logout
+                  是的，登出
                 </button>
                 <button
                   className="modal-button cancel"
                   onClick={() => setShowConfirm(false)}
                 >
-                  Cancel
+                  取消
                 </button>
               </div>
             </div>

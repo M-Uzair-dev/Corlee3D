@@ -9,6 +9,8 @@ const DeleteModal = ({
   itemId,
   itemType,
   onDeleteSuccess,
+  isBulkDelete = false,
+  bulkCount = 0,
 }) => {
   if (!isOpen) return null;
 
@@ -16,55 +18,82 @@ const DeleteModal = ({
   const getEntityDisplayName = () => {
     switch (itemType) {
       case "fabric":
-        return "Fabric";
+        return isBulkDelete ? "布料" : "布料";
       case "colorCategory":
-        return "Color Category";
+        return isBulkDelete ? "顏色" : "顏色";
       case "fabricCategory":
-        return "Fabric Category";
+        return isBulkDelete ? "布種" : "布種";
       case "user":
-        return "User";
+        return isBulkDelete ? "使用者" : "使用者";
       case "blog":
-        return "Blog";
+        return isBulkDelete ? "文章" : "文章";
       case "order":
-        return "Order";
+        return isBulkDelete ? "訂單" : "訂單";
       case "blogCategory":
-        return "Blog Category";
+        return isBulkDelete ? "文章分類" : "文章分類";
       case "contactDetails":
-        return "Contact Details";
+        return isBulkDelete ? "聯絡資訊" : "聯絡資訊";
       case "contactRequest":
-        return "Contact Request";
+        return isBulkDelete ? "聯絡請求" : "聯絡請求";
       case "event":
-        return "Event";
+        return isBulkDelete ? "活動" : "活動";
       default:
-        return "Item";
+        return isBulkDelete ? "項目" : "項目";
     }
   };
 
   // Get API endpoint based on item type
   const getDeleteEndpoint = () => {
-    switch (itemType) {
-      case "fabric":
-        return `/fabrics/${itemId}/delete/`;
-      case "colorCategory":
-        return `/color-categories/${itemId}/`;
-      case "fabricCategory":
-        return `/product-categories/${itemId}/`;
-      case "user":
-        return `/users/${itemId}/`;
-      case "blog":
-        return `/blogs/${itemId}/`;
-      case "order":
-        return `/orders/${itemId}/`;
-      case "blogCategory":
-        return `/blog-categories/${itemId}/`;
-      case "contactDetails":
-        return `/contact-details/${itemId}/`;
-      case "contactRequest":
-        return `/contact-requests/${itemId}/`;
-      case "event":
-        return `/events/${itemId}/`;
-      default:
-        return "";
+    if (isBulkDelete) {
+      switch (itemType) {
+        case "fabric":
+          return `/fabrics/bulk-delete/`;
+        case "colorCategory":
+          return `/color-categories/bulk-delete/`;
+        case "fabricCategory":
+          return `/product-categories/bulk-delete/`;
+        case "user":
+          return `/users/bulk-delete/`;
+        case "blog":
+          return `/blogs/bulk-delete/`;
+        case "order":
+          return `/orders/bulk-delete/`;
+        case "blogCategory":
+          return `/blog-categories/bulk-delete/`;
+        case "contactDetails":
+          return `/contact-details/bulk-delete/`;
+        case "contactRequest":
+          return `/contact-requests/bulk-delete/`;
+        case "event":
+          return `/events/bulk-delete/`;
+        default:
+          return "";
+      }
+    } else {
+      switch (itemType) {
+        case "fabric":
+          return `/fabrics/${itemId}/delete/`;
+        case "colorCategory":
+          return `/color-categories/${itemId}/`;
+        case "fabricCategory":
+          return `/product-categories/${itemId}/`;
+        case "user":
+          return `/users/${itemId}/`;
+        case "blog":
+          return `/blogs/${itemId}/`;
+        case "order":
+          return `/orders/${itemId}/`;
+        case "blogCategory":
+          return `/blog-categories/${itemId}/`;
+        case "contactDetails":
+          return `/contact-details/${itemId}/`;
+        case "contactRequest":
+          return `/contact-requests/${itemId}/`;
+        case "event":
+          return `/events/${itemId}/`;
+        default:
+          return "";
+      }
     }
   };
 
@@ -74,22 +103,32 @@ const DeleteModal = ({
       const endpoint = getDeleteEndpoint();
       if (!endpoint) {
         console.log("No endpoint found for itemType:", itemType);
-        toast.error("Invalid item type");
+        toast.error("無效的項目類型");
         onClose();
         return;
       }
 
       console.log("Sending delete request to endpoint:", endpoint);
-      await api.delete(endpoint);
-      console.log("Delete request successful for itemId:", itemId);
-      toast.success(`${getEntityDisplayName()} deleted successfully`);
+
+      if (isBulkDelete) {
+        // For bulk delete, send POST request with array of IDs
+        const requestBody = { [`${itemType}_ids`]: itemId };
+        await api.post(endpoint, requestBody);
+        console.log("Bulk delete request successful for items:", itemId);
+        toast.success(`${bulkCount} 個${getEntityDisplayName()}刪除成功`);
+      } else {
+        // For single delete, send DELETE request
+        await api.delete(endpoint);
+        console.log("Delete request successful for itemId:", itemId);
+        toast.success(`${getEntityDisplayName()}刪除成功`);
+      }
+
       onDeleteSuccess(itemId);
       onClose();
     } catch (error) {
       console.error("Error deleting item:", error);
       toast.error(
-        error.response?.data?.error ||
-          `Failed to delete ${getEntityDisplayName()}`
+        error.response?.data?.error || `刪除${getEntityDisplayName()}失敗`
       );
       onClose();
     }
@@ -99,21 +138,32 @@ const DeleteModal = ({
     <div className="delete-modal-overlay">
       <div className="delete-modal">
         <div className="delete-modal-header">
-          <h2>Confirm Delete</h2>
+          <h2>確認刪除</h2>
           <button className="close-button" onClick={onClose}>
             &times;
           </button>
         </div>
         <div className="delete-modal-body">
-          <p>Are you sure you want to delete this {getEntityDisplayName()}?</p>
-          <p className="delete-warning">This action cannot be undone.</p>
+          {isBulkDelete ? (
+            <>
+              <p>
+                您確定要刪除 {bulkCount} 個{getEntityDisplayName()}嗎？
+              </p>
+              <p className="delete-warning">此操作無法復原。</p>
+            </>
+          ) : (
+            <>
+              <p>您確定要刪除此{getEntityDisplayName()}嗎？</p>
+              <p className="delete-warning">此操作無法復原。</p>
+            </>
+          )}
         </div>
         <div className="delete-modal-footer">
           <button className="cancel-button" onClick={onClose}>
-            Cancel
+            取消
           </button>
           <button className="delete-button" onClick={handleDelete}>
-            Delete
+            刪除 {isBulkDelete ? `(${bulkCount})` : ""}
           </button>
         </div>
       </div>

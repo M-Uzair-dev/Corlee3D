@@ -11,19 +11,19 @@ const ContactDetails = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [contactDetailsData, setContactDetailsData] = useState({
     fields: {
-      phone: "Phone",
-      email: "Email",
-      address: "Address",
-      address_mandarin: "Address Mandarin",
-      city: "City",
-      city_mandarin: "City Mandarin",
-      county: "County",
-      county_mandarin: "County Mandarin",
-      postal_code: "Postal Code",
-      country: "Country",
-      country_mandarin: "Country Mandarin",
-      latitude: "Latitude",
-      longitude: "Longitude",
+      phone: "電話",
+      email: "信箱",
+      address: "地址",
+      address_mandarin: "地址（中文）",
+      city: "城市",
+      city_mandarin: "城市（中文）",
+      county: "縣市",
+      county_mandarin: "縣市（中文）",
+      postal_code: "郵遞區號",
+      country: "國家",
+      country_mandarin: "國家（中文）",
+      latitude: "緯度",
+      longitude: "經度",
       facebook: "Facebook",
       instagram: "Instagram",
       whatsapp: "WhatsApp",
@@ -53,30 +53,30 @@ const ContactDetails = () => {
 
       const transformedData = response.data.results.map((item) => ({
         id: item.id,
-        phone: item.phone || "Not specified",
-        email: item.email || "Not specified",
-        address: item.address || "Not specified",
-        city: item.city || "Not specified",
-        county: item.county || "Not specified",
-        postal_code: item.postal_code || "Not specified",
-        country: item.country || "Not specified",
-        latitude: item.latitude || "Not specified",
-        longitude: item.longitude || "Not specified",
-        facebook: item.facebook || "Not specified",
-        instagram: item.instagram || "Not specified",
-        whatsapp: item.whatsapp || "Not specified",
-        line: item.line || "Not specified",
-        address_mandarin: item.address_mandarin || "Not specified",
-        city_mandarin: item.city_mandarin || "Not specified",
-        county_mandarin: item.county_mandarin || "Not specified",
-        country_mandarin: item.country_mandarin || "Not specified",
+        phone: item.phone || "未指定",
+        email: item.email || "未指定",
+        address: item.address || "未指定",
+        city: item.city || "未指定",
+        county: item.county || "未指定",
+        postal_code: item.postal_code || "未指定",
+        country: item.country || "未指定",
+        latitude: item.latitude || "未指定",
+        longitude: item.longitude || "未指定",
+        facebook: item.facebook || "未指定",
+        instagram: item.instagram || "未指定",
+        whatsapp: item.whatsapp || "未指定",
+        line: item.line || "未指定",
+        address_mandarin: item.address_mandarin || "未指定",
+        city_mandarin: item.city_mandarin || "未指定",
+        county_mandarin: item.county_mandarin || "未指定",
+        country_mandarin: item.country_mandarin || "未指定",
 
         actions: (
           <div className="action-cell">
             <button
               className="action-btn edit"
               onClick={() => handleEditContact(item.id)}
-              title="Edit Contact Details"
+              title="編輯聯絡資訊"
             >
               <FaEdit />
             </button>
@@ -91,7 +91,7 @@ const ContactDetails = () => {
       }));
     } catch (error) {
       console.error("Error fetching contact details:", error);
-      toast.error("Failed to load contact details");
+      toast.error("載入聯絡資訊失敗");
       setContactDetailsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
@@ -102,7 +102,7 @@ const ContactDetails = () => {
 
   return (
     <PageContent
-      title="Contact Details"
+      title="聯絡資訊"
       icon={<FaAddressCard />}
       data={contactDetailsData}
       page="contactDetails"

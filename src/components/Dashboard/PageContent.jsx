@@ -12,6 +12,7 @@ const PageContent = ({
   onCreate,
   onEdit,
   onView,
+  onBulkDelete,
   currentPage = 1,
   totalPages = 1,
   onPageChange,
@@ -78,6 +79,7 @@ const PageContent = ({
             }}
             page={page}
             onDelete={onDelete}
+            onBulkDelete={onBulkDelete}
             onCreate={handleCreate}
             onEdit={onEdit}
             onView={onView}
@@ -90,10 +92,8 @@ const PageContent = ({
       ) : (
         <div className="empty-content">
           <div className="empty-icon">{icon}</div>
-          <p className="empty-text">
-            Content for {title} will be implemented here.
-          </p>
-          <button className="btn btn-secondary">Learn More</button>
+          <p className="empty-text">{title}的內容將在此處實現。</p>
+          <button className="btn btn-secondary">了解更多</button>
         </div>
       )}
     </div>

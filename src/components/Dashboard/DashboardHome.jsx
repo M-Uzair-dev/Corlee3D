@@ -27,7 +27,7 @@ const DashboardHome = () => {
       console.log(response.data);
     } catch (error) {
       console.error("Error fetching analytics:", error);
-      toast.error("Failed to load analytics data");
+      toast.error("載入分析數據失敗");
     } finally {
       setIsLoading(false);
     }
@@ -35,11 +35,11 @@ const DashboardHome = () => {
 
   const fabricData = {
     labels: analytics.top_ordered_items.map(
-      (item) => item.fabric__title || "Unknown"
+      (item) => item.fabric__title || "未知"
     ),
     datasets: [
       {
-        label: "Total Orders",
+        label: "總訂單數",
         data: analytics.top_ordered_items.map((item) => item.total_orders),
         backgroundColor: "#4285f4",
         maxBarThickness: 40,
@@ -49,11 +49,11 @@ const DashboardHome = () => {
 
   const categoryData = {
     labels: analytics.top_ordered_categories.map(
-      (category) => category.fabric__product_category__name || "Unknown"
+      (category) => category.fabric__product_category__name || "未知"
     ),
     datasets: [
       {
-        label: "Total Orders",
+        label: "總訂單數",
         data: analytics.top_ordered_categories.map(
           (category) => category.total_orders
         ),
@@ -90,7 +90,7 @@ const DashboardHome = () => {
               <FaBox />
             </div>
             <div className="stat-content">
-              <h3 className="stat-label">Total Fabrics</h3>
+              <h3 className="stat-label">布料總數</h3>
               <p className="stat-value">{analytics.total_fabrics}</p>
             </div>
           </div>
@@ -103,7 +103,7 @@ const DashboardHome = () => {
               <FaUsers />
             </div>
             <div className="stat-content">
-              <h3 className="stat-label">Total Users</h3>
+              <h3 className="stat-label">使用者總數</h3>
               <p className="stat-value">{analytics.total_users}</p>
             </div>
           </div>
@@ -116,7 +116,7 @@ const DashboardHome = () => {
               <FaShoppingCart />
             </div>
             <div className="stat-content">
-              <h3 className="stat-label">Total Orders</h3>
+              <h3 className="stat-label">訂單總數</h3>
               <p className="stat-value">{analytics.total_orders}</p>
             </div>
           </div>
@@ -129,7 +129,7 @@ const DashboardHome = () => {
               <FaChartLine />
             </div>
             <div className="stat-content">
-              <h3 className="stat-label">Total Blogs</h3>
+              <h3 className="stat-label">文章總數</h3>
               <p className="stat-value">{analytics.total_blogs}</p>
             </div>
           </div>
@@ -141,7 +141,7 @@ const DashboardHome = () => {
         {/* Top Ordered Fabrics Chart */}
         <div className="chart-card" style={{ flex: 1 }}>
           <div className="chart-header">
-            <h3 className="chart-title">Top Ordered Fabrics</h3>
+            <h3 className="chart-title">熱門布料訂單</h3>
             <div className="chart-actions"></div>
           </div>
           <div
@@ -155,7 +155,7 @@ const DashboardHome = () => {
         {/* Top Ordered Categories Chart */}
         <div className="chart-card" style={{ flex: 1 }}>
           <div className="chart-header">
-            <h3 className="chart-title">Top Ordered Categories</h3>
+            <h3 className="chart-title">熱門布種訂單</h3>
             <div className="chart-actions"></div>
           </div>
           <div

@@ -158,13 +158,13 @@ const EditPageTemplate = ({
     <div className="dashboard-content-card edit-page-container">
       <div className="edit-page-header">
         <button className="back-button" onClick={() => navigate(redirectPath)}>
-          ← Back to List
+          ← 返回列表
         </button>
       </div>
 
       <Edit
         data={data}
-        heading={`Edit ${entityName}`}
+        heading={`編輯 ${entityName}`}
         onSubmit={handleSubmit}
         isLoading={isSubmitting}
         isLoadingData={isLoadingData}

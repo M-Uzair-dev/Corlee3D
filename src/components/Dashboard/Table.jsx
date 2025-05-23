@@ -18,12 +18,15 @@ const Table = ({
   options,
   page,
   onDelete,
+  onBulkDelete,
   currentPage = 1,
   totalPages = 1,
   onPageChange,
 }) => {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [itemToDelete, setItemToDelete] = useState(null);
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [showBulkDeleteModal, setShowBulkDeleteModal] = useState(false);
   const columnNames = Object.keys(fields);
   const navigate = useNavigate();
 
@@ -85,28 +88,62 @@ const Table = ({
   const getEntityDisplayName = () => {
     switch (page) {
       case "fabric":
-        return "Fabric";
+        return "布料";
       case "colorCategory":
-        return "Color Category";
+        return "顏色";
       case "fabricCategory":
-        return "Fabric Category";
+        return "布種";
       case "user":
-        return "User";
+        return "使用者";
       case "blogs":
-        return "Blog";
+        return "文章";
       case "order":
-        return "Order";
+        return "訂單";
       case "blogCategory":
-        return "Blog Category";
+        return "文章分類";
       case "contactDetails":
-        return "Contact Details";
+        return "聯絡資訊";
       case "contactRequest":
-        return "Contact Request";
+        return "聯絡請求";
       case "event":
-        return "Event";
+        return "活動";
       default:
-        return "Item";
+        return "項目";
     }
+  };
+
+  // Handle individual item selection
+  const handleItemSelect = (itemId) => {
+    setSelectedItems((prev) =>
+      prev.includes(itemId)
+        ? prev.filter((id) => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
+
+  // Handle select all/deselect all
+  const handleSelectAll = () => {
+    if (selectedItems.length === data.length) {
+      setSelectedItems([]);
+    } else {
+      setSelectedItems(data.map((item) => item.id));
+    }
+  };
+
+  // Handle bulk delete
+  const handleBulkDeleteClick = () => {
+    if (selectedItems.length > 0) {
+      setShowBulkDeleteModal(true);
+    }
+  };
+
+  // Handle bulk delete success
+  const handleBulkDeleteSuccess = () => {
+    if (onBulkDelete) {
+      onBulkDelete(selectedItems);
+    }
+    setSelectedItems([]);
+    setShowBulkDeleteModal(false);
   };
 
   // Show delete modal for an item
@@ -126,6 +163,15 @@ const Table = ({
   const renderHeaders = () => {
     return (
       <tr>
+        {options?.bulkDelete && (
+          <th>
+            <input
+              type="checkbox"
+              checked={selectedItems.length === data.length && data.length > 0}
+              onChange={handleSelectAll}
+            />
+          </th>
+        )}
         {columnNames.map((column) => (
           <th key={column}>
             {column.charAt(0).toUpperCase() + column.slice(1)}
@@ -229,7 +275,7 @@ const Table = ({
   if (isLoading) {
     return (
       <div style={{ position: "relative", minHeight: "300px" }}>
-        <LoadingSpinner text="Loading data..." overlay />
+        <LoadingSpinner text="正在載入數據..." overlay />
       </div>
     );
   }
@@ -242,14 +288,26 @@ const Table = ({
             className="create-button"
             onClick={() => navigate(getCreateRoute())}
           >
-            <FaPlus /> Create New {getEntityDisplayName()}
+            <FaPlus /> 新增{getEntityDisplayName()}
+          </button>
+        </div>
+      )}
+
+      {/* Bulk Delete Button */}
+      {options?.bulkDelete && selectedItems.length > 0 && (
+        <div className="bulk-actions">
+          <button
+            className="bulk-delete-button"
+            onClick={handleBulkDeleteClick}
+          >
+            <FaTrash /> 刪除所選項目 ({selectedItems.length})
           </button>
         </div>
       )}
 
       {/* Render empty state */}
       {!data || data.length === 0 ? (
-        <p className="empty-table-message">No data available.</p>
+        <p className="empty-table-message">沒有可用的數據。</p>
       ) : (
         <div className="table-responsive">
           <table className="data-table">
@@ -257,6 +315,15 @@ const Table = ({
             <tbody>
               {data.map((item, index) => (
                 <tr key={index}>
+                  {options?.bulkDelete && (
+                    <td>
+                      <input
+                        type="checkbox"
+                        checked={selectedItems.includes(item.id)}
+                        onChange={() => handleItemSelect(item.id)}
+                      />
+                    </td>
+                  )}
                   {columnNames.map((column) => renderCell(item, column))}
                   {(options?.edit || options?.delete || options?.view) &&
                     renderActions(item)}
@@ -276,7 +343,7 @@ const Table = ({
                 <FaChevronLeft />
               </button>
               <span className="page-info">
-                Page {currentPage} of {totalPages}
+                第 {currentPage} 頁，共 {totalPages} 頁
               </span>
               <button
                 className="pagination-button"
@@ -299,6 +366,19 @@ const Table = ({
         onDeleteSuccess={handleDeleteSuccess}
       />
 
+      {/* Bulk Delete Modal */}
+      {options?.bulkDelete && (
+        <DeleteModal
+          isOpen={showBulkDeleteModal}
+          onClose={() => setShowBulkDeleteModal(false)}
+          itemId={selectedItems}
+          itemType={page === "blogs" ? "blog" : page}
+          onDeleteSuccess={handleBulkDeleteSuccess}
+          isBulkDelete={true}
+          bulkCount={selectedItems.length}
+        />
+      )}
+
       <style jsx>{`
         .table-header {
           display: flex;
@@ -320,6 +400,29 @@ const Table = ({
 
         .create-button:hover {
           background-color: #2d9248;
+        }
+
+        .bulk-actions {
+          display: flex;
+          justify-content: flex-start;
+          margin-bottom: 16px;
+        }
+
+        .bulk-delete-button {
+          background-color: #dc3545;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          padding: 8px 16px;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 14px;
+        }
+
+        .bulk-delete-button:hover {
+          background-color: #c82333;
         }
 
         .pagination-controls {

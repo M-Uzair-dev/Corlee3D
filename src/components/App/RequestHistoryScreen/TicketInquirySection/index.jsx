@@ -112,11 +112,12 @@ function TicketInquirySection({ ticketInquiriesData }) {
             <div className="resultsfound">
               {isMandarin ? (
                 <p>
-                  {data?.length} {data?.length > 1 ? "个结果" : "个结果"} 已找到
+                  {data?.length} {data?.length > 1 ? "个结果 " : "个结果 "}{" "}
+                  已找到
                 </p>
               ) : (
                 <p>
-                  {data?.length} {data?.length > 1 ? "results" : "result"}
+                  {data?.length} {data?.length > 1 ? "results " : "result "}
                   found
                 </p>
               )}

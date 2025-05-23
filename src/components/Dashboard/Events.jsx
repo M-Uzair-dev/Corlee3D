@@ -15,10 +15,10 @@ const Events = () => {
   const [eventsData, setEventsData] = useState({
     fields: {
       id: "ID",
-      title: "Title",
-      date: "Date",
-      location: "Location",
-      status: "Status",
+      title: "活動標題",
+      date: "活動日期",
+      location: "活動地點",
+      status: "活動狀態",
     },
     data: [],
     isLoading: true,
@@ -46,12 +46,12 @@ const Events = () => {
       if (response.data.results) {
         const transformedData = response.data.results.map((event) => ({
           id: event.id,
-          title: event.title || "Untitled",
+          title: event.title || "未命名",
           date: event.date
             ? new Date(event.date).toLocaleDateString()
-            : "Not set",
-          location: event.location || "Not specified",
-          status: event.status || "Upcoming",
+            : "未設定",
+          location: event.location || "未指定",
+          status: event.status || "即將舉行",
         }));
 
         const totalCount = response.data.count || 0;
@@ -66,7 +66,7 @@ const Events = () => {
       }
     } catch (error) {
       console.error("Error fetching events:", error);
-      toast.error("Failed to load events");
+      toast.error("載入活動失敗");
       setEventsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
@@ -85,7 +85,7 @@ const Events = () => {
   };
 
   const handleDeleteEvent = () => {
-    toast.success("Event deleted successfully");
+    toast.success("活動刪除成功");
     fetchEvents();
   };
 
@@ -112,10 +112,10 @@ const Events = () => {
         onClick={handlePrevPage}
         disabled={page <= 1 || eventsData.isLoading}
       >
-        <FaChevronLeft /> Previous
+        <FaChevronLeft /> 上一頁
       </button>
       <span className="pagination-info">
-        Page {page} of {totalPages}
+        第 {page} 頁，共 {totalPages} 頁
       </span>
       {page < totalPages && (
         <button
@@ -123,7 +123,7 @@ const Events = () => {
           onClick={handleNextPage}
           disabled={eventsData.isLoading}
         >
-          Next <FaChevronRight />
+          下一頁 <FaChevronRight />
         </button>
       )}
     </div>
@@ -132,7 +132,7 @@ const Events = () => {
   return (
     <>
       <PageContent
-        title="Events"
+        title="活動"
         icon={<FaCalendar />}
         data={eventsData}
         page="event"

@@ -86,7 +86,7 @@ function DynamicContentDisplay(props) {
               props.changeShowcall();
             }}
           >
-            {isMandarin ? "联系我们" : "Contact"}
+            {isMandarin ? "聯絡我們" : "Contact"}
             <svg
               fill="none"
               viewBox="0 0 12 12"

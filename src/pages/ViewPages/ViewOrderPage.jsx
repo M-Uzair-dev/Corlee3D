@@ -67,7 +67,7 @@ function ViewOrderPage() {
       >
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>Loading order data...</p>
+          <p>正在載入訂單資料...</p>
         </div>
       </div>
     );
@@ -80,70 +80,68 @@ function ViewOrderPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/orders")}
         >
-          ← Back to Orders
+          ← 返回訂單
         </button>
         <button
           className="edit-button"
           onClick={() => navigate(`/dashboard/orders/edit/${id}`)}
         >
-          Edit Order
+          編輯訂單
         </button>
       </div>
 
-      <h2 className="view-heading">Order Details</h2>
+      <h2 className="view-heading">訂單詳情</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <div className="order-summary">
         <div className="order-summary-item">
-          <span>Order Number:</span>
+          <span>訂單編號：</span>
           <strong>{orderData?.order_id}</strong>
         </div>
         <div className="order-summary-item">
-          <span>Order Date:</span>
+          <span>訂單日期：</span>
           <strong>
             {orderData?.order_date
               ? new Date(orderData.order_date).toLocaleDateString()
-              : "Unknown"}
+              : "未知"}
           </strong>
         </div>
       </div>
 
       {orderData.user && (
         <div className="view-section">
-          <h3>Customer Information</h3>
+          <h3>客戶資訊</h3>
           <div className="customer-details">
             <div className="detail-row">
               <div className="detail-item">
-                <span>Name:</span>
+                <span>姓名：</span>
                 <p>
-                  {orderData.user.name ||
-                    orderData.user.username ||
-                    "Not provided"}
+                  {orderData.user.name || orderData.user.username || "未提供"}
                 </p>
               </div>
               <div className="detail-item">
-                <span>Company:</span>
-                <p>{orderData.user.company_name || "Not provided"}</p>
+                <span>公司：</span>
+                <p>{orderData.user.company_name || "未提供"}</p>
               </div>
             </div>
             <div className="detail-row">
               <div className="detail-item">
-                <span>Email:</span>
-                <p>{orderData.user.email || "Not provided"}</p>
+                <span>信箱：</span>
+                <p>{orderData.user.email || "未提供"}</p>
               </div>
               <div className="detail-item">
-                <span>Phone:</span>
+                <span>電話：</span>
                 <p>
                   {orderData.user.phone ||
                     orderData.user.mobile_phone ||
-                    "Not provided"}
+                    "未提供"}
                 </p>
               </div>
             </div>
             <div className="detail-item address">
-              <span>Address:</span>
-              <p>{orderData.user.address || "Not provided"}</p>
+              <span>地址：</span>
+              <p>{orderData.user.address || "未提供"}</p>
             </div>
           </div>
         </div>
@@ -151,16 +149,16 @@ function ViewOrderPage() {
 
       {orderData.items && orderData.items.length > 0 && (
         <div className="view-section">
-          <h3>Order Items</h3>
+          <h3>訂單項目</h3>
 
           <div className="order-items-wrapper">
             <div className="order-items">
               <div className="order-items-scroll-container">
                 <div className="items-header">
-                  <div className="item-header-cell">Product</div>
-                  <div className="item-header-cell">Image</div>
-                  <div className="item-header-cell">Color</div>
-                  <div className="item-header-cell">Quantity</div>
+                  <div className="item-header-cell">產品</div>
+                  <div className="item-header-cell">圖片</div>
+                  <div className="item-header-cell">顏色</div>
+                  <div className="item-header-cell">數量</div>
                 </div>
 
                 <div className="order-items-container">
@@ -168,7 +166,7 @@ function ViewOrderPage() {
                     const productName =
                       item.fabric?.title ||
                       item.fabric_name ||
-                      `Fabric #${item.fabric?.id || item.fabric_id}`;
+                      `布料 #${item.fabric?.id || item.fabric_id}`;
 
                     const imageUrl = getMatchingColorImage(
                       item.fabric,
@@ -187,11 +185,11 @@ function ViewOrderPage() {
                               onError={(e) => {
                                 e.target.onerror = null;
                                 e.target.src =
-                                  "https://via.placeholder.com/80?text=No+Image";
+                                  "https://via.placeholder.com/80?text=無圖片";
                               }}
                             />
                           ) : (
-                            <div className="no-image">No Image</div>
+                            <div className="no-image">無圖片</div>
                           )}
                         </div>
                         <div className="item-cell">{item.color}</div>
@@ -212,14 +210,14 @@ function ViewOrderPage() {
           className="secondary-button"
           onClick={() => navigate("/dashboard/orders")}
         >
-          Back to Orders
+          返回訂單
         </button>
         <button
           type="button"
           className="primary-button"
           onClick={() => navigate(`/dashboard/orders/edit/${id}`)}
         >
-          Edit Order
+          編輯訂單
         </button>
       </div>
 

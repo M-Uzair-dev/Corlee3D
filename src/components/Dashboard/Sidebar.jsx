@@ -20,35 +20,35 @@ const Sidebar = ({ isSidebarOpen, toggleSidebar, isMobile }) => {
   const location = useLocation();
 
   const menuItems = [
-    { path: "/dashboard", name: "Dashboard", icon: <FaChartBar /> },
-    { path: "/dashboard/fabrics", name: "Fabrics", icon: <FaBox /> },
+    { path: "/dashboard", name: "後台管理", icon: <FaChartBar /> },
+    { path: "/dashboard/fabrics", name: "布料", icon: <FaBox /> },
     {
       path: "/dashboard/color-categories",
-      name: "Color Categories",
+      name: "顏色",
       icon: <FaPalette />,
     },
     {
       path: "/dashboard/fabric-categories",
-      name: "Fabric Categories",
+      name: "布種",
       icon: <FaTags />,
     },
-    { path: "/dashboard/users", name: "Users", icon: <FaUsers /> },
-    { path: "/dashboard/orders", name: "Orders", icon: <FaShoppingCart /> },
-    { path: "/dashboard/events", name: "Events", icon: <FaCalendarAlt /> },
-    { path: "/dashboard/blogs", name: "Blogs", icon: <FaBlog /> },
+    { path: "/dashboard/users", name: "使用者", icon: <FaUsers /> },
+    { path: "/dashboard/orders", name: "訂單", icon: <FaShoppingCart /> },
+    { path: "/dashboard/events", name: "活動", icon: <FaCalendarAlt /> },
+    { path: "/dashboard/blogs", name: "文章", icon: <FaBlog /> },
     {
       path: "/dashboard/blog-categories",
-      name: "Blog Categories",
+      name: "文章分類",
       icon: <FaList />,
     },
     {
       path: "/dashboard/contact-details",
-      name: "Contact Details",
+      name: "聯絡資訊",
       icon: <FaAddressBook />,
     },
     {
       path: "/dashboard/contact-requests",
-      name: "Contact Requests",
+      name: "聯絡請求",
       icon: <FaEnvelope />,
     },
   ];

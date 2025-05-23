@@ -21,11 +21,11 @@ const Blogs = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [blogsData, setBlogsData] = useState({
     fields: {
-      title: "Title",
-      category: "Category",
-      author: "Author",
-      view_count: "Views",
-      created_at: "Created At",
+      title: "標題",
+      category: "分類",
+      author: "作者",
+      view_count: "瀏覽次數",
+      created_at: "建立日期",
     },
     data: [],
     isLoading: true,
@@ -97,7 +97,7 @@ const Blogs = () => {
       }
     } catch (error) {
       console.error("Error fetching blogs:", error);
-      toast.error("Failed to load blogs");
+      toast.error("載入文章失敗");
       setBlogsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
@@ -116,7 +116,7 @@ const Blogs = () => {
   };
 
   const handleDeleteBlog = () => {
-    toast.success("Blog deleted successfully");
+    toast.success("文章刪除成功");
     fetchBlogs();
   };
 
@@ -143,10 +143,10 @@ const Blogs = () => {
         onClick={handlePrevPage}
         disabled={page <= 1 || blogsData.isLoading}
       >
-        <FaChevronLeft /> Previous
+        <FaChevronLeft /> 上一頁
       </button>
       <span className="pagination-info">
-        Page {page} of {totalPages}
+        第 {page} 頁，共 {totalPages} 頁
       </span>
       {page < totalPages && (
         <button
@@ -154,7 +154,7 @@ const Blogs = () => {
           onClick={handleNextPage}
           disabled={blogsData.isLoading}
         >
-          Next <FaChevronRight />
+          下一頁 <FaChevronRight />
         </button>
       )}
     </div>
@@ -163,7 +163,7 @@ const Blogs = () => {
   return (
     <>
       <PageContent
-        title="Blogs"
+        title="文章"
         icon={<FaBlog />}
         data={blogsData}
         page="blogs"

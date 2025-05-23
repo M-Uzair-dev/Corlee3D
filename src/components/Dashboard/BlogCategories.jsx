@@ -8,8 +8,8 @@ const BlogCategories = () => {
   const [categoriesData, setCategoriesData] = useState({
     fields: {
       id: "ID",
-      name: "Name",
-      name_mandarin: "Mandarin Name",
+      name: "英文名稱",
+      name_mandarin: "中文名稱",
     },
     data: [],
     isLoading: true,
@@ -32,8 +32,8 @@ const BlogCategories = () => {
         // Transform API data to match table structure
         const transformedData = response.data.map((category) => ({
           id: category.id,
-          name: category.name || "Unnamed",
-          name_mandarin: category.name_mandarin || "Unnamed",
+          name: category.name || "未命名",
+          name_mandarin: category.name_mandarin || "未命名",
         }));
 
         setCategoriesData((prev) => ({
@@ -44,20 +44,20 @@ const BlogCategories = () => {
       }
     } catch (error) {
       console.error("Error fetching blog categories:", error);
-      toast.error("Failed to load blog categories");
+      toast.error("載入文章分類失敗");
       setCategoriesData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
   const handleDeleteSuccess = (deletedId) => {
-    toast.success("Blog category deleted successfully");
+    toast.success("文章分類刪除成功");
     // Refetch categories to update the list
     fetchCategories();
   };
 
   return (
     <PageContent
-      title="Blog Categories"
+      title="文章分類"
       icon={<FaList />}
       data={categoriesData}
       page="blogCategory"

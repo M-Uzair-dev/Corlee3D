@@ -31,9 +31,9 @@ const ProductRequest = (props) => {
     return () => window.removeEventListener("resize", updateCounter);
   }, []);
   useEffect(() => {
-    const tempimages = item.related_order.items.map((orderItem) => {
-      const image = orderItem.fabric.color_images.find(
-        (colorImage) => colorImage.color_display_name === orderItem.color
+    const tempimages = item?.related_order?.items?.map((orderItem) => {
+      const image = orderItem?.fabric?.color_images?.find(
+        (colorImage) => colorImage.color === orderItem.color
       );
       return image ? image.primary_image_url : null;
     });
@@ -86,10 +86,10 @@ const ProductRequest = (props) => {
                 }
               >
                 <p className="ticketnumber">
-                  {item.related_order.items[index].fabric.item_code}
+                  {item?.related_order?.items[index]?.fabric?.item_code}
                 </p>{" "}
                 <p className="lengthofimagediv">
-                  {item.related_order.items[index].quantity}yd
+                  {item?.related_order?.items[index]?.quantity}yd
                 </p>{" "}
               </div>
             </div>

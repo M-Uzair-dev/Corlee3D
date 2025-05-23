@@ -24,7 +24,7 @@ const CreatePageTemplate = ({
 
     // Simulate API call with timeout
     setTimeout(() => {
-      toast.success(`${entityName} created successfully`);
+      toast.success(`${entityName}建立成功`);
       setIsSubmitting(false);
       navigate(redirectPath);
     }, 1500);
@@ -33,11 +33,11 @@ const CreatePageTemplate = ({
     /*
     try {
       await api.post(createEndpoint, formData);
-      toast.success(`${entityName} created successfully`);
+      toast.success(`${entityName}建立成功`);
       navigate(redirectPath);
     } catch (error) {
       handleApiError(error, entityName, setErrorMessage, setFieldErrors, false);
-      toast.error(`Error creating ${entityName}`);
+      toast.error(`建立${entityName}時發生錯誤`);
       setIsSubmitting(false);
     }
     */
@@ -47,13 +47,13 @@ const CreatePageTemplate = ({
     <div className="dashboard-content-card create-page-container">
       <div className="create-page-header">
         <button className="back-button" onClick={() => navigate(redirectPath)}>
-          ← Back to List
+          ← 返回列表
         </button>
       </div>
 
       <Edit
         data={initialData}
-        heading={`Create New ${entityName}`}
+        heading={`新增 ${entityName}`}
         onSubmit={handleSubmit}
         isLoading={isSubmitting}
         isLoadingData={false}

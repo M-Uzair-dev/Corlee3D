@@ -147,8 +147,7 @@ function TicketInfoSection(props) {
                               style={{
                                 backgroundImage: `url(${
                                   e?.fabric?.color_images?.filter(
-                                    (item) =>
-                                      item.color_display_name === e.color
+                                    (item) => item.color === e.color
                                   )[0]?.primary_image_url
                                 })`,
                                 backgroundSize: "cover",

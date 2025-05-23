@@ -21,11 +21,11 @@ const ContactRequests = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [contactRequestsData, setContactRequestsData] = useState({
     fields: {
-      request_type: "Request Type",
-      subject: "Subject",
-      company_name: "Company Name",
-      email: "Email",
-      status: "Status",
+      request_type: "請求類型",
+      subject: "主旨",
+      company_name: "公司名稱",
+      email: "信箱",
+      status: "狀態",
     },
     data: [],
     isLoading: true,
@@ -59,36 +59,36 @@ const ContactRequests = () => {
         id: request.id,
         request_type:
           request.request_type == "general"
-            ? "General Inquiry"
+            ? "一般詢問"
             : request.request_type == "product"
-            ? "Product Inquiry"
+            ? "產品詢問"
             : request.request_type == "product_request"
-            ? "Product Request"
-            : "Other",
-        subject: request.subject || "No Subject",
+            ? "產品請求"
+            : "其他",
+        subject: request.subject || "無主旨",
         company_name: request.company_name || "N/A",
         email: request.user.email || "N/A",
-        status: request.status || "New",
+        status: request.status || "新請求",
         actions: (
           <div className="action-cell">
             <button
               className="action-btn view"
               onClick={() => handleViewRequest(request.id)}
-              title="View Request"
+              title="查看請求"
             >
               <FaEye />
             </button>
             <button
               className="action-btn edit"
               onClick={() => handleEditRequest(request.id)}
-              title="Edit Request"
+              title="編輯請求"
             >
               <FaEdit />
             </button>
             <button
               className="action-btn delete"
               onClick={() => handleShowDeleteModal(request.id)}
-              title="Delete Request"
+              title="刪除請求"
             >
               <FaTrash />
             </button>
@@ -104,7 +104,7 @@ const ContactRequests = () => {
       setTotalPages(response.data.total_pages);
     } catch (error) {
       console.error("Error fetching contact requests:", error);
-      toast.error("Failed to load contact requests");
+      toast.error("載入聯絡請求失敗");
       setContactRequestsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
@@ -129,7 +129,7 @@ const ContactRequests = () => {
       fetchContactRequests();
     } catch (error) {
       console.error("Error handling request deletion:", error);
-      toast.error("Failed to complete request deletion");
+      toast.error("完成請求刪除失敗");
     }
   };
 
@@ -153,10 +153,10 @@ const ContactRequests = () => {
         onClick={handlePrevPage}
         disabled={page <= 1 || contactRequestsData.isLoading}
       >
-        <FaChevronLeft /> Previous
+        <FaChevronLeft /> 上一頁
       </button>
       <span className="pagination-info">
-        Page {page} of {totalPages}
+        第 {page} 頁，共 {totalPages} 頁
       </span>
       {page < totalPages && (
         <button
@@ -164,7 +164,7 @@ const ContactRequests = () => {
           onClick={handleNextPage}
           disabled={contactRequestsData.isLoading}
         >
-          Next <FaChevronRight />
+          下一頁 <FaChevronRight />
         </button>
       )}
     </div>
@@ -173,7 +173,7 @@ const ContactRequests = () => {
   return (
     <>
       <PageContent
-        title="Contact Requests"
+        title="聯絡請求"
         icon={<FaEnvelope />}
         data={contactRequestsData}
         page="contactRequest"

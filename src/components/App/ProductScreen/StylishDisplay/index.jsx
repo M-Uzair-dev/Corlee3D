@@ -137,7 +137,7 @@ function StylishDisplay(props) {
           }}
         >
           {!loading ? (
-            <span>+</span>
+            "+"
           ) : (
             <TailSpin
               visible={true}

@@ -8,9 +8,9 @@ const ColorCategories = () => {
   const [colorData, setColorData] = useState({
     fields: {
       id: "ID",
-      display_name: "Name",
-      color: "Color",
-      color_preview: "Preview",
+      display_name: "顯示名稱",
+      color: "顏色代碼",
+      color_preview: "顏色預覽",
     },
     data: [],
     isLoading: true,
@@ -33,7 +33,7 @@ const ColorCategories = () => {
         // Transform API data to match table structure
         const transformedData = response.data.map((color) => ({
           id: color.id,
-          display_name: color.display_name || "Unnamed",
+          display_name: color.display_name || "未命名",
           color: color.color || "#FFFFFF",
           color_preview: (
             <div
@@ -57,20 +57,20 @@ const ColorCategories = () => {
       }
     } catch (error) {
       console.error("Error fetching color categories:", error);
-      toast.error("Failed to load color categories");
+      toast.error("載入顏色失敗");
       setColorData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
   const handleDeleteSuccess = (deletedId) => {
-    toast.success("Color category deleted successfully");
+    toast.success("顏色刪除成功");
     // Refetch colors to update the list
     fetchColors();
   };
 
   return (
     <PageContent
-      title="Color Categories"
+      title="顏色"
       icon={<FaPalette />}
       data={colorData}
       page="colorCategory"

@@ -10,10 +10,10 @@ const Fabrics = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [fabricsData, setFabricsData] = useState({
     fields: {
-      title: "Title",
-      category: "Category",
-      item_code: "Item Code",
-      hot_selling: "Hot Selling",
+      title: "標題",
+      category: "商品種類",
+      item_code: "商品編號",
+      hot_selling: "熱銷商品",
       id: "ID",
     },
     data: [],
@@ -23,6 +23,7 @@ const Fabrics = () => {
       edit: true,
       delete: true,
       view: true,
+      bulkDelete: true,
     },
   });
 
@@ -62,7 +63,7 @@ const Fabrics = () => {
       }
     } catch (error) {
       console.error("Error fetching fabrics:", error);
-      toast.error("Failed to load fabrics data");
+      toast.error("載入布料數據失敗");
       setFabricsData((prev) => ({ ...prev, isLoading: false }));
     }
   };
@@ -80,9 +81,25 @@ const Fabrics = () => {
   };
 
   const handleDeleteSuccess = (deletedId) => {
-    toast.success("Fabric deleted successfully");
+    toast.success("布料刪除成功");
     // Refetch fabrics to update the list
     fetchFabrics();
+  };
+
+  const handleBulkDelete = async (selectedIds) => {
+    try {
+      console.log("Bulk deleting fabrics with IDs:", selectedIds);
+      const response = await api.post("/fabrics/bulk-delete/", {
+        fabric_ids: selectedIds,
+      });
+      console.log("Bulk delete response:", response.data);
+      toast.success(`${selectedIds.length} 個布料刪除成功`);
+      // Refetch fabrics to update the list
+      fetchFabrics();
+    } catch (error) {
+      console.error("Error bulk deleting fabrics:", error);
+      toast.error(error.response?.data?.error || "刪除所選布料失敗");
+    }
   };
 
   // Create pagination UI component
@@ -93,10 +110,10 @@ const Fabrics = () => {
         onClick={handlePrevPage}
         disabled={page <= 1 || fabricsData.isLoading}
       >
-        <FaChevronLeft /> Previous
+        <FaChevronLeft /> 上一頁
       </button>
       <span className="pagination-info">
-        Page {page} of {totalPages}
+        第 {page} 頁，共 {totalPages} 頁
       </span>
       {page < totalPages && (
         <button
@@ -104,7 +121,7 @@ const Fabrics = () => {
           onClick={handleNextPage}
           disabled={fabricsData.isLoading}
         >
-          Next <FaChevronRight />
+          下一頁 <FaChevronRight />
         </button>
       )}
     </div>
@@ -113,11 +130,12 @@ const Fabrics = () => {
   return (
     <>
       <PageContent
-        title="Fabrics"
+        title="布料"
         icon={<FaBox />}
         data={fabricsData}
         page="fabric"
         onDelete={handleDeleteSuccess}
+        onBulkDelete={handleBulkDelete}
       />
       {totalPages > 1 && <Pagination />}
     </>

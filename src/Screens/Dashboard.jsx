@@ -78,48 +78,43 @@ const Dashboard = () => {
   // Get title from current path
   const getTitle = () => {
     const path = location.pathname;
-    if (path === "/dashboard") return "Dashboard";
-    if (path === "/dashboard/fabrics") return "Fabrics";
-    if (path.match(/\/dashboard\/fabrics\/edit\/\d+/)) return "Edit Fabric";
-    if (path === "/dashboard/fabrics/create") return "Create Fabric";
-    if (path === "/dashboard/color-categories") return "Color Categories";
+    if (path === "/dashboard") return "後台管理";
+    if (path === "/dashboard/fabrics") return "布料";
+    if (path.match(/\/dashboard\/fabrics\/edit\/\d+/)) return "編輯布料";
+    if (path === "/dashboard/fabrics/create") return "新增布料";
+    if (path === "/dashboard/color-categories") return "顏色";
     if (path.match(/\/dashboard\/color-categories\/edit\/\d+/))
-      return "Edit Color Category";
-    if (path === "/dashboard/color-categories/create")
-      return "Create Color Category";
-    if (path === "/dashboard/fabric-categories") return "Fabric Categories";
+      return "編輯顏色";
+    if (path === "/dashboard/color-categories/create") return "新增顏色";
+    if (path === "/dashboard/fabric-categories") return "布種";
     if (path.match(/\/dashboard\/fabric-categories\/edit\/\d+/))
-      return "Edit Fabric Category";
-    if (path === "/dashboard/fabric-categories/create")
-      return "Create Fabric Category";
-    if (path === "/dashboard/users") return "Users";
-    if (path.match(/\/dashboard\/users\/edit\/\d+/)) return "Edit User";
-    if (path === "/dashboard/users/create") return "Create User";
-    if (path === "/dashboard/orders") return "Orders";
-    if (path.match(/\/dashboard\/orders\/edit\/\d+/)) return "Edit Order";
-    if (path === "/dashboard/orders/create") return "Create Order";
-    if (path === "/dashboard/blogs") return "Blogs";
-    if (path.match(/\/dashboard\/blogs\/edit\/\d+/)) return "Edit Blog";
-    if (path === "/dashboard/blogs/create") return "Create Blog";
-    if (path === "/dashboard/blog-categories") return "Blog Categories";
+      return "編輯布種";
+    if (path === "/dashboard/fabric-categories/create") return "新增布種";
+    if (path === "/dashboard/users") return "使用者";
+    if (path.match(/\/dashboard\/users\/edit\/\d+/)) return "編輯使用者";
+    if (path === "/dashboard/users/create") return "新增使用者";
+    if (path === "/dashboard/orders") return "訂單";
+    if (path.match(/\/dashboard\/orders\/edit\/\d+/)) return "編輯訂單";
+    if (path === "/dashboard/orders/create") return "新增訂單";
+    if (path === "/dashboard/blogs") return "文章";
+    if (path.match(/\/dashboard\/blogs\/edit\/\d+/)) return "編輯文章";
+    if (path === "/dashboard/blogs/create") return "新增文章";
+    if (path === "/dashboard/blog-categories") return "文章分類";
     if (path.match(/\/dashboard\/blog-categories\/edit\/\d+/))
-      return "Edit Blog Category";
-    if (path === "/dashboard/blog-categories/create")
-      return "Create Blog Category";
-    if (path === "/dashboard/contact-details") return "Contact Details";
+      return "編輯文章分類";
+    if (path === "/dashboard/blog-categories/create") return "新增文章分類";
+    if (path === "/dashboard/contact-details") return "聯絡資訊";
     if (path.match(/\/dashboard\/contact-details\/edit\/\d+/))
-      return "Edit Contact Details";
-    if (path === "/dashboard/contact-details/create")
-      return "Create Contact Details";
-    if (path === "/dashboard/contact-requests") return "Contact Requests";
+      return "編輯聯絡資訊";
+    if (path === "/dashboard/contact-details/create") return "新增聯絡資訊";
+    if (path === "/dashboard/contact-requests") return "聯絡請求";
     if (path.match(/\/dashboard\/contact-requests\/edit\/\d+/))
-      return "Edit Contact Request";
-    if (path === "/dashboard/contact-requests/create")
-      return "Create Contact Request";
-    if (path === "/dashboard/events") return "Events";
-    if (path.match(/\/dashboard\/events\/edit\/\d+/)) return "Edit Event";
-    if (path === "/dashboard/events/create") return "Create Event";
-    return "Dashboard";
+      return "編輯聯絡請求";
+    if (path === "/dashboard/contact-requests/create") return "新增聯絡請求";
+    if (path === "/dashboard/events") return "活動";
+    if (path.match(/\/dashboard\/events\/edit\/\d+/)) return "編輯活動";
+    if (path === "/dashboard/events/create") return "新增活動";
+    return "後台管理";
   };
   const isAuthenticated = localStorage.getItem("theUserIsAdmin") == "ADMIN";
   if (!isAuthenticated) {

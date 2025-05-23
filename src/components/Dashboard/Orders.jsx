@@ -21,12 +21,12 @@ const Orders = () => {
   const [totalPages, setTotalPages] = useState(1);
   const [ordersData, setOrdersData] = useState({
     fields: {
-      id: "Order ID",
-      customer_name: "Customer Name",
-      customer_email: "Customer Email",
-      customer_phone: "Customer Phone",
-      order_date: "Order Date",
-      order_items: "Order Items",
+      id: "訂單編號",
+      customer_name: "客戶姓名",
+      customer_email: "客戶信箱",
+      customer_phone: "客戶電話",
+      order_date: "訂單日期",
+      order_items: "訂單項目數量",
     },
     data: [],
     isLoading: true,
@@ -54,9 +54,9 @@ const Orders = () => {
       if (response.data.results) {
         const transformedData = response.data.results.map((order) => ({
           id: order.id,
-          customer_name: order.user.name || "Unknown Customer",
-          customer_email: order.user.email || "No email",
-          customer_phone: order.user.phone || "No phone",
+          customer_name: order.user.name || "未知客戶",
+          customer_email: order.user.email || "無信箱",
+          customer_phone: order.user.phone || "無電話",
           order_date: order.order_date
             ? new Date(order.order_date).toLocaleDateString()
             : "N/A",
@@ -66,21 +66,21 @@ const Orders = () => {
               <button
                 className="action-btn view"
                 onClick={() => handleViewOrder(order.id)}
-                title="View Order"
+                title="查看訂單"
               >
                 <FaEye />
               </button>
               <button
                 className="action-btn edit"
                 onClick={() => handleEditOrder(order.id)}
-                title="Edit Order"
+                title="編輯訂單"
               >
                 <FaEdit />
               </button>
               <button
                 className="action-btn delete"
                 onClick={() => handleShowDeleteModal(order.id)}
-                title="Delete Order"
+                title="刪除訂單"
               >
                 <FaTrash />
               </button>
@@ -100,7 +100,7 @@ const Orders = () => {
       }
     } catch (error) {
       console.error("Error fetching orders:", error);
-      toast.error("Failed to load orders");
+      toast.error("載入訂單失敗");
       setOrdersData((prev) => ({ ...prev, isLoading: false }));
     }
   };
@@ -119,7 +119,7 @@ const Orders = () => {
   };
 
   const handleDeleteOrder = () => {
-    toast.success("Order deleted successfully");
+    toast.success("訂單刪除成功");
     fetchOrders();
   };
 
@@ -142,10 +142,10 @@ const Orders = () => {
         onClick={handlePrevPage}
         disabled={page <= 1 || ordersData.isLoading}
       >
-        <FaChevronLeft /> Previous
+        <FaChevronLeft /> 上一頁
       </button>
       <span className="pagination-info">
-        Page {page} of {totalPages}
+        第 {page} 頁，共 {totalPages} 頁
       </span>
       {page < totalPages && (
         <button
@@ -153,7 +153,7 @@ const Orders = () => {
           onClick={handleNextPage}
           disabled={ordersData.isLoading}
         >
-          Next <FaChevronRight />
+          下一頁 <FaChevronRight />
         </button>
       )}
     </div>
@@ -162,7 +162,7 @@ const Orders = () => {
   return (
     <>
       <PageContent
-        title="Orders"
+        title="訂單"
         icon={<FaShoppingCart />}
         data={ordersData}
         page="order"

@@ -6437,7 +6437,7 @@ button:hover:not(.button-with-icon2) {
   }
   .productsoptionsdivinnav > *:nth-child(3) {
     border-top: 1px solid rgba(0, 0, 0, 0.177);
-    margin-top: 30px;
+    margin-top: 60px;
   }
   .clodeiconiner {
     margin-right: 20px !important;
@@ -6458,7 +6458,7 @@ button:hover:not(.button-with-icon2) {
     display: block;
     position: absolute;
     top: 45px;
-    right: 15px;
+    left: 3px;
   }
   .contact-info-container-nav,
   .product-card-container-nav {
@@ -6480,13 +6480,14 @@ button:hover:not(.button-with-icon2) {
   .clearicon,
   .clodeiconiner {
     position: absolute;
-    left: 20px !important;
+    right: 30px !important;
     border: none !important;
     scale: 1.5 !important;
+    margin: 0 !important;
   }
   .closeicon {
     position: absolute;
-    left: -30px !important;
+    right: -20px !important;
     top: -10px;
     border: none !important;
     scale: 1.5 !important;
@@ -6539,4 +6540,15 @@ button:hover:not(.button-with-icon2) {
 .product-gallery-row {
   width: calc(100% - 50px) !important;
   padding: 0 !important;
+}
+.dropdowndiv {
+  min-width: max-content;
+}
+.textdivinnavproductdropdown h1 {
+  font-size: 20px !important;
+  font-weight: 500 !important;
+}
+.textdivinnavproductdropdown p {
+  font-size: 16px !important;
+  margin-top: 0;
 }

@@ -17,9 +17,9 @@ const FabricCategories = () => {
   const [categoriesData, setCategoriesData] = useState({
     fields: {
       id: "ID",
-      name: "Name",
-      description: "Description",
-      image_preview: "Image",
+      name: "布種名稱",
+      description: "描述",
+      image_preview: "布種圖片",
     },
     data: [],
     isLoading: true,
@@ -46,9 +46,9 @@ const FabricCategories = () => {
       if (response.data.results) {
         // Transform API data to match table structure
         const transformedData = response.data.results.map((category) => ({
-          name: category.name || "Unnamed",
+          name: category.name || "未命名",
           id: category.id,
-          description: category.description || "No description",
+          description: category.description || "無描述",
           order: category.order || 0,
           image_preview: category.image_url ? (
             <div
@@ -100,13 +100,13 @@ const FabricCategories = () => {
       }
     } catch (error) {
       console.error("Error fetching fabric categories:", error);
-      toast.error("Failed to load fabric categories");
+      toast.error("載入布種失敗");
       setCategoriesData((prev) => ({ ...prev, isLoading: false }));
     }
   };
 
   const handleDeleteSuccess = (deletedId) => {
-    toast.success("Fabric category deleted successfully");
+    toast.success("布種刪除成功");
     // Refetch categories to update the list
     fetchCategories();
   };
@@ -148,13 +148,13 @@ const FabricCategories = () => {
       });
 
       if (response.status === 200) {
-        toast.success("Categories reordered successfully");
+        toast.success("布種排序成功");
         setReorderMode(false);
         fetchCategories(); // Refetch to get the latest order from the server
       }
     } catch (error) {
       console.error("Error saving category order:", error);
-      toast.error("Failed to save category order");
+      toast.error("儲存布種排序失敗");
     } finally {
       setSavingOrder(false);
     }
@@ -170,14 +170,14 @@ const FabricCategories = () => {
     return (
       <div className="reorder-container">
         <div className="reorder-header">
-          <h1>Reorder Categories</h1>
+          <h1>重新排序布種</h1>
           <div className="reorder-actions">
             <button
               className="btn btn-secondary"
               onClick={cancelReordering}
               disabled={savingOrder}
             >
-              <FaTimes /> Cancel
+              <FaTimes /> 取消
             </button>
             <button
               className="btn btn-primary save-btn"
@@ -186,11 +186,11 @@ const FabricCategories = () => {
             >
               {savingOrder ? (
                 <>
-                  <LoadingSpinner small /> Saving...
+                  <LoadingSpinner small /> 儲存中...
                 </>
               ) : (
                 <>
-                  <FaSave /> Save Order
+                  <FaSave /> 儲存排序
                 </>
               )}
             </button>
@@ -198,9 +198,8 @@ const FabricCategories = () => {
         </div>
 
         <div className="reorder-instructions">
-          <b>How to reorder:</b> Use the up and down arrow buttons to change the
-          position of each category. Changes won't be saved until you click
-          "Save Order".
+          <b>如何重新排序：</b>{" "}
+          使用上下箭頭按鈕更改每個布種的位置。變更將不會被儲存，直到您點擊「儲存排序」。
         </div>
 
         <div className="categories-list">
@@ -220,7 +219,7 @@ const FabricCategories = () => {
                     className="btn-move btn-move-up"
                     onClick={() => moveItemUp(index)}
                     disabled={index === 0}
-                    title="Move Up"
+                    title="上移"
                   >
                     <FaArrowUp />
                   </button>
@@ -228,13 +227,13 @@ const FabricCategories = () => {
                     className="btn-move btn-move-down"
                     onClick={() => moveItemDown(index)}
                     disabled={index === reorderedCategories.length - 1}
-                    title="Move Down"
+                    title="下移"
                   >
                     <FaArrowDown />
                   </button>
                 </div>
                 <div className="category-position">
-                  <span>{index + 1}</span> of {reorderedCategories.length}
+                  <span>{index + 1}</span> / {reorderedCategories.length}
                 </div>
               </div>
             </div>
@@ -252,11 +251,11 @@ const FabricCategories = () => {
           style={{ margin: "20px" }}
           onClick={() => setReorderMode(true)}
         >
-          <FaListOl /> Reorder Categories
+          <FaListOl /> 重新排序布種
         </button>
       </div>
       <PageContent
-        title="Fabric Categories"
+        title="布種"
         icon={<FaFolder />}
         data={categoriesData}
         page="fabricCategory"

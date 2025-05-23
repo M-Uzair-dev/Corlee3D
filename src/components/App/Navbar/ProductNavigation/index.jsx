@@ -87,17 +87,18 @@ function ProductNavigation(props) {
           </div>
           {show && (
             <div className="dropdowndiv">
+              {document.body.scrollWidth < 950 && (
+                <p onClick={() => navigate("/user/bag")}>
+                  {isMandarin ? "购物车" : "Bag"}
+                </p>
+              )}
               <p onClick={() => navigate("/user/history")}>
                 {isMandarin ? "历史" : "History"}
               </p>
               <p onClick={() => navigate("/user/favourites")}>
                 {isMandarin ? "收藏" : "Favourites"}
               </p>
-              {document.body.scrollWidth < 950 && (
-                <p onClick={() => navigate("/user/bag")}>
-                  {isMandarin ? "购物车" : "Bag"}
-                </p>
-              )}
+
               <p
                 onClick={() => {
                   window.location.reload();
@@ -148,7 +149,7 @@ function ProductNavigation(props) {
             style={{ cursor: "pointer" }}
           >
             <p className="contact-info-text-style-nav notolive">
-              {isMandarin ? "产品" : "Products"}
+              {isMandarin ? "產品" : "Products"}
             </p>
             <SvgIcon1 className="svg-container-nav" showprod={props.showprod} />
           </div>
@@ -171,7 +172,7 @@ function ProductNavigation(props) {
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/about")}
           >
-            {isMandarin ? "关于我们" : "About us"}
+            {isMandarin ? "關於我們" : "About us"}
           </p>
         </div>
         <DynamicContentDisplay
