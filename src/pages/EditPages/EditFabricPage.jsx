@@ -449,7 +449,7 @@ function EditFabricPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/fabrics")}
         >
-          ← Back to Fabrics
+          ← 返回布料
         </button>
       </div>
 
@@ -462,12 +462,12 @@ function EditFabricPage() {
           console.log("Color categories:", colorCategories);
         }}
       >
-        Edit Fabric
+        編輯布料
       </h2>
 
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-section">
-          <h3>Fabric Details</h3>
+          <h3>布料詳細資料</h3>
 
           <div className="form-row">
             <div className="form-group">
@@ -585,7 +585,7 @@ function EditFabricPage() {
                 name="composition_mandarin"
                 value={formData.composition_mandarin}
                 onChange={handleInputChange}
-                placeholder="棉质100%"
+                placeholder="棉質100%"
               />
             </div>
 

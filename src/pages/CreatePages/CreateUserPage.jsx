@@ -75,11 +75,11 @@ function CreateUserPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/users")}
         >
-          ← Back to Users
+          ← 返回用戶
         </button>
       </div>
 
-      <h2 className="create-heading">Create New User</h2>
+      <h2 className="create-heading">新增用戶</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 

@@ -92,17 +92,17 @@ function EditBlogCategoryPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/blog-categories")}
         >
-          ← Back to Blog Categories
+          ← 返回部落格分類
         </button>
       </div>
 
-      <h2 className="edit-heading">Edit Blog Category</h2>
+      <h2 className="edit-heading">編輯部落格分類</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>Category Details</h3>
+          <h3>分類詳細資料</h3>
 
           <div className="form-group">
             <label htmlFor="name">Category Name *</label>
@@ -125,7 +125,7 @@ function EditBlogCategoryPage() {
               name="name_mandarin"
               value={formData.name_mandarin}
               onChange={handleInputChange}
-              placeholder="e.g., 时尚趋势，行业新闻"
+              placeholder="e.g., 時尚趨勢，行業新聞"
             />
           </div>
         </div>

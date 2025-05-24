@@ -115,17 +115,17 @@ function EditContactRequestPage() {
           className="back-button"
           onClick={() => navigate(`/dashboard/contact-requests/${id}`)}
         >
-          ← Back to Contact Request
+          ← 返回聯絡要求
         </button>
       </div>
 
-      <h2 className="edit-heading">Edit Contact Request</h2>
+      <h2 className="edit-heading">編輯聯絡要求</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>Request Details</h3>
+          <h3>要求詳細資料</h3>
 
           <div className="form-group">
             <label htmlFor="request_type">Request Type *</label>

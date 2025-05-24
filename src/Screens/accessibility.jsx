@@ -8,7 +8,7 @@ const terms = () => {
     <div>
       <Navbar />
       <div className="containerTerms">
-        <h1>{isMandarin ? "无障碍" : "Accessibility"}</h1>
+        <h1>{isMandarin ? "無障礙" : "Accessibility"}</h1>
         <p>
           {isMandarin
             ? "在 Corlee，無障礙設計是我們服務所有客戶的重要承諾。我們致力於確保每位用戶，包括有殘障人士，都能順利瀏覽、選購並與我們的批發布料系列互動。我們的網站遵循包容性設計原則，支援鍵盤導航、為圖片提供替代文字，以及提供清晰的視覺對比，幫助視覺或行動不便的使用者。我們持續依據《網頁內容無障礙指引》（WCAG）改進數位無障礙性，並歡迎您的回饋，以協助我們打造更具包容性的使用體驗。"

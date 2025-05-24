@@ -29,7 +29,7 @@ function FPReset(props) {
             onClick={() => navigate("/login")}
             style={{ cursor: "pointer" }}
           >
-            {isMandarin ? "<- 登录" : "<- Login"}
+            {isMandarin ? "<- 登錄" : "<- Login"}
           </p>
         </div>
       </div>

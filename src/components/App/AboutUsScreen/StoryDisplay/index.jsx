@@ -6,11 +6,11 @@ function StoryDisplay() {
   return (
     <div className="story-box">
       <p className="golden-heading">
-        {isMandarin ? "如何开始" : "How it started"}
+        {isMandarin ? "如何開始" : "How it started"}
       </p>
       <p className="hero-title">
         {isMandarin
-          ? "我们的故事与对卓越的承诺"
+          ? "我們的故事與對卓越的承諾"
           : "Our Story & Commitment to Excellence"}
       </p>
     </div>

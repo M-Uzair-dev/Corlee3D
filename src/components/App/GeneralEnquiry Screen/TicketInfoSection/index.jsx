@@ -93,7 +93,7 @@ function TicketInfoSection(props) {
         <>
           <div className="ticket-details-container1">
             <p className="ticket-number-text-style">
-              {isMandarin ? "票号" : "Ticket Number"}
+              {isMandarin ? "票號" : "Ticket Number"}
             </p>
             <p className="ticket-number-style">
               {data.contact_request?.request_number}
@@ -104,14 +104,14 @@ function TicketInfoSection(props) {
               <button className="button-general-inquiry-style">
                 {props.product
                   ? isMandarin
-                    ? "产品查询"
+                    ? "產品查詢"
                     : "Product Inquiry"
                   : props.request
                   ? isMandarin
-                    ? "产品请求"
+                    ? "產品請求"
                     : "Products Request"
                   : isMandarin
-                  ? "一般查询"
+                  ? "一般查詢"
                   : "General Inquiry"}
               </button>
               <p className="date-label">
@@ -137,7 +137,7 @@ function TicketInfoSection(props) {
                             i === 0 ? { display: "block" } : { display: "none" }
                           }
                         >
-                          {isMandarin ? "产品详情" : "Product Details"}
+                          {isMandarin ? "產品詳情" : "Product Details"}
                         </p>
 
                         <div className="productinquiryproductdiv">
@@ -167,7 +167,7 @@ function TicketInfoSection(props) {
                           <div className="productdetailsdiv">
                             <div className="colordiv">
                               <p className="color">
-                                {isMandarin ? "颜色" : "Color"}
+                                {isMandarin ? "顏色" : "Color"}
                               </p>
 
                               <div
@@ -177,7 +177,7 @@ function TicketInfoSection(props) {
                               ></div>
                             </div>
                             <p className="quantityofproduct">
-                              {isMandarin ? "数量" : "Quantity"}
+                              {isMandarin ? "數量" : "Quantity"}
                               <span>{text}</span>
                             </p>
                             <p className="priceofproduct">{e.quantity}</p>
@@ -197,7 +197,7 @@ function TicketInfoSection(props) {
                   </p>
                   {props.product ? (
                     <div className="productinquiryproductsection">
-                      <p>{isMandarin ? "产品详情" : "Product Details"}</p>
+                      <p>{isMandarin ? "產品詳情" : "Product Details"}</p>
 
                       <div className="productinquiryproductdiv">
                         <div className="productsimageandtextdiv">
@@ -227,7 +227,7 @@ function TicketInfoSection(props) {
                         <div className="productdetailsdiv">
                           <div className="colordiv">
                             <p className="color">
-                              {isMandarin ? "颜色" : "Color"}
+                              {isMandarin ? "顏色" : "Color"}
                             </p>
                             {data?.contact_request?.related_fabric?.color_images?.map(
                               (e, i) => (
@@ -240,7 +240,7 @@ function TicketInfoSection(props) {
                             )}
                           </div>
                           <p className="quantityofproduct">
-                            {isMandarin ? "数量" : "Quantity"}
+                            {isMandarin ? "數量" : "Quantity"}
                             <span>{text}</span>
                           </p>
                           <p className="priceofproduct">2</p>

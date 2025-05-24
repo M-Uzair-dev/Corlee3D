@@ -102,17 +102,17 @@ function EditContactDetailsPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/contact-details")}
         >
-          ← Back to Contact Details
+          ← 返回聯絡詳細資料
         </button>
       </div>
 
-      <h2 className="edit-heading">Edit Contact Details</h2>
+      <h2 className="edit-heading">編輯聯絡詳細資料</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>Contact Information</h3>
+          <h3>聯絡資訊</h3>
 
           <div className="form-group">
             <label htmlFor="phone">Phone *</label>

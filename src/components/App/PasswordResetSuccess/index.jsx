@@ -50,10 +50,10 @@ function ComponentYouSelected(props) {
           >
             {isMandarin
               ? loading
-                ? "加载中..."
+                ? "加載中..."
                 : props.email
-                ? "验证"
-                : "返回登录"
+                ? "驗證"
+                : "返回登錄"
               : loading
               ? "Loading..."
               : props.email

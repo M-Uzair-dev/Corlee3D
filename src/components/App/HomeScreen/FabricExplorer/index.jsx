@@ -74,7 +74,7 @@ function FabricExplorer() {
         <div className="fabric-types-section">
           <p className="fabric-type-heading">
             {isMandarin
-              ? "我们提供多种面料类型！"
+              ? "我們提供多種面料類型！"
               : "Range of fabric types we offer!"}
           </p>
           <p className="fabric-type-description">

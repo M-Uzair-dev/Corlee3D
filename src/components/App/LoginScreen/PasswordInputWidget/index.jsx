@@ -11,7 +11,7 @@ function PasswordInputWidget({ name, value, onChange }) {
         name={name}
         value={value}
         onChange={onChange}
-        placeholder={isMandarin ? "密码" : "Password"}
+        placeholder={isMandarin ? "密碼" : "Password"}
         type={showPass ? "text" : "password"}
         className="input-with-border-radius input-style-f62::placeholder"
       />

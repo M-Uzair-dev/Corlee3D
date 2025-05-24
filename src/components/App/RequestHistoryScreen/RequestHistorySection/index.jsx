@@ -7,11 +7,11 @@ function RequestHistorySection() {
     <div className="request-history-container1">
       <div className="request-history-container">
         <p className="request-history-title">
-          {isMandarin ? "请求历史" : "Request History"}
+          {isMandarin ? "請求歷史" : "Request History"}
         </p>
         <p className="request-history-text">
           {isMandarin
-            ? "在这里您可以找到您过去所做的所有请求"
+            ? "在這裡您可以找到您過去所做的所有請求"
             : "Here you can find all the requests you have made in the past"}
         </p>
       </div>

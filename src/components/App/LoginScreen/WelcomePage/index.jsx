@@ -57,9 +57,9 @@ function WelcomePage() {
   return (
     <div className="hero-section2">
       <div className="central-content-panel">
-        <p className="hero-title-text-style">{isMandarin ? "登录" : "Login"}</p>
+        <p className="hero-title-text-style">{isMandarin ? "登錄" : "Login"}</p>
         <p className="central-text-block">
-          {isMandarin ? "请登录以继续" : "Please login to continue"}
+          {isMandarin ? "請登錄以繼續" : "Please login to continue"}
         </p>
         <button
           className="button-with-icon"
@@ -69,10 +69,10 @@ function WelcomePage() {
           <SvgIcon1 className="svg-container" />
           {loading
             ? isMandarin
-              ? "加载中..."
+              ? "載入中..."
               : "Loading..."
             : isMandarin
-            ? "使用 Google 登录"
+            ? "使用 Google 登錄"
             : "Login with google"}
         </button>
         <StylishContentBlock />

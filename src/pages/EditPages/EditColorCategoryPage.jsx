@@ -82,7 +82,7 @@ function EditColorCategoryPage() {
       >
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>Loading color category data...</p>
+          <p>載入顏色分類資料...</p>
         </div>
       </div>
     );
@@ -95,17 +95,17 @@ function EditColorCategoryPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/color-categories")}
         >
-          ← Back to Color Categories
+          ← 返回顏色分類
         </button>
       </div>
 
-      <h2 className="edit-heading">Edit Color Category</h2>
+      <h2 className="edit-heading">編輯顏色分類</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>Color Category Details</h3>
+          <h3>顏色分類詳細資料</h3>
 
           <div className="form-group">
             <label htmlFor="display_name">Display Name</label>

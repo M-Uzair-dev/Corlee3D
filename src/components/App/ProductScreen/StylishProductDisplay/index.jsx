@@ -40,7 +40,7 @@ function StylishProductDisplay(props) {
       }
     >
       <div className="relatedproducts">
-        <p>{isMandarin ? "相关产品" : "Related Products"}</p>
+        <p>{isMandarin ? "相關產品" : "Related Products"}</p>
       </div>
       {props.loading ? (
         <div
@@ -72,7 +72,7 @@ function StylishProductDisplay(props) {
             width: "100%",
           }}
         >
-          {isMandarin ? "没有相关产品" : "No Related Products"}
+          {isMandarin ? "沒有相關產品" : "No Related Products"}
         </h1>
       ) : (
         <div className="products">

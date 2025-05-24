@@ -139,17 +139,17 @@ function EditUserPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/users")}
         >
-          ← Back to Users
+          ← 返回用戶
         </button>
       </div>
 
-      <h2 className="edit-heading">Edit User</h2>
+      <h2 className="edit-heading">編輯用戶</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>User Details</h3>
+          <h3>用戶詳細資料</h3>
 
           <div className="form-row">
             <div className="form-group">

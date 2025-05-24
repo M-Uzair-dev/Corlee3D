@@ -165,17 +165,17 @@ function EditBlogPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/blogs")}
         >
-          ← Back to Blogs
+          ← 返回部落格
         </button>
       </div>
 
-      <h2 className="edit-heading">Edit Blog</h2>
+      <h2 className="edit-heading">編輯部落格</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>Blog Information</h3>
+          <h3>部落格資訊</h3>
 
           <div className="form-group">
             <label htmlFor="title">Title *</label>

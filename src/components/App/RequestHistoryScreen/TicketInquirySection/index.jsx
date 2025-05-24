@@ -103,7 +103,7 @@ function TicketInquirySection({ ticketInquiriesData }) {
             }}
           >
             <h3 style={{ textAlign: "center", fontSize: "20px" }}>
-              {isMandarin ? "没有历史记录" : "No history found"}
+              {isMandarin ? "沒有歷史記錄" : "No history found"}
             </h3>
           </div>
         ) : (
@@ -112,7 +112,7 @@ function TicketInquirySection({ ticketInquiriesData }) {
             <div className="resultsfound">
               {isMandarin ? (
                 <p>
-                  {data?.length} {data?.length > 1 ? "个结果 " : "个结果 "}{" "}
+                  {data?.length} {data?.length > 1 ? "個結果 " : "個結果 "}{" "}
                   已找到
                 </p>
               ) : (

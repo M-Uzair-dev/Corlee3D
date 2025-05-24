@@ -72,7 +72,7 @@ function CustomerInformationForm(props) {
           {data.request_type === "product" && (
             <div className="horizontal-centered-label-container">
               <label htmlFor="name" className="bold-black-label">
-                {isMandarin ? "产品代码" : "Item Code"}
+                {isMandarin ? "產品代碼" : "Item Code"}
               </label>
               <input
                 name="item_code"
@@ -91,14 +91,14 @@ function CustomerInformationForm(props) {
         <div className="fullwidth-container">
           <div className="horizontal-centered-label-container">
             <label htmlFor="name" className="bold-black-label">
-              {isMandarin ? "主题" : "Subject"}
+              {isMandarin ? "主題" : "Subject"}
             </label>
             <input
               name="subject"
               onChange={handleChange}
               value={data.subject}
               id="name"
-              placeholder={isMandarin ? "i.e 产品代码" : "i.e Item Code"}
+              placeholder={isMandarin ? "i.e 產品代碼" : "i.e Item Code"}
               type="text"
               className="input-with-label-style input-style-f62::placeholder"
             />
@@ -113,7 +113,7 @@ function CustomerInformationForm(props) {
             {/* Input with Label Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
             <div className="horizontal-centered-label-container">
               <label htmlFor="email" className="bold-black-label">
-                {isMandarin ? "电子邮件" : "Email"}
+                {isMandarin ? "電子郵件" : "Email"}
               </label>
               <input
                 id="email"
@@ -130,7 +130,7 @@ function CustomerInformationForm(props) {
             {/* Input with Label Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
             <div className="horizontal-centered-label-container">
               <label htmlFor="email" className="bold-black-label">
-                {isMandarin ? "电话号码" : "Phone Number"}
+                {isMandarin ? "電話號碼" : "Phone Number"}
               </label>
               <input
                 id="email"
@@ -157,7 +157,7 @@ function CustomerInformationForm(props) {
               }
             />
             <p className="sample-request-button-style">
-              {isMandarin ? "请求样品" : "Request Sample"}
+              {isMandarin ? "請求樣品" : "Request Sample"}
             </p>
           </div>
         )}

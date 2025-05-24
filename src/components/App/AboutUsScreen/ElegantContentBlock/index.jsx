@@ -7,7 +7,7 @@ function ElegantContentBlock() {
     <div className="text-container-flex-box">
       <p className="central-text-styler">
         {isMandarin
-          ? "我们的愿景是 通过品质、创意与信任，重新定义面料批发行业。我们致力于成为全球设计师、零售商和制造商最值得信赖的优质面料供应商。融合创新与传统，我们希望编织出持久的合作关系和可持续的成功，惠及未来的每一代人。"
+          ? "我們的願景是 通過品質、創意與信任，重新定義面料批發行業。我們致力於成為全球設計師、零售商和製造商最值得信賴的優質面料供應商。融合創新與傳統，我們希望編織出持久的合作關係和可持續的成功，惠及未來的每一代人。"
           : "Our vision is to redefine the fabric wholesale industry through quality, creativity, and trust. We strive to become the most reliable source for premium textiles, empowering designers, retailers, and manufacturers across the globe. By combining innovation with tradition, we aim to weave lasting relationships and sustainable success for generations to come."}
       </p>
       <div className="content-wrapper">

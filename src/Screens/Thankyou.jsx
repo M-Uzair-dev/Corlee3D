@@ -39,13 +39,17 @@ const Thankyou = () => {
             />
           </svg>
         </div>
-        <h1>{isMandarin ? "感谢您" : "Thank You"}</h1>
-        <h3>
-          {isMandarin
-            ? "您的请求已成功提交"
-            : "Your request has been submitted successfuly."}
-        </h3>
-        <p className="request">{isMandarin ? "请求编号" : "Request number"}</p>
+        <div className="textboxdivmain">
+          <h1>{isMandarin ? "感謝您" : "Thank You"}</h1>
+          <p className="main">
+            {isMandarin
+              ? "您的請求已成功提交"
+              : "Your request has been successfully submitted"}
+          </p>
+          <p className="request">
+            {isMandarin ? "請求編號" : "Request number"}
+          </p>
+        </div>
         <div className="copydiv">
           <div className="codediv">
             <p>#{id}</p>
@@ -84,13 +88,13 @@ const Thankyou = () => {
                 textWrap: "nowrap",
               }}
             >
-              {isMandarin ? "复制" : "Copy"}
+              {isMandarin ? "複製" : "Copy"}
             </p>
           </div>
         </div>
         <p>
           {isMandarin
-            ? "我们已经收到您的电子邮件。我们正在研究您的请求，并将在尽快回复您。"
+            ? "我們已經收到您的電子郵件。我們正在研究您的請求，並將儘快回復您。"
             : "We have recieved your email. We are looking into yor request and will get back to you as soon as possible."}
         </p>
         <button onClick={() => navigate("/")}>

@@ -62,7 +62,7 @@ function CreateFabricPage() {
         setColorCategories(colorResponse.data.results || colorResponse.data);
       } catch (error) {
         console.error("Error fetching categories:", error);
-        toast.error("Failed to load categories data");
+        toast.error("載入種類資料失敗");
       }
     };
 
@@ -172,7 +172,7 @@ function CreateFabricPage() {
         color_images: updatedColorImages,
       });
     } else {
-      toast.error("At least one color image is required");
+      toast.error("至少需要一個顏色圖片");
     }
   };
 
@@ -185,7 +185,7 @@ function CreateFabricPage() {
 
     // Validate form
     if (!formData.title || !formData.product_category || !formData.item_code) {
-      setErrorMessage("Please fill in all required fields");
+      setErrorMessage("請填寫所有必填欄位");
       setIsSubmitting(false);
       return;
     }
@@ -196,7 +196,7 @@ function CreateFabricPage() {
     );
 
     if (validColorImages.length === 0) {
-      setErrorMessage("At least one color with a primary image is required");
+      setErrorMessage("至少需要一個顏色並包含主要圖片");
       setIsSubmitting(false);
       return;
     }
@@ -212,12 +212,12 @@ function CreateFabricPage() {
 
     try {
       const response = await api.post("/fabrics/", apiData);
-      toast.success("Fabric created successfully");
+      toast.success("布料建立成功");
       navigate("/dashboard/fabrics");
     } catch (error) {
       // Use the error handling utility
-      handleApiError(error, "Fabric", setErrorMessage, setFieldErrors, false);
-      toast.error("Failed to create fabric");
+      handleApiError(error, "布料", setErrorMessage, setFieldErrors, false);
+      toast.error("建立布料失敗");
       setIsSubmitting(false);
     }
   };
@@ -227,17 +227,17 @@ function CreateFabricPage() {
       className="dashboard-content-card create-page-container"
       style={{ position: "relative" }}
     >
-      {isSubmitting && <LoadingSpinner text="Creating fabric..." overlay />}
+      {isSubmitting && <LoadingSpinner text="建立布料中..." overlay />}
       <div className="create-page-header">
         <button
           className="back-button"
           onClick={() => navigate("/dashboard/fabrics")}
         >
-          ← Back to Fabrics
+          ← 返回布料列表
         </button>
       </div>
 
-      <h2 className="create-heading">Create New Fabric</h2>
+      <h2 className="create-heading">新增布料</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
@@ -361,7 +361,7 @@ function CreateFabricPage() {
                 name="composition_mandarin"
                 value={formData.composition_mandarin}
                 onChange={handleInputChange}
-                placeholder="棉质100%"
+                placeholder="棉質100%"
               />
             </div>
 
@@ -411,7 +411,7 @@ function CreateFabricPage() {
                 name="finish_mandarin"
                 value={formData.finish_mandarin}
                 onChange={handleInputChange}
-                placeholder="柔软，哑光"
+                placeholder="柔軟，啞光"
               />
             </div>
           </div>

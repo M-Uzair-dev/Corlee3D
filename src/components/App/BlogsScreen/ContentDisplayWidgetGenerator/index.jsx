@@ -43,7 +43,7 @@ function ContentDisplayWidgetGenerator() {
             ? `&ordering=${
                 localsort === "newest" || localsort === "最新"
                   ? "-created_at"
-                  : localsort === "oldest" || localsort === "最旧"
+                  : localsort === "oldest" || localsort === "最舊"
                   ? "created_at"
                   : "-view_count"
               }`
@@ -62,7 +62,7 @@ function ContentDisplayWidgetGenerator() {
             ? `&ordering=${
                 localsort === "newest" || localsort === "最新"
                   ? "-created_at"
-                  : localsort === "oldest" || localsort === "最旧"
+                  : localsort === "oldest" || localsort === "最舊"
                   ? "created_at"
                   : "-view_count"
               }`
@@ -116,7 +116,7 @@ function ContentDisplayWidgetGenerator() {
             ? `&ordering=${
                 localsort === "newest" || localsort === "最新"
                   ? "-created_at"
-                  : localsort === "oldest" || localsort === "最旧"
+                  : localsort === "oldest" || localsort === "最舊"
                   ? "created_at"
                   : "-view_count"
               }`
@@ -131,7 +131,7 @@ function ContentDisplayWidgetGenerator() {
             ? `&ordering=${
                 localsort === "newest" || localsort === "最新"
                   ? "-created_at"
-                  : localsort === "oldest" || localsort === "最旧"
+                  : localsort === "oldest" || localsort === "最舊"
                   ? "created_at"
                   : "-view_count"
               }`
@@ -207,11 +207,11 @@ function ContentDisplayWidgetGenerator() {
   return (
     <div className="blog-post-container-blogs">
       <p className="hero-title-text-style-blogs">
-        {isMandarin ? "我们的博客" : "OUR BLOGS"}
+        {isMandarin ? "我們的博客" : "OUR BLOGS"}
       </p>
       <p className="blog-post-content-text-style-blogs">
         {isMandarin
-          ? "我们分享行业见解、趋势分析和创新解决方案，帮助您在面料批发领域保持领先地位。"
+          ? "我們分享行業見解、趨勢分析和創新解決方案，幫助您在面料批發領域保持領先地位。"
           : "We share industry insights, trend analysis, and innovative solutions to help you stay ahead in the fabric wholesale industry."}
       </p>
 
@@ -269,7 +269,7 @@ function ContentDisplayWidgetGenerator() {
               onClick={() => setShowfilter(!showfilter)}
             >
               <SvgIcon5 className="svg-container6-blogs" />
-              {isMandarin ? "过滤" : "Filter"}
+              {isMandarin ? "過濾" : "Filter"}
             </button>
           </div>
         </div>
@@ -296,7 +296,7 @@ function ContentDisplayWidgetGenerator() {
           </div>
         ) : noBlogs ? (
           <h1 style={{ textAlign: "center" }}>
-            {isMandarin ? "没有博客" : "No blogs"}
+            {isMandarin ? "沒有博客" : "No blogs"}
           </h1>
         ) : (
           <>
@@ -368,7 +368,7 @@ function ContentDisplayWidgetGenerator() {
                 />
               </svg>
             </div>
-            <h1>{isMandarin ? "过滤项目" : "Filter Items"}</h1>
+            <h1>{isMandarin ? "過濾項目" : "Filter Items"}</h1>
             <div className="sortbydiv">
               <div
                 className="maintopvisiblediv"
@@ -416,31 +416,31 @@ function ContentDisplayWidgetGenerator() {
                 </p>
                 <p
                   onClick={() => {
-                    localsort === "oldest" || localsort === "最旧"
+                    localsort === "oldest" || localsort === "最舊"
                       ? setLocalsort("")
-                      : setLocalsort(isMandarin ? "最旧" : "oldest");
+                      : setLocalsort(isMandarin ? "最舊" : "oldest");
                   }}
                   style={
-                    localsort === "oldest" || localsort === "最旧"
+                    localsort === "oldest" || localsort === "最舊"
                       ? { backgroundColor: "rgba(0, 0, 0, 0.07)" }
                       : null
                   }
                 >
-                  {isMandarin ? "最旧" : "Oldest"}
+                  {isMandarin ? "最舊" : "Oldest"}
                 </p>
                 <p
                   onClick={() => {
-                    localsort === "popularity" || localsort === "受欢迎"
+                    localsort === "popularity" || localsort === "受歡迎"
                       ? setLocalsort("")
-                      : setLocalsort(isMandarin ? "受欢迎" : "popularity");
+                      : setLocalsort(isMandarin ? "受歡迎" : "popularity");
                   }}
                   style={
-                    localsort === "popularity" || localsort === "受欢迎"
+                    localsort === "popularity" || localsort === "受歡迎"
                       ? { backgroundColor: "rgba(0, 0, 0, 0.07)" }
                       : null
                   }
                 >
-                  {isMandarin ? "受欢迎" : "Popularity"}
+                  {isMandarin ? "受歡迎" : "Popularity"}
                 </p>
               </div>
             </div>
@@ -453,7 +453,7 @@ function ContentDisplayWidgetGenerator() {
                   console.log(categs);
                 }}
               >
-                <p>{isMandarin ? "类别" : "Categories"}</p>
+                <p>{isMandarin ? "類別" : "Categories"}</p>
                 <svg
                   width="14"
                   height="9"
@@ -487,7 +487,7 @@ function ContentDisplayWidgetGenerator() {
                 {loading2 ? (
                   <div style={{ textAlign: "center" }}>
                     <p style={{ textAlign: "center", width: "100%" }}>
-                      {isMandarin ? "加载中..." : "Loading..."}
+                      {isMandarin ? "載入中..." : "Loading..."}
                     </p>
                   </div>
                 ) : (
@@ -524,7 +524,7 @@ function ContentDisplayWidgetGenerator() {
                   setShowfilter(false);
                 }}
               >
-                {isMandarin ? "应用" : "Apply"}
+                {isMandarin ? "應用" : "Apply"}
               </button>
               <button
                 onClick={() => {

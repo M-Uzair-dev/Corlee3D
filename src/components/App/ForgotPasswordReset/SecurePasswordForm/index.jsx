@@ -46,7 +46,7 @@ function SecurePasswordForm(props) {
       <div className="nested-svg-container">
         <div className="flex-row-container">
           <input
-            placeholder={isMandarin ? "新密码" : "New Password"}
+            placeholder={isMandarin ? "新密碼" : "New Password"}
             type={showpassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -96,7 +96,7 @@ function SecurePasswordForm(props) {
             )}
 
             <p className="text-styler">
-              {isMandarin ? "小写字母" : "Lowercase characters"}
+              {isMandarin ? "小寫字母" : "Lowercase characters"}
             </p>
           </div>
           <div className="text-block-container">
@@ -134,7 +134,7 @@ function SecurePasswordForm(props) {
               />
             )}
 
-            <p className="text-styler">{isMandarin ? "数字" : "Numbers"}</p>
+            <p className="text-styler">{isMandarin ? "數字" : "Numbers"}</p>
           </div>
         </div>
         <div className="vertical-text-block">
@@ -174,7 +174,7 @@ function SecurePasswordForm(props) {
             )}
 
             <p className="text-styler">
-              {isMandarin ? "大写字母" : "Uppercase characters"}
+              {isMandarin ? "大寫字母" : "Uppercase characters"}
             </p>
           </div>
           <div className="text-block-container">
@@ -213,7 +213,7 @@ function SecurePasswordForm(props) {
             )}
 
             <p className="text-styler">
-              {isMandarin ? "8个字符最小" : "8 characters minimum"}
+              {isMandarin ? "8個字符最小" : "8 characters minimum"}
             </p>
           </div>
         </div>
@@ -222,7 +222,7 @@ function SecurePasswordForm(props) {
         {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
         <div className="flex-row-container">
           <input
-            placeholder={isMandarin ? "确认新密码" : "Confirm new password"}
+            placeholder={isMandarin ? "確認新密碼" : "Confirm new password"}
             type={showcpassword ? "text" : "password"}
             className="input-with-icon input-style-f62::placeholder"
             value={confirm}
@@ -270,10 +270,10 @@ function SecurePasswordForm(props) {
       >
         {loading
           ? isMandarin
-            ? "加载中..."
+            ? "加載中..."
             : "Loading..."
           : isMandarin
-          ? "重置密码"
+          ? "重置密碼"
           : "Reset password"}
       </button>
     </div>

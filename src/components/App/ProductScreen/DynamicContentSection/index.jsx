@@ -71,7 +71,7 @@ function DynamicContentSection(props) {
                 wrapperClass=""
               />
             ) : isMandarin ? (
-              "加载更多"
+              "載入更多"
             ) : (
               "Load More"
             )}

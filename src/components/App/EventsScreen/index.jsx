@@ -14,20 +14,20 @@ function EventsComponent({ eventDisplayWidgetArgs }) {
             <div className="leftsidecontent">
               <h1>
                 {isMandarin
-                  ? "想与我们预约吗？"
+                  ? "想與我們預約嗎？"
                   : "Want to Book an Appointment with us?"}
               </h1>
               <p className="letsgoanddiscussit">
-                {isMandarin ? "让我们讨论一下" : "Let’s go & discuss it"}
+                {isMandarin ? "讓我們討論一下" : "Let's go & discuss it"}
               </p>
               <p className="content-text-area">
                 {isMandarin
-                  ? "我们期待了解您的需求，并为您量身定制解决方案。请留下您的信息，我们的团队将尽快与您联系，安排专属预约。"
+                  ? "我們期待了解您的需求，並為您量身定制解決方案。請留下您的信息，我們的團隊將盡快與您聯繫，安排專屬預約。"
                   : "We look forward to learning about your needs and tailoring a solution just for you. Leave your details, and our team will get in touch shortly to schedule your personalized appointment."}
               </p>
               {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
               <button className="event-card-button">
-                {isMandarin ? "立即预约" : "Book Now"}
+                {isMandarin ? "立即預約" : "Book Now"}
                 <SvgIcon1 className="svg-container" />
               </button>
             </div>
@@ -38,14 +38,14 @@ function EventsComponent({ eventDisplayWidgetArgs }) {
             />
           </div>
           <p className="upcoming-events-heading">
-            {isMandarin ? "即将举行的活动" : "Upcoming Events"}
+            {isMandarin ? "即將舉行的活動" : "Upcoming Events"}
           </p>
           <RenderEventDisplayWidgets
             eventDisplayWidgetArgs={eventDisplayWidgetArgs}
           />
           {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <button className="btn-load-more">
-            {isMandarin ? "加载更多" : "Load More"}
+            {isMandarin ? "加載更多" : "Load More"}
           </button>
         </div>
       </div>

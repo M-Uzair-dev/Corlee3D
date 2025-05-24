@@ -33,7 +33,7 @@ function StylishLayoutBuilder(props) {
             ? `keyword=${
                 searchterm
                   ? searchterm
-                  : name === "Hot Selling" || name == "热卖"
+                  : name === "Hot Selling" || name == "熱賣"
                   ? "best_selling"
                   : name
               }`
@@ -48,7 +48,7 @@ function StylishLayoutBuilder(props) {
             ? `keyword=${
                 searchterm
                   ? searchterm
-                  : name === "Hot Selling" || name == "热卖"
+                  : name === "Hot Selling" || name == "熱賣"
                   ? "best_selling"
                   : name
               }`

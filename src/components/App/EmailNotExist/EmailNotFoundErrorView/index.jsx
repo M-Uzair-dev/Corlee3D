@@ -10,12 +10,12 @@ function EmailNotFoundErrorView(props) {
         <SvgIcon1 className="svg-container" />
       </div>
       <p className="error-message-title">
-        {isMandarin ? "邮箱不存在" : "Email does not exist."}
+        {isMandarin ? "郵箱不存在" : "Email does not exist."}
       </p>
       <p className="email-not-found-message1">
         <span>
           {isMandarin
-            ? "我们无法找到您输入的电子邮件，似乎您输入的电子邮件不存在。"
+            ? "我們無法找到您輸入的電子郵件，似乎您輸入的電子郵件不存在。"
             : "We are unable to find the email you entered, it seems like the email you entered does not exist."}
         </span>
         <span className="email-not-found-message">{props.email}</span>

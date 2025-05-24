@@ -190,7 +190,7 @@ function DynamicContentDisplay(props) {
                     onClick={() => navigate("/user/history")}
                     style={{ cursor: "pointer", minWidth: "max-content" }}
                   >
-                    {isMandarin ? "历史" : "History"}
+                    {isMandarin ? "歷史" : "History"}
                   </p>
                   <p
                     onClick={() => navigate("/user/favourites")}
@@ -284,10 +284,10 @@ function DynamicContentDisplay(props) {
             <h1
               className={isMandarin ? "loginpopupheader" : "loginpopupheader2"}
             >
-              {isMandarin ? "需要登录" : "Login Required"}
+              {isMandarin ? "需要登錄" : "Login Required"}
             </h1>
             <p>
-              {isMandarin ? "此操作需要登录。" : "This action requires login."}
+              {isMandarin ? "此操作需要登錄。" : "This action requires login."}
             </p>
             <div className="buttonsinloginpopup">
               <button
@@ -296,7 +296,7 @@ function DynamicContentDisplay(props) {
                   navigate("/login");
                 }}
               >
-                {isMandarin ? "登录" : "Login"}
+                {isMandarin ? "登錄" : "Login"}
               </button>
               <button
                 onClick={(e) => {
@@ -304,7 +304,7 @@ function DynamicContentDisplay(props) {
                   setshowLoginPopup(false);
                 }}
               >
-                {isMandarin ? "不，谢谢" : "No, I'm cool"}
+                {isMandarin ? "不，謝謝" : "No, I'm cool"}
               </button>
             </div>
           </div>

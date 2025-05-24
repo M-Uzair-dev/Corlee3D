@@ -171,11 +171,11 @@ function EditOrderPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/orders")}
         >
-          ← Back to Orders
+          ← 返回訂單
         </button>
       </div>
 
-      <h2 className="edit-heading">Edit Order</h2>
+      <h2 className="edit-heading">編輯訂單</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 

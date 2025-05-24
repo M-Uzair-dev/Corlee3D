@@ -107,14 +107,14 @@ END:VCALENDAR
                 className="text-link-style"
                 onClick={() => setShowMore(false)}
               >
-                {isMandarin ? "显示较少" : "Show Less"}
+                {isMandarin ? "顯示較少" : "Show Less"}
               </span>
             ) : (
               <span
                 className="text-link-style"
                 onClick={() => setShowMore(true)}
               >
-                {isMandarin ? "显示更多" : "Show More"}
+                {isMandarin ? "顯示更多" : "Show More"}
               </span>
             )
           ) : null}

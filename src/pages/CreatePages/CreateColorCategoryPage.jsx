@@ -53,17 +53,17 @@ function CreateColorCategoryPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/color-categories")}
         >
-          ← Back to Color Categories
+          ← 返回顏色分類
         </button>
       </div>
 
-      <h2 className="create-heading">Create New Color Category</h2>
+      <h2 className="create-heading">新增顏色分類</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>Color Category Details</h3>
+          <h3>顏色分類詳細資料</h3>
 
           <div className="form-group">
             <label htmlFor="display_name">Display Name</label>

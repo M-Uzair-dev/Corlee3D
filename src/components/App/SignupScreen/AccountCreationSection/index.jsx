@@ -7,7 +7,7 @@ function AccountCreationSection() {
   return (
     <div className="account-creation-form-container">
       <p className="hero-title inSignup">
-        {isMandarin ? "创建账户" : "Create account"}
+        {isMandarin ? "創建賬戶" : "Create account"}
       </p>
       <UserSignupSection />
     </div>

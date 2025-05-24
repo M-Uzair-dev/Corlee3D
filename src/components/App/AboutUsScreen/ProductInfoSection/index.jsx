@@ -14,7 +14,7 @@ function ProductInfoSection() {
             className="image-block"
           />
           <h1 className="containsline">1</h1>
-          <p>{isMandarin ? "询价报价" : "Inquiry quotation"}</p>
+          <p>{isMandarin ? "詢價報價" : "Inquiry quotation"}</p>
         </div>
         <div className="order-process-child">
           <img
@@ -23,7 +23,7 @@ function ProductInfoSection() {
             className="image-block"
           />
           <h1>2</h1>
-          <p>{isMandarin ? "下订单" : "Place your order"}</p>
+          <p>{isMandarin ? "下訂單" : "Place your order"}</p>
         </div>
         <div className="order-process-child">
           <img
@@ -32,7 +32,7 @@ function ProductInfoSection() {
             className="image-block"
           />
           <h1>3</h1>
-          <p>{isMandarin ? "制造产品" : "Manufacturing your product"}</p>
+          <p>{isMandarin ? "製造產品" : "Manufacturing your product"}</p>
         </div>
         <div className="order-process-child">
           <img
@@ -41,7 +41,7 @@ function ProductInfoSection() {
             className="image-block"
           />
           <h1>4</h1>
-          <p>{isMandarin ? "检验与包装" : "Inspection & packaging"}</p>
+          <p>{isMandarin ? "檢驗與包裝" : "Inspection & packaging"}</p>
         </div>
         <div className="order-process-child">
           <img
@@ -50,7 +50,7 @@ function ProductInfoSection() {
             className="image-block"
           />
           <h1>5</h1>
-          <p>{isMandarin ? "送货到您的地址" : "Delivery to your address"}</p>
+          <p>{isMandarin ? "送貨到您的地址" : "Delivery to your address"}</p>
         </div>
       </div>
     </div>

@@ -89,11 +89,11 @@ function ProductNavigation(props) {
             <div className="dropdowndiv">
               {document.body.scrollWidth < 950 && (
                 <p onClick={() => navigate("/user/bag")}>
-                  {isMandarin ? "购物车" : "Bag"}
+                  {isMandarin ? "購物車" : "Bag"}
                 </p>
               )}
               <p onClick={() => navigate("/user/history")}>
-                {isMandarin ? "历史" : "History"}
+                {isMandarin ? "歷史" : "History"}
               </p>
               <p onClick={() => navigate("/user/favourites")}>
                 {isMandarin ? "收藏" : "Favourites"}
@@ -158,7 +158,7 @@ function ProductNavigation(props) {
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/events")}
           >
-            {isMandarin ? "活动" : "Events"}
+            {isMandarin ? "活動" : "Events"}
           </p>
           <p
             className="contact-info-text-style-nav"

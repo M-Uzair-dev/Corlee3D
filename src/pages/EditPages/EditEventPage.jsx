@@ -185,17 +185,17 @@ function EditEventPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/events")}
         >
-          ← Back to Events
+          ← 返回活動
         </button>
       </div>
 
-      <h2 className="edit-heading">Edit Event</h2>
+      <h2 className="edit-heading">編輯活動</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3 className="section-title">Event Details</h3>
+          <h3 className="section-title">活動詳細資料</h3>
 
           <div className="form-row">
             <div className="form-group">
@@ -221,7 +221,7 @@ function EditEventPage() {
                 name="title_mandarin"
                 value={formData.title_mandarin}
                 onChange={handleInputChange}
-                placeholder="输入活动标题"
+                placeholder="輸入活動標題"
               />
             </div>
           </div>
@@ -251,7 +251,7 @@ function EditEventPage() {
                 value={formData.description_mandarin}
                 onChange={handleInputChange}
                 rows="4"
-                placeholder="描述活动"
+                placeholder="描述活動"
               />
             </div>
           </div>
@@ -304,7 +304,7 @@ function EditEventPage() {
                 name="location_mandarin"
                 value={formData.location_mandarin}
                 onChange={handleInputChange}
-                placeholder="输入活动地点"
+                placeholder="輸入活動地點"
               />
             </div>
           </div>

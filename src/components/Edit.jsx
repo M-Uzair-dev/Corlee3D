@@ -53,7 +53,7 @@ const Edit = ({
         !formData[key] ||
         (typeof formData[key] === "string" && !formData[key].trim())
       ) {
-        errors[key] = "This field is required";
+        errors[key] = "此欄位為必填";
       }
     });
 
@@ -121,7 +121,7 @@ const Edit = ({
       {isLoadingData ? (
         <div className="loading-spinner-container">
           <div className="loading-spinner"></div>
-          <p>Loading data...</p>
+          <p>載入資料中...</p>
         </div>
       ) : (
         <form onSubmit={handleSubmit}>
@@ -129,7 +129,7 @@ const Edit = ({
           <div className="input-fields-container">{renderInputFields()}</div>
 
           <button type="submit" className="submit-button" disabled={isLoading}>
-            {isLoading ? "Saving..." : "Save Changes"}
+            {isLoading ? "儲存中..." : "儲存變更"}
           </button>
         </form>
       )}

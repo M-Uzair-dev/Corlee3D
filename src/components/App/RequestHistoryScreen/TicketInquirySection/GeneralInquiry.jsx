@@ -14,14 +14,14 @@ const GeneralInquiry = (props) => {
     >
       <div className="infotext">
         <p className="ticket">
-          {isMandarin ? "票号" : "Ticket Number"} : {props.item.request_number}
+          {isMandarin ? "票號" : "Ticket Number"} : {props.item.request_number}
         </p>
-        <p className="inqtext">{isMandarin ? "一般查询" : "General Inquiry"}</p>
+        <p className="inqtext">{isMandarin ? "一般查詢" : "General Inquiry"}</p>
       </div>
       <div className="otherdata">
         <div className="productinqtextdiv">
           <div className="headingofproduct">
-            {isMandarin ? "主题" : "Subject"} : {props.item.subject}
+            {isMandarin ? "主題" : "Subject"} : {props.item.subject}
           </div>
           <p className="productdesc">{props.item.message}</p>
         </div>

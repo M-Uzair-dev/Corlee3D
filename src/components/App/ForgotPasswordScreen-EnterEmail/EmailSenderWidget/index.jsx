@@ -51,10 +51,10 @@ function EmailSenderWidget() {
       >
         {loading
           ? isMandarin
-            ? "加载中..."
+            ? "加載中..."
             : "Loading..."
           : isMandarin
-          ? "发送重置链接"
+          ? "發送重置鏈接"
           : "Send reset link"}
       </button>
     </div>

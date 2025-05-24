@@ -7,7 +7,7 @@ function ContactInfoSection(props) {
   return (
     <div className="contact-details-container">
       <p className="contact-details-heading mb40">
-        {isMandarin ? "联系详情" : "Contact Details"}
+        {isMandarin ? "聯繫詳情" : "Contact Details"}
       </p>
       <MessageContainer {...props} />
     </div>

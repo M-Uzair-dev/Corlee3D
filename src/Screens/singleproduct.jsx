@@ -130,11 +130,11 @@ const singleproduct = () => {
   const [loadingText, setLoadingText] = useState("Initializing...");
 
   const texts = [
-    isMandarin ? "加载资产..." : "Loading assets...",
-    isMandarin ? "组装场景..." : "Assembling the scene...",
-    isMandarin ? "打磨细节..." : "Polishing details...",
-    isMandarin ? "最终化纹理..." : "Finalizing textures...",
-    isMandarin ? "渲染场景..." : "Rendering the scene...",
+    isMandarin ? "載入資產..." : "Loading assets...",
+    isMandarin ? "組裝場景..." : "Assembling the scene...",
+    isMandarin ? "打磨細節..." : "Polishing details...",
+    isMandarin ? "最終化紋理..." : "Finalizing textures...",
+    isMandarin ? "渲染場景..." : "Rendering the scene...",
     isMandarin ? "快完成了..." : "Almost there...",
   ];
 
@@ -246,7 +246,7 @@ const singleproduct = () => {
                   : product.description}
               </p>
               <p className="colorsinproduct">
-                {isMandarin ? "颜色" : "Colors"}
+                {isMandarin ? "顏色" : "Colors"}
               </p>
               <div className="colorsinproduct">
                 {product.color_images.map((item, index) => (
@@ -422,12 +422,12 @@ const singleproduct = () => {
             </div>
             <h1>
               {isMandarin
-                ? "预览这款面料的3D效果"
+                ? "預覽這款面料的3D效果"
                 : "Preview This Fabric in 3D"}
             </h1>
             <p>
               {isMandarin
-                ? "探索这款面料在衬衫、裤子或其他服装上的外观，我们的交互式3D模型可以旋转和从不同角度查看，以便在做出选择之前看到每个细节。"
+                ? "探索這款面料在襯衫、褲子或其他服裝上的外觀，我們的交互式3D模型可以旋轉和從不同角度查看，以便在做出選擇之前看到每個細節。"
                 : "Explore how this fabric looks on a shirt, pants, or other clothing items with our interactive 3D model. Rotate and view it from different angles to see every detail before making a choice."}
             </p>
             <button
@@ -575,10 +575,10 @@ const singleproduct = () => {
             <h1
               className={isMandarin ? "loginpopupheader" : "loginpopupheader2"}
             >
-              {isMandarin ? "需要登录" : "Login Required"}
+              {isMandarin ? "需要登錄" : "Login Required"}
             </h1>
             <p>
-              {isMandarin ? "此操作需要登录。" : "This action requires login."}
+              {isMandarin ? "此操作需要登錄。" : "This action requires login."}
             </p>
             <div className="buttonsinloginpopup">
               <button
@@ -587,7 +587,7 @@ const singleproduct = () => {
                   navigate("/login");
                 }}
               >
-                {isMandarin ? "登录" : "Login"}
+                {isMandarin ? "登錄" : "Login"}
               </button>
               <button
                 onClick={(e) => {
@@ -595,7 +595,7 @@ const singleproduct = () => {
                   setshowLoginPopup(false);
                 }}
               >
-                {isMandarin ? "不，谢谢" : "No, I'm cool"}
+                {isMandarin ? "不，謝謝" : "No, I'm cool"}
               </button>
             </div>
           </div>

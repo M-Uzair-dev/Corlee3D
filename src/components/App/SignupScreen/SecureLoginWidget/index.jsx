@@ -9,7 +9,7 @@ function SecureLoginWidget(props) {
       <input
         type="text"
         className="id-label-text-style"
-        placeholder={isMandarin ? "密码" : "Password"}
+        placeholder={isMandarin ? "密碼" : "Password"}
         name="password"
         onChange={props.onChange}
         value={props.value}

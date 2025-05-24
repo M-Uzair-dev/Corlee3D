@@ -94,17 +94,17 @@ function CreateFabricCategoryPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/fabric-categories")}
         >
-          ← Back to Fabric Categories
+          ← 返回布料分類
         </button>
       </div>
 
-      <h2 className="create-heading">Create Fabric Category</h2>
+      <h2 className="create-heading">新增布料分類</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-section">
-          <h3>Category Details</h3>
+          <h3>分類詳細資料</h3>
 
           <div className="form-group">
             <label htmlFor="name">Category Name *</label>
@@ -151,7 +151,7 @@ function CreateFabricCategoryPage() {
               value={formData.description_mandarin}
               onChange={handleInputChange}
               rows="4"
-              placeholder="输入类别描述（可选）"
+              placeholder="輸入類別描述（可選）"
             />
           </div>
         </div>

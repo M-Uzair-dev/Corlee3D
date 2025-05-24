@@ -59,7 +59,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
         <input
           type="text"
           className="id-label-text-style"
-          placeholder={isMandarin ? "公司名称" : "Company Name"}
+          placeholder={isMandarin ? "公司名稱" : "Company Name"}
           name="company_name"
           onChange={handleChange}
           value={formData.company_name}
@@ -73,7 +73,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
         <div className="flexbox-item">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder={isMandarin ? "电话" : "Phone"}
+            placeholder={isMandarin ? "電話" : "Phone"}
             type="text"
             className="input-field-with-border input-style-f62::placeholder"
             name="phone"
@@ -84,7 +84,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
         <div className="flex-grow-shrink-basis">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder={isMandarin ? "手机" : "Mobile phone"}
+            placeholder={isMandarin ? "手機" : "Mobile phone"}
             type="text"
             className="input-field-with-border input-style-f62::placeholder"
             name="mobile_phone"
@@ -101,10 +101,10 @@ function UserRegistrationLayout({ loading, setLoading }) {
       >
         {loading
           ? isMandarin
-            ? "加载中..."
+            ? "載入中..."
             : "Loading..."
           : isMandarin
-          ? "创建账户"
+          ? "創建帳戶"
           : "Create account"}
       </button>
       {error && <p className="error-message">{error}</p>}

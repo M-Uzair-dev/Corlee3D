@@ -59,11 +59,11 @@ function RenderEventDisplayWidgets({ eventDisplayWidgetArgs }) {
     <div className="event-card-container1">
       {loading ? (
         <h1 style={{ textAlign: "center" }}>
-          {isMandarin ? "加载中..." : "Loading..."}
+          {isMandarin ? "載入中..." : "Loading..."}
         </h1>
       ) : noEvents ? (
         <h1 style={{ textAlign: "center" }}>
-          {isMandarin ? "没有更多事件" : "No more events"}
+          {isMandarin ? "沒有更多事件" : "No more events"}
         </h1>
       ) : (
         events.map((event, index) => {

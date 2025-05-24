@@ -57,22 +57,22 @@ function MessageDisplay(props) {
             : "Favourites"
           : props.searchterm
           ? isMandarin
-            ? "搜索产品"
+            ? "搜索產品"
             : "Search products"
           : props.name
           ? props.name
           : isMandarin
-          ? "所有产品"
+          ? "所有產品"
           : "All Products"}
       </p>
       <p className="material-description-text-style">
         {props.fav
           ? isMandarin
-            ? "所有你收藏的产品都在这里"
+            ? "所有你收藏的產品都在這裡"
             : "All your favourite products are here"
           : props.searchterm
           ? isMandarin
-            ? "匹配你搜索的产品：" + props.searchterm
+            ? "匹配你搜索的產品：" + props.searchterm
             : "Products matching your search : " + props.searchterm
           : props.desc}
       </p>
@@ -81,7 +81,7 @@ function MessageDisplay(props) {
         onClick={() => setShowfilter(!showfilter)}
       >
         <SvgIcon1 className="svg-container4" />
-        {isMandarin ? "过滤" : "Filter"}
+        {isMandarin ? "過濾" : "Filter"}
       </button>
       <div
         className={
@@ -107,7 +107,7 @@ function MessageDisplay(props) {
               />
             </svg>
           </div>
-          <h1>{isMandarin ? "过滤项目" : "Filter Items"}</h1>
+          <h1>{isMandarin ? "過濾項目" : "Filter Items"}</h1>
           <div className="sortbydiv">
             <div
               className="maintopvisiblediv"
@@ -165,7 +165,7 @@ function MessageDisplay(props) {
                     : null
                 }
               >
-                {isMandarin ? "最旧" : "Oldest"}
+                {isMandarin ? "最舊" : "Oldest"}
               </p>
               <p
                 onClick={() => {
@@ -179,7 +179,7 @@ function MessageDisplay(props) {
                     : null
                 }
               >
-                {isMandarin ? "最受欢迎" : "Most Requested"}
+                {isMandarin ? "最受歡迎" : "Most Requested"}
               </p>
             </div>
           </div>
@@ -190,7 +190,7 @@ function MessageDisplay(props) {
                 setShowcolors((prev) => !prev);
               }}
             >
-              <p>{isMandarin ? "颜色" : "Colors"}</p>
+              <p>{isMandarin ? "顏色" : "Colors"}</p>
               <svg
                 width="14"
                 height="9"
@@ -266,7 +266,7 @@ function MessageDisplay(props) {
                 setShowfilter(!showfilter);
               }}
             >
-              {isMandarin ? "应用" : "Apply"}
+              {isMandarin ? "應用" : "Apply"}
             </button>
             <button
               onClick={() => {

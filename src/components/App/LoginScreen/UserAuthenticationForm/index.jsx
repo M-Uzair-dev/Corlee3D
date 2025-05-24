@@ -74,7 +74,7 @@ function UserAuthenticationForm() {
               <img className="hidden-icon img-content-66044729" />
             </div>
             <label htmlFor="remember-me" className="remember-me-label">
-              {isMandarin ? "记住我" : "Remember me"}
+              {isMandarin ? "記住我" : "Remember me"}
             </label>
           </div>
           <p
@@ -86,7 +86,7 @@ function UserAuthenticationForm() {
               cursor: "pointer",
             }}
           >
-            {isMandarin ? "忘记密码？" : "Forgot password?"}
+            {isMandarin ? "忘記密碼？" : "Forgot password?"}
           </p>
         </div>
         <button
@@ -96,17 +96,17 @@ function UserAuthenticationForm() {
         >
           {loading
             ? isMandarin
-              ? "加载中..."
+              ? "載入中..."
               : "Loading..."
             : isMandarin
-            ? "登录"
+            ? "登錄"
             : "Login"}
         </button>
         {error && <p className="error-message">{error}</p>}
       </form>
       <div className="account-info-container">
         <p className="account-info-text-style">
-          {isMandarin ? "没有账户？" : "Don't have an account?"}
+          {isMandarin ? "沒有帳戶？" : "Don't have an account?"}
         </p>
         <p
           className="sign-up-link-style"
@@ -115,7 +115,7 @@ function UserAuthenticationForm() {
             navigate("/signup");
           }}
         >
-          {isMandarin ? "注册" : "Sign up"}
+          {isMandarin ? "註冊" : "Sign up"}
         </p>
       </div>
     </div>

@@ -12,7 +12,7 @@ function ContactInfoSection1() {
           className="image-container"
         />
       </div>
-      <p className="hero-title">{isMandarin ? "联系我们" : "Call Us"}</p>
+      <p className="hero-title">{isMandarin ? "聯繫我們" : "Call Us"}</p>
       <p className="contact-info-text-style">{localStorage.getItem("phone")}</p>
     </div>
   );

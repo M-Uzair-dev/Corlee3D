@@ -15,7 +15,7 @@ function InputForm(props) {
           onChange={props.onChange}
           value={props.name}
           id="name"
-          placeholder={isMandarin ? "i.e 张三" : "i.e Jone Doe"}
+          placeholder={isMandarin ? "i.e 張三" : "i.e Jone Doe"}
           type="text"
           className="input-with-label-style input-style-f62::placeholder"
         />

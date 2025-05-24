@@ -8,11 +8,11 @@ function CompanyInputWidget(props) {
       {/* Input with Label Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
       <div className="horizontal-centered-label-container">
         <label htmlFor="company name" className="bold-black-label label5">
-          {isMandarin ? "公司名称" : "Company Name"}
+          {isMandarin ? "公司名稱" : "Company Name"}
         </label>
         <input
           id="company name"
-          placeholder={isMandarin ? "i.e 公司名称" : "i.e Company Name"}
+          placeholder={isMandarin ? "i.e 公司名稱" : "i.e Company Name"}
           type="text"
           name="company_name"
           onChange={props.onChange}

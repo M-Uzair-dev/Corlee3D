@@ -13,22 +13,22 @@ function SecureUpdateConfirmation(props) {
       <p className="success-message-style">
         {props.email
           ? isMandarin
-            ? "验证您的电子邮件"
+            ? "驗證您的電子郵件"
             : "Verify your email"
           : isMandarin
-          ? "密码更新成功"
+          ? "密碼更新成功"
           : "Success!"}
       </p>
       {props.email ? (
         <p className="password-update-message">
           {isMandarin
-            ? "请验证您的电子邮件地址以完全激活您的 Corlee 帐户并获得对所有服务和功能的完全访问权限。"
+            ? "請驗證您的電子郵件地址以完全激活您的 Corlee 帳戶並獲得對所有服務和功能的完全訪問權限。"
             : "Please verify your email address to fully activate your Corlee account and gain unrestricted access to all our services and features."}
         </p>
       ) : (
         <p className="password-update-message">
           {isMandarin
-            ? "您的密码已更新且安全。您现在可以再次登录。"
+            ? "您的密碼已更新且安全。您現在可以再次登錄。"
             : "Your password has been updated & is secure. You can now login again"}
         </p>
       )}

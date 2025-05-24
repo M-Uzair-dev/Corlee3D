@@ -126,17 +126,17 @@ function CreateBlogPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/blogs")}
         >
-          ← Back to Blogs
+          ← 返回部落格
         </button>
       </div>
 
-      <h2 className="create-heading">Create New Blog</h2>
+      <h2 className="create-heading">新增部落格</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-section">
-          <h3>Blog Information</h3>
+          <h3>部落格資訊</h3>
 
           <div className="form-group">
             <label htmlFor="title">Title *</label>

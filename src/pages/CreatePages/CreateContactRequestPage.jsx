@@ -60,17 +60,17 @@ function CreateContactRequestPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/contact-requests")}
         >
-          ← Back to Contact Requests
+          ← 返回聯絡要求
         </button>
       </div>
 
-      <h2 className="create-heading">Create Contact Request</h2>
+      <h2 className="create-heading">新增聯絡要求</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-section">
-          <h3>Request Details</h3>
+          <h3>要求詳細資料</h3>
 
           <div className="form-group">
             <label htmlFor="request_type">Request Type *</label>

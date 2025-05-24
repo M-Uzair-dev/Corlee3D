@@ -66,7 +66,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "产品" : "Products"}
+              {isMandarin ? "產品" : "Products"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -78,7 +78,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "活动" : "Events"}
+              {isMandarin ? "活動" : "Events"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -90,7 +90,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "关于我们" : "About us"}
+              {isMandarin ? "關於我們" : "About us"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -140,7 +140,7 @@ function BottomBar(props) {
           <span className="brand-text-style-bb">
             © {new Date().getFullYear()}
             {isMandarin
-              ? " corlee & co. 保留所有权利。"
+              ? " corlee & co. 保留所有權利。"
               : " corlee & co. All Rights Reserved."}
           </span>{" "}
           <a
@@ -151,7 +151,7 @@ function BottomBar(props) {
             }}
             className="link-underline-white-bb"
           >
-            {isMandarin ? "条款" : "Terms"}
+            {isMandarin ? "條款" : "Terms"}
           </a>
           <span className="brand-text-style-bb">, </span>
           <a
@@ -162,7 +162,7 @@ function BottomBar(props) {
             }}
             className="link-underline-white-bb"
           >
-            {isMandarin ? "隐私" : "Privacy"}
+            {isMandarin ? "隱私" : "Privacy"}
           </a>
           <span className="brand-text-style-bb"> &amp; </span>
           <a
@@ -173,7 +173,7 @@ function BottomBar(props) {
             }}
             className="link-underline-white-bb"
           >
-            {isMandarin ? "无障碍" : "Accessibility"}
+            {isMandarin ? "無障礙" : "Accessibility"}
           </a>
           <br />{" "}
           <a

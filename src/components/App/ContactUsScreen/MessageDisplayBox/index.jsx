@@ -11,7 +11,7 @@ function MessageDisplayBox(props) {
         style={{ resize: "none" }}
         id="company name"
         placeholder={
-          isMandarin ? "写你的消息在这里" : "Write your message here"
+          isMandarin ? "寫你的消息在這裡" : "Write your message here"
         }
         type="text"
         name="description"

@@ -8,7 +8,7 @@ function UsernameInputWidget({ name, value, onChange }) {
         name={name}
         value={value}
         onChange={onChange}
-        placeholder={isMandarin ? "用户名" : "Username"}
+        placeholder={isMandarin ? "用戶名" : "Username"}
         type="text"
         className="input-with-border-radius input-style-f62::placeholder"
       />

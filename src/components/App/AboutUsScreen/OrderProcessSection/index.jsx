@@ -10,11 +10,11 @@ function OrderProcessSection() {
         <div className="vertical-centered-container">
           <div className="order-process-container">
             <p className="order-process-title">
-              {isMandarin ? "订单流程" : "Order Process"}
+              {isMandarin ? "訂單流程" : "Order Process"}
             </p>
             <p className="order-process-description">
               {isMandarin
-                ? "从首次询价到最终交付，我们的流程旨在高效、透明且顺畅，确保您每一次都能准时收到高品质面料。"
+                ? "從首次詢價到最終交付，我們的流程旨在高效、透明且順暢，確保您每一次都能準時收到高品質面料。"
                 : "From your first inquiry to the final delivery, our process is designed to be smooth, transparent, and efficient—ensuring you receive high-quality fabrics on time, every time."}
             </p>
           </div>

@@ -59,12 +59,12 @@ function CompanyInfoSection() {
   return (
     <div className="company-details-container4">
       <p className="company-details-title">
-        {isMandarin ? "公司详情" : "Company Details"}
+        {isMandarin ? "公司詳情" : "Company Details"}
       </p>
       <div className="company-details-container2">
         <input
           type="text"
-          placeholder={isMandarin ? "公司名称" : "Company name"}
+          placeholder={isMandarin ? "公司名稱" : "Company name"}
           className="company-title-text-style"
           value={data.company_name}
           style={{
@@ -83,7 +83,7 @@ function CompanyInfoSection() {
         <div className="flexbox-item">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder={isMandarin ? "电话" : "Phone"}
+            placeholder={isMandarin ? "電話" : "Phone"}
             value={data.phone}
             onChange={(e) => setData({ ...data, phone: e.target.value })}
             type="text"
@@ -93,7 +93,7 @@ function CompanyInfoSection() {
         <div className="flex-grow-shrink-basis-margin-left">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder={isMandarin ? "手机" : "Mobile phone"}
+            placeholder={isMandarin ? "手機" : "Mobile phone"}
             value={data.mobile_phone}
             onChange={(e) => setData({ ...data, mobile_phone: e.target.value })}
             type="text"
@@ -111,10 +111,10 @@ function CompanyInfoSection() {
       >
         {loading
           ? isMandarin
-            ? "加载中..."
+            ? "載入中..."
             : "Loading..."
           : isMandarin
-          ? "创建账户"
+          ? "創建帳戶"
           : "Create Account"}
       </button>
     </div>

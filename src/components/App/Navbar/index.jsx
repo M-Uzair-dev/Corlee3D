@@ -197,7 +197,7 @@ function Navbar(props) {
                     toast.success("Phone number copied to clipboard");
                   }}
                 >
-                  {isMandarin ? "电话" : "Phone Call"}
+                  {isMandarin ? "電話" : "Phone Call"}
                 </a>{" "}
               </p>
             </div>
@@ -217,7 +217,7 @@ function Navbar(props) {
               {/* // whatsapp, postal_code, phone, longitude, line, latitude,
               instagram, facebook, email, country, address */}
               <a href={`mailto:${localStorage.getItem("email")}`}>
-                {isMandarin ? "电子邮件" : "Email"}
+                {isMandarin ? "電子郵件" : "Email"}
               </a>{" "}
             </div>
             <div className="singlecalldetail">
@@ -278,7 +278,7 @@ function Navbar(props) {
               }}
               className="needhelp"
             >
-              {isMandarin ? "需要帮助？" : "Need help ?"}
+              <p>{isMandarin ? "需要幫助嗎？" : "Need help ?"}</p>
             </p>
           </div>
         </div>
@@ -380,7 +380,7 @@ function Navbar(props) {
                 onClick={() => {
                   navigate(
                     isMandarin
-                      ? "/products/热卖/科里最受欢迎的热卖面料"
+                      ? "/products/熱賣/科里最受歡迎的熱賣面料"
                       : "/products/Hot Selling/ All of Corlee's hot seling products."
                   );
                   setShowprod(false);
@@ -393,10 +393,10 @@ function Navbar(props) {
                 }}
               >
                 <div className="textdivinnavproductdropdown">
-                  <h1>{isMandarin ? "热卖" : "Hot Selling"}</h1>
+                  <h1>{isMandarin ? "熱賣" : "Hot Selling"}</h1>
                   <p>
                     {isMandarin
-                      ? "查看科里最受欢迎的热卖面料"
+                      ? "查看科里最受歡迎的熱賣面料"
                       : "View corlee's top hot selling fabrics"}
                   </p>
                 </div>
