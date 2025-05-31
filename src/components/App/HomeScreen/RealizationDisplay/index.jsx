@@ -11,7 +11,7 @@ function RealizationDisplay() {
   return (
     <div className="realization-container-home">
       <p className="majestic-heading-home">
-        {isMandarin ? "實現成果" : "Realizations"}
+        {isMandarin ? "布料合集" : "Realizations"}
       </p>
       <div className="realization-container1-home">
         <div className="image-container-with-text1-home">

@@ -392,7 +392,7 @@ const singleproduct = () => {
         </div>
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
-          <p className="mainkeytext">{isMandarin ? "完成" : "Finish"}</p>
+          <p className="mainkeytext">{isMandarin ? "表面處理" : "Finish"}</p>
           <div className="maintextans">
             {!loading
               ? isMandarin && product.finish_mandarin
@@ -409,7 +409,7 @@ const singleproduct = () => {
               navigate(`/contact/${product.item_code}`);
             }}
           >
-            {isMandarin ? "需要支持？" : "Need Support ?"}
+            {isMandarin ? "需要支援嗎？" : "Need Support ?"}
           </div>
         </div>
       </div>

@@ -66,7 +66,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "產品" : "Products"}
+              {isMandarin ? "的產品" : "Products"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -78,7 +78,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "活動" : "Events"}
+              {isMandarin ? "" : "Events"}
             </p>
             <p
               className="unique-text-block-bb"

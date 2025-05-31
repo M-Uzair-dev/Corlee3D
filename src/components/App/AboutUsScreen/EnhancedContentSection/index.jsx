@@ -17,8 +17,8 @@ function EnhancedContentSection() {
           </p>
           <p className="order-process-description">
             {isMandarin
-              ? "多年來，我們憑藉優質的產品、可靠的服務和穩定的交付，與全球客戶建立了長期合作關係。"
-              : "Over the years, we've built lasting relationships with clients around the world by delivering quality, reliability, and unmatched service in every order."}
+              ? "一起認識那些選擇共樂力的品牌，也邀請您成為我們下一位合作夥伴！"
+              : "Discover the brands that choose Corlee for their fabric needs, and build a trusted partnership with us!"}
           </p>
         </div>
       </div>

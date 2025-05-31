@@ -14,8 +14,8 @@ function OrderProcessSection() {
             </p>
             <p className="order-process-description">
               {isMandarin
-                ? "從首次詢價到最終交付，我們的流程旨在高效、透明且順暢，確保您每一次都能準時收到高品質面料。"
-                : "From your first inquiry to the final delivery, our process is designed to be smooth, transparent, and efficient—ensuring you receive high-quality fabrics on time, every time."}
+                ? "從第一步詢價到最後出貨，我們致力於讓流程更簡單省心，始終以品質為本，讓您全程滿意。"
+                : "From initial request to final delivery, we make the process easy, always focused on quality and your satisfaction."}
             </p>
           </div>
         </div>

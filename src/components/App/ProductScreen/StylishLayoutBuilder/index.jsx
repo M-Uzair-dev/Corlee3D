@@ -33,7 +33,7 @@ function StylishLayoutBuilder(props) {
             ? `keyword=${
                 searchterm
                   ? searchterm
-                  : name === "Hot Selling" || name == "熱賣"
+                  : name === "Hot Selling" || name == "熱銷款式"
                   ? "best_selling"
                   : name
               }`
@@ -48,7 +48,7 @@ function StylishLayoutBuilder(props) {
             ? `keyword=${
                 searchterm
                   ? searchterm
-                  : name === "Hot Selling" || name == "熱賣"
+                  : name === "Hot Selling" || name == "熱銷款式"
                   ? "best_selling"
                   : name
               }`
@@ -58,7 +58,7 @@ function StylishLayoutBuilder(props) {
         }`}${props.page ? `&page=${props.page}` : ""}`
       );
 
-      if (response.data.results.length > 0) {
+      if (response?.data?.results?.length > 0) {
         setProducts(response.data.results);
         setNoproducts(false);
         let tempfabrics = [];

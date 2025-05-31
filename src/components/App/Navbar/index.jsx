@@ -380,8 +380,8 @@ function Navbar(props) {
                 onClick={() => {
                   navigate(
                     isMandarin
-                      ? "/products/熱賣/科里最受歡迎的熱賣面料"
-                      : "/products/Hot Selling/ All of Corlee's hot seling products."
+                      ? "/products/熱銷款式/查看熱銷款式"
+                      : "/products/Hot Selling/Discover our most popular fabric choices."
                   );
                   setShowprod(false);
                   setOpen(false);
@@ -393,11 +393,11 @@ function Navbar(props) {
                 }}
               >
                 <div className="textdivinnavproductdropdown">
-                  <h1>{isMandarin ? "熱賣" : "Hot Selling"}</h1>
+                  <h1>{isMandarin ? "熱銷款式" : "Hot Selling"}</h1>
                   <p>
                     {isMandarin
-                      ? "查看科里最受歡迎的熱賣面料"
-                      : "View corlee's top hot selling fabrics"}
+                      ? "查看熱銷款式"
+                      : "Discover our most popular fabric choices."}
                   </p>
                 </div>
                 <div

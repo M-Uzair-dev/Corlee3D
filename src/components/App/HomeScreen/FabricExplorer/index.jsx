@@ -73,14 +73,12 @@ function FabricExplorer() {
       <div className="fabric-range-section">
         <div className="fabric-types-section">
           <p className="fabric-type-heading">
-            {isMandarin
-              ? "我們提供多種面料類型！"
-              : "Range of fabric types we offer!"}
+            {isMandarin ? "我們的布料選擇" : "Our Selection of Fabrics"}
           </p>
           <p className="fabric-type-description">
             {isMandarin
-              ? "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit assumenda ."
-              : "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit assumenda ."}
+              ? "從高級材料到可持續選擇，使用我們的 3D 模擬器找到您的完美布料匹配今天！"
+              : "From premium materials to sustainable choices, use our 3D simulator to find your perfect fabric match today!"}
           </p>
         </div>
         <div className="fabric-type-range-container">

@@ -14,16 +14,16 @@ function EventsComponent({ eventDisplayWidgetArgs }) {
             <div className="leftsidecontent">
               <h1>
                 {isMandarin
-                  ? "想與我們預約嗎？"
-                  : "Want to Book an Appointment with us?"}
+                  ? "想更了解？馬上跟我們預約聊聊！"
+                  : "Ready to chat? Book a time that works for you!"}
               </h1>
               <p className="letsgoanddiscussit">
                 {isMandarin ? "讓我們討論一下" : "Let's go & discuss it"}
               </p>
               <p className="content-text-area">
                 {isMandarin
-                  ? "我們期待了解您的需求，並為您量身定制解決方案。請留下您的信息，我們的團隊將盡快與您聯繫，安排專屬預約。"
-                  : "We look forward to learning about your needs and tailoring a solution just for you. Leave your details, and our team will get in touch shortly to schedule your personalized appointment."}
+                  ? "想更深入聊聊合作可能？現在就預約專屬會議，讓我們為你打造最合適的布料！"
+                  : "Schedule a personalized meeting with Corlee to explore your business needs in detail. Book your appointment today and get solutions tailored just for you."}
               </p>
               {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
               <button className="event-card-button">

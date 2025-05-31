@@ -57,9 +57,13 @@ function WelcomePage() {
   return (
     <div className="hero-section2">
       <div className="central-content-panel">
-        <p className="hero-title-text-style">{isMandarin ? "登錄" : "Login"}</p>
+        <p className="hero-title-text-style">
+          {isMandarin ? "您好" : "Welcome to Corlee"}
+        </p>
         <p className="central-text-block">
-          {isMandarin ? "請登錄以繼續" : "Please login to continue"}
+          {isMandarin
+            ? "快登入看更多！"
+            : "Access your account and discover more!"}
         </p>
         <button
           className="button-with-icon"

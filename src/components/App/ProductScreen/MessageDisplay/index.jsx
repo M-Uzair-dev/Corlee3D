@@ -68,8 +68,8 @@ function MessageDisplay(props) {
       <p className="material-description-text-style">
         {props.fav
           ? isMandarin
-            ? "所有你收藏的產品都在這裡"
-            : "All your favourite products are here"
+            ? "Hey，在找最喜歡的款式嗎？這邊可以瀏覽跟篩選喔！"
+            : "Hey, looking for your favorite fabrics? You can view and organize them right here."
           : props.searchterm
           ? isMandarin
             ? "匹配你搜索的產品：" + props.searchterm

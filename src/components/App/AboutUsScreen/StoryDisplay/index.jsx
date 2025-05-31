@@ -5,13 +5,11 @@ function StoryDisplay() {
   const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="story-box">
-      <p className="golden-heading">
+      {/* <p className="golden-heading">
         {isMandarin ? "如何開始" : "How it started"}
-      </p>
+      </p> */}
       <p className="hero-title">
-        {isMandarin
-          ? "我們的故事與對卓越的承諾"
-          : "Our Story & Commitment to Excellence"}
+        {isMandarin ? "關於共樂力" : "The story of Corlee"}
       </p>
     </div>
   );
