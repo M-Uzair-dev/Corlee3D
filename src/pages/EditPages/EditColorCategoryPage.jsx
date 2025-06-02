@@ -95,20 +95,20 @@ function EditColorCategoryPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/color-categories")}
         >
-          ← 返回顏色分類
+          ← 返回
         </button>
       </div>
 
-      <h2 className="edit-heading">編輯顏色分類</h2>
+      <h2 className="edit-heading">編輯顏⾊</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>顏色分類詳細資料</h3>
+          <h3>顏⾊詳情</h3>
 
           <div className="form-group">
-            <label htmlFor="display_name">Display Name</label>
+            <label htmlFor="display_name">顯⽰名稱</label>
             <input
               type="text"
               id="display_name"
@@ -116,26 +116,22 @@ function EditColorCategoryPage() {
               value={formData.display_name}
               onChange={handleInputChange}
               required
-              placeholder="e.g., Navy Blue, Crimson Red"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="display_name_mandarin">
-              Display Name (Mandarin)
-            </label>
+            <label htmlFor="display_name_mandarin">顯⽰名稱 (中⽂)</label>
             <input
               type="text"
               id="display_name_mandarin"
               name="display_name_mandarin"
               value={formData.display_name_mandarin}
               onChange={handleInputChange}
-              placeholder="e.g., 海军蓝，深红色"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="color">Color Value *</label>
+            <label htmlFor="color">顏⾊代碼 *</label>
             <div className="color-picker-container">
               <input
                 type="color"
@@ -159,10 +155,8 @@ function EditColorCategoryPage() {
         </div>
 
         <div className="form-section">
-          <h3>Color Preview</h3>
-          <p className="section-info">
-            This is how your color will appear in the system
-          </p>
+          <h3>顏⾊預覽</h3>
+          <p className="section-info">這是您的顏色在系統中的顯示方式</p>
 
           <div className="color-preview">
             <div
@@ -170,7 +164,7 @@ function EditColorCategoryPage() {
               style={{ backgroundColor: formData.color }}
             ></div>
             <div className="color-name">
-              {formData.display_name || "Color Name"}
+              {formData.display_name || "顏色名稱"}
             </div>
           </div>
         </div>
@@ -181,14 +175,14 @@ function EditColorCategoryPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/color-categories")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Updating..." : "Update Color Category"}
+            {isSubmitting ? "更新中..." : "更新顏⾊"}
           </button>
         </div>
       </form>

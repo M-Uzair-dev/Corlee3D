@@ -75,21 +75,21 @@ function CreateUserPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/users")}
         >
-          ← 返回用戶
+          ← 返回
         </button>
       </div>
 
-      <h2 className="create-heading">新增用戶</h2>
+      <h2 className="create-heading">新增使⽤者</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-section">
-          <h3>Account Information</h3>
+          <h3>帳號資訊</h3>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="username">Username *</label>
+              <label htmlFor="username">使⽤者名稱 *</label>
               <input
                 type="text"
                 id="username"
@@ -97,12 +97,11 @@ function CreateUserPage() {
                 value={formData.username}
                 onChange={handleInputChange}
                 required
-                placeholder="Enter username"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="password">Password *</label>
+              <label htmlFor="password">密碼 *</label>
               <input
                 type="password"
                 id="password"
@@ -110,13 +109,12 @@ function CreateUserPage() {
                 value={formData.password}
                 onChange={handleInputChange}
                 required
-                placeholder="Enter password"
               />
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="email">Email *</label>
+            <label htmlFor="email">信箱 *</label>
             <input
               type="email"
               id="email"
@@ -124,16 +122,15 @@ function CreateUserPage() {
               value={formData.email}
               onChange={handleInputChange}
               required
-              placeholder="Enter email"
             />
           </div>
         </div>
 
         <div className="form-section">
-          <h3>Contact Information</h3>
+          <h3>聯絡資訊</h3>
 
           <div className="form-group">
-            <label htmlFor="name">Full Name *</label>
+            <label htmlFor="name">姓名 *</label>
             <input
               type="text"
               id="name"
@@ -141,32 +138,29 @@ function CreateUserPage() {
               value={formData.name}
               onChange={handleInputChange}
               required
-              placeholder="Enter full name"
             />
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="phone">Phone Number</label>
+              <label htmlFor="phone">電話號碼</label>
               <input
                 type="text"
                 id="phone"
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="Enter phone number"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="company_name">Company</label>
+              <label htmlFor="company_name">公司</label>
               <input
                 type="text"
                 id="company_name"
                 name="company_name"
                 value={formData.company_name}
                 onChange={handleInputChange}
-                placeholder="Enter company name"
               />
             </div>
           </div>
@@ -206,14 +200,14 @@ function CreateUserPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/users")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Creating..." : "Create User"}
+            {isSubmitting ? "建立中..." : "建立使⽤者"}
           </button>
         </div>
       </form>

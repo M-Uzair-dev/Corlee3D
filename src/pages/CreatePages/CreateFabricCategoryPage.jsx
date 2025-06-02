@@ -94,20 +94,20 @@ function CreateFabricCategoryPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/fabric-categories")}
         >
-          ← 返回布料分類
+          ← 返回
         </button>
       </div>
 
-      <h2 className="create-heading">新增布料分類</h2>
+      <h2 className="create-heading">新增布種</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-section">
-          <h3>分類詳細資料</h3>
+          <h3>布種詳情</h3>
 
           <div className="form-group">
-            <label htmlFor="name">Category Name *</label>
+            <label htmlFor="name">布種名稱 *</label>
             <input
               type="text"
               id="name"
@@ -115,52 +115,46 @@ function CreateFabricCategoryPage() {
               value={formData.name}
               onChange={handleInputChange}
               required
-              placeholder="e.g., Cotton, Silk, Linen"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="name_mandarin">Category Name (Mandarin)</label>
+            <label htmlFor="name_mandarin">布種名稱 (中⽂)</label>
             <input
               type="text"
               id="name_mandarin"
               name="name_mandarin"
               value={formData.name_mandarin}
               onChange={handleInputChange}
-              placeholder="e.g., 棉布，丝绸，亚麻布"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="description">描述</label>
             <textarea
               id="description"
               name="description"
               value={formData.description}
               onChange={handleInputChange}
               rows="4"
-              placeholder="Enter category description (optional)"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="description_mandarin">Description (Mandarin)</label>
+            <label htmlFor="description_mandarin">描述(中⽂)</label>
             <textarea
               id="description_mandarin"
               name="description_mandarin"
               value={formData.description_mandarin}
               onChange={handleInputChange}
               rows="4"
-              placeholder="輸入類別描述（可選）"
             />
           </div>
         </div>
 
         <div className="form-section">
-          <h3>Category Image</h3>
-          <p className="section-info">
-            Add an image to represent this category (optional)
-          </p>
+          <h3>布種圖片</h3>
+          <p className="section-info">新增布種的代表圖片（可選）</p>
 
           <div className="image-preview-container">
             {formData.image && imageDetails ? (
@@ -175,7 +169,7 @@ function CreateFabricCategoryPage() {
               <div className="no-image-container">
                 <div className="no-image-placeholder">
                   <FolderIcon />
-                  <span>No image selected</span>
+                  <span>尚未選擇圖片</span>
                 </div>
               </div>
             )}
@@ -185,7 +179,7 @@ function CreateFabricCategoryPage() {
               className="select-image-button"
               onClick={() => setIsGalleryOpen(true)}
             >
-              {formData.image ? "Change Image" : "Select Image"}
+              {formData.image ? "更換圖片" : "選擇圖片"}
             </button>
           </div>
         </div>
@@ -196,14 +190,14 @@ function CreateFabricCategoryPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/fabric-categories")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Creating..." : "Create Category"}
+            {isSubmitting ? "建立中..." : "建立布種"}
           </button>
         </div>
       </form>

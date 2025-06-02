@@ -38,11 +38,6 @@
   background-color: transparent;
 }
 
-.create-page-container .edit-heading {
-  margin-top: 0;
-  color: #4285f4; /* Different color to distinguish from edit pages */
-}
-
 /* Additional styling for create button */
 .create-page-container .submit-button {
   background-color: #34a853; /* Green to indicate creation */

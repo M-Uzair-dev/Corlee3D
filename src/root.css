@@ -6552,3 +6552,11 @@ button:hover:not(.button-with-icon2) {
   font-size: 16px !important;
   margin-top: 0;
 }
+.no-image {
+  font-size: 10px !important;
+  white-space: nowrap;
+}
+.page-actions,
+.page-actions button {
+  margin-bottom: 0 !important;
+}

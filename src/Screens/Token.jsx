@@ -39,6 +39,8 @@ const Token = () => {
   }, []);
   const [emailNotVerified, setEmailNotVerified] = useState(false);
 
+  const isMandarin = localStorage.getItem("isMandarin");
+
   const getUser = async () => {
     if (localStorage.getItem("token")) {
       const res = await api.get("/user/");
@@ -64,7 +66,9 @@ const Token = () => {
     <>
       <Toaster position="bottom-left" closeButton />
       {emailNotVerified && (
-        <div className="noemailband">Verify your email address.</div>
+        <div className="noemailband">
+          {isMandarin ? "驗證您的地址" : "Verify your email address."}
+        </div>
       )}
       <Outlet />
     </>

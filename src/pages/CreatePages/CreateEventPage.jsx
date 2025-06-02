@@ -114,7 +114,7 @@ function CreateEventPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/events")}
         >
-          ← 返回活動
+          ← 返回
         </button>
       </div>
 
@@ -124,18 +124,17 @@ function CreateEventPage() {
 
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-section">
-          <h3 className="section-title">活動詳細資料</h3>
+          <h3 className="section-title">活動詳情</h3>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="title">Event Title*</label>
+              <label htmlFor="title">活動標題 *</label>
               <input
                 type="text"
                 id="title"
                 name="title"
                 value={formData.title}
                 onChange={handleInputChange}
-                placeholder="Enter event title"
                 required
               />
             </div>
@@ -143,51 +142,46 @@ function CreateEventPage() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="title_mandarin">Event Title (Mandarin)</label>
+              <label htmlFor="title_mandarin">活動標題 (中⽂)</label>
               <input
                 type="text"
                 id="title_mandarin"
                 name="title_mandarin"
                 value={formData.title_mandarin}
                 onChange={handleInputChange}
-                placeholder="輸入活動標題"
               />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="description">Description</label>
+              <label htmlFor="description">描述</label>
               <textarea
                 id="description"
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
                 rows="4"
-                placeholder="Describe the event"
               />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="description_mandarin">
-                Description (Mandarin)
-              </label>
+              <label htmlFor="description_mandarin">描述(中⽂)</label>
               <textarea
                 id="description_mandarin"
                 name="description_mandarin"
                 value={formData.description_mandarin}
                 onChange={handleInputChange}
                 rows="4"
-                placeholder="描述活動"
               />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="date">Event Date*</label>
+              <label htmlFor="date">活動⽇期 *</label>
               <input
                 type="date"
                 id="date"
@@ -198,7 +192,7 @@ function CreateEventPage() {
               />
             </div>
             <div className="form-group">
-              <label htmlFor="time">Event Time</label>
+              <label htmlFor="time">活動時間</label>
               <input
                 type="time"
                 id="time"
@@ -211,14 +205,13 @@ function CreateEventPage() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="location">Location*</label>
+              <label htmlFor="location">地點 *</label>
               <input
                 type="text"
                 id="location"
                 name="location"
                 value={formData.location}
                 onChange={handleInputChange}
-                placeholder="Enter event location"
                 required
               />
             </div>
@@ -226,64 +219,60 @@ function CreateEventPage() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="location_mandarin">Location (Mandarin)</label>
+              <label htmlFor="location_mandarin">地點(中⽂)</label>
               <input
                 type="text"
                 id="location_mandarin"
                 name="location_mandarin"
                 value={formData.location_mandarin}
                 onChange={handleInputChange}
-                placeholder="輸入活動地點"
               />
             </div>
           </div>
         </div>
 
         <div className="form-section">
-          <h3 className="section-title">Contact Information</h3>
+          <h3 className="section-title">聯絡資訊</h3>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="url">Event URL</label>
+              <label htmlFor="url">活動網址</label>
               <input
                 type="url"
                 id="url"
                 name="url"
                 value={formData.url}
                 onChange={handleInputChange}
-                placeholder="https://example.com/event"
               />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="email">Contact Email</label>
+              <label htmlFor="email">聯絡信箱</label>
               <input
                 type="email"
                 id="email"
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                placeholder="event@example.com"
               />
             </div>
             <div className="form-group">
-              <label htmlFor="phone">Contact Phone</label>
+              <label htmlFor="phone">聯絡電話</label>
               <input
                 type="tel"
                 id="phone"
                 name="phone"
                 value={formData.phone}
                 onChange={handleInputChange}
-                placeholder="(123) 456-7890"
               />
             </div>
           </div>
         </div>
 
         <div className="form-section">
-          <h3 className="section-title">Event Image</h3>
+          <h3 className="section-title">活動圖片</h3>
 
           <div className="image-selection">
             <div className="selected-image">
@@ -300,7 +289,7 @@ function CreateEventPage() {
                   }}
                 />
               ) : (
-                <div className="no-image-placeholder">No image selected</div>
+                <div className="no-image-placeholder">尚未選擇圖片</div>
               )}
             </div>
 
@@ -309,7 +298,7 @@ function CreateEventPage() {
               className="select-image-button"
               onClick={openMediaGallery}
             >
-              {formData.photo ? "Change Image" : "Select Image"}
+              {formData.photo ? "更換圖片" : "選擇圖片"}
             </button>
           </div>
         </div>
@@ -320,15 +309,15 @@ function CreateEventPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/events")}
           >
-            Cancel
+            取消
           </button>
           <button type="submit" className="submit-button" disabled={isLoading}>
-            {isLoading ? "Creating..." : "Create Event"}
+            {isLoading ? "建立中..." : "建立活動"}
           </button>
         </div>
       </form>
 
-      {isLoading && <LoadingSpinner text="Creating event..." overlay />}
+      {isLoading && <LoadingSpinner text="建立活動中..." overlay />}
 
       <MediaGalleryPopup
         isOpen={isGalleryOpen}

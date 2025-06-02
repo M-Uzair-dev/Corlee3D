@@ -43,10 +43,10 @@ const Fabrics = () => {
       if (response.data.results) {
         // Transform API data to match table structure
         const transformedData = response.data.results.map((fabric) => ({
-          title: fabric.title || "Unnamed",
-          category: fabric.product_category_name || "Uncategorized",
-          item_code: fabric.item_code || "N/A",
-          hot_selling: fabric.is_hot_selling ? "Yes" : "No",
+          title: fabric.title || "未命名",
+          category: fabric.product_category_name || "未分類",
+          item_code: fabric.item_code || "無",
+          hot_selling: fabric.is_hot_selling ? "是" : "否",
           id: fabric.id,
         }));
 

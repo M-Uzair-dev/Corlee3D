@@ -139,21 +139,21 @@ function EditUserPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/users")}
         >
-          ← 返回用戶
+          ← 返回
         </button>
       </div>
 
-      <h2 className="edit-heading">編輯用戶</h2>
+      <h2 className="edit-heading">編輯使⽤者</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>用戶詳細資料</h3>
+          <h3>帳號資訊</h3>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="username">Username *</label>
+              <label htmlFor="username">使⽤者名稱 *</label>
               <input
                 type="text"
                 id="username"
@@ -161,12 +161,11 @@ function EditUserPage() {
                 value={formData.username}
                 onChange={handleInputChange}
                 required
-                placeholder="Enter username"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="email">Email *</label>
+              <label htmlFor="email">信箱 *</label>
               <input
                 type="email"
                 id="email"
@@ -174,13 +173,12 @@ function EditUserPage() {
                 value={formData.email}
                 onChange={handleInputChange}
                 required
-                placeholder="Enter email"
               />
             </div>
           </div>
 
           <div className="form-group">
-            <label htmlFor="name">Full Name *</label>
+            <label htmlFor="name">姓名 *</label>
             <input
               type="text"
               id="name"
@@ -188,57 +186,30 @@ function EditUserPage() {
               value={formData.name}
               onChange={handleInputChange}
               required
-              placeholder="Enter full name"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="company_name">Company Name</label>
+            <label htmlFor="company_name">公司</label>
             <input
               type="text"
               id="company_name"
               name="company_name"
               value={formData.company_name}
               onChange={handleInputChange}
-              placeholder="Enter company name"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="phone">Phone</label>
+            <label htmlFor="phone">電話號碼</label>
             <input
               type="text"
               id="phone"
               name="phone"
               value={formData.phone}
               onChange={handleInputChange}
-              placeholder="Enter phone number"
             />
           </div>
-
-          {/* <div className="form-row checkboxes">
-            <div className="form-group checkbox-group">
-              <input
-                type="checkbox"
-                id="is_staff"
-                name="is_staff"
-                checked={formData.is_staff}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="is_staff">Admin Access</label>
-            </div>
-
-            <div className="form-group checkbox-group">
-              <input
-                type="checkbox"
-                id="is_active"
-                name="is_active"
-                checked={formData.is_active}
-                onChange={handleInputChange}
-              />
-              <label htmlFor="is_active">Active Account</label>
-            </div>
-          </div> */}
         </div>
 
         <div className="form-actions">
@@ -247,14 +218,14 @@ function EditUserPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/users")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Updating..." : "Update User"}
+            {isSubmitting ? "更新中..." : "更新使⽤者"}
           </button>
         </div>
       </form>

@@ -80,7 +80,7 @@ function EditBlogCategoryPage() {
         className="dashboard-content-card"
         style={{ position: "relative", minHeight: "300px" }}
       >
-        <LoadingSpinner text="Loading blog category data..." overlay />
+        <LoadingSpinner text="載入分類資料中..." overlay />
       </div>
     );
   }
@@ -92,11 +92,11 @@ function EditBlogCategoryPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/blog-categories")}
         >
-          ← 返回部落格分類
+          ← 返回
         </button>
       </div>
 
-      <h2 className="edit-heading">編輯部落格分類</h2>
+      <h2 className="edit-heading">編輯⽂章分類</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
@@ -105,7 +105,7 @@ function EditBlogCategoryPage() {
           <h3>分類詳細資料</h3>
 
           <div className="form-group">
-            <label htmlFor="name">Category Name *</label>
+            <label htmlFor="name">分類名稱 *</label>
             <input
               type="text"
               id="name"
@@ -113,19 +113,17 @@ function EditBlogCategoryPage() {
               value={formData.name}
               onChange={handleInputChange}
               required
-              placeholder="e.g., Fashion Trends, Industry News"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="name_mandarin">Category Name (Mandarin)</label>
+            <label htmlFor="name_mandarin">分類名稱(中⽂)</label>
             <input
               type="text"
               id="name_mandarin"
               name="name_mandarin"
               value={formData.name_mandarin}
               onChange={handleInputChange}
-              placeholder="e.g., 時尚趨勢，行業新聞"
             />
           </div>
         </div>
@@ -136,14 +134,14 @@ function EditBlogCategoryPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/blog-categories")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Updating..." : "Update Category"}
+            {isSubmitting ? "更新中..." : "更新分類"}
           </button>
         </div>
       </form>

@@ -90,7 +90,7 @@ const DashboardHome = () => {
               <FaBox />
             </div>
             <div className="stat-content">
-              <h3 className="stat-label">布料總數</h3>
+              <h3 className="stat-label">所有布料</h3>
               <p className="stat-value">{analytics.total_fabrics}</p>
             </div>
           </div>
@@ -103,7 +103,7 @@ const DashboardHome = () => {
               <FaUsers />
             </div>
             <div className="stat-content">
-              <h3 className="stat-label">使用者總數</h3>
+              <h3 className="stat-label">所有⽤⼾</h3>
               <p className="stat-value">{analytics.total_users}</p>
             </div>
           </div>
@@ -116,7 +116,7 @@ const DashboardHome = () => {
               <FaShoppingCart />
             </div>
             <div className="stat-content">
-              <h3 className="stat-label">訂單總數</h3>
+              <h3 className="stat-label">所有訂單</h3>
               <p className="stat-value">{analytics.total_orders}</p>
             </div>
           </div>
@@ -129,7 +129,7 @@ const DashboardHome = () => {
               <FaChartLine />
             </div>
             <div className="stat-content">
-              <h3 className="stat-label">文章總數</h3>
+              <h3 className="stat-label">所有⽂章</h3>
               <p className="stat-value">{analytics.total_blogs}</p>
             </div>
           </div>
@@ -141,7 +141,7 @@ const DashboardHome = () => {
         {/* Top Ordered Fabrics Chart */}
         <div className="chart-card" style={{ flex: 1 }}>
           <div className="chart-header">
-            <h3 className="chart-title">熱門布料訂單</h3>
+            <h3 className="chart-title">熱銷布料排⾏</h3>
             <div className="chart-actions"></div>
           </div>
           <div
@@ -155,7 +155,7 @@ const DashboardHome = () => {
         {/* Top Ordered Categories Chart */}
         <div className="chart-card" style={{ flex: 1 }}>
           <div className="chart-header">
-            <h3 className="chart-title">熱門布種訂單</h3>
+            <h3 className="chart-title">熱銷種類排⾏</h3>
             <div className="chart-actions"></div>
           </div>
           <div

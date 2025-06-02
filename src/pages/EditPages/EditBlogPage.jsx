@@ -155,7 +155,7 @@ function EditBlogPage() {
   };
 
   if (isLoading) {
-    return <LoadingSpinner text="Loading blog..." />;
+    return <LoadingSpinner text="載入⽂章中..." />;
   }
 
   return (
@@ -165,20 +165,20 @@ function EditBlogPage() {
           className="back-button"
           onClick={() => navigate("/dashboard/blogs")}
         >
-          ← 返回部落格
+          ← 返回
         </button>
       </div>
 
-      <h2 className="edit-heading">編輯部落格</h2>
+      <h2 className="edit-heading">編輯⽂章</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
         <div className="form-section">
-          <h3>部落格資訊</h3>
+          <h3>⽂章資訊</h3>
 
           <div className="form-group">
-            <label htmlFor="title">Title *</label>
+            <label htmlFor="title">標題 *</label>
             <input
               type="text"
               id="title"
@@ -186,24 +186,22 @@ function EditBlogPage() {
               value={formData.title}
               onChange={handleInputChange}
               required
-              placeholder="Enter blog title"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="title_mandarin">Title (Mandarin)</label>
+            <label htmlFor="title_mandarin">標題(中⽂)</label>
             <input
               type="text"
               id="title_mandarin"
               name="title_mandarin"
               value={formData.title_mandarin}
               onChange={handleInputChange}
-              placeholder="Enter blog title in Mandarin"
             />
           </div>
 
           <div className="form-group">
-            <label htmlFor="content">Content *</label>
+            <label htmlFor="content">內⽂ *</label>
             <ReactQuill
               value={formData.content}
               onChange={handleContentChange}
@@ -232,7 +230,7 @@ function EditBlogPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="content_mandarin">Content (Mandarin)</label>
+            <label htmlFor="content_mandarin">內⽂(中⽂)</label>
             <ReactQuill
               value={formData.content_mandarin}
               onChange={handleContentMandarinChange}
@@ -261,7 +259,7 @@ function EditBlogPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="author">Author *</label>
+            <label htmlFor="author">作者 *</label>
             <select
               id="author"
               name="author"
@@ -269,17 +267,17 @@ function EditBlogPage() {
               onChange={handleInputChange}
               required
             >
-              <option value="">Select an author</option>
+              <option value="">選擇作者</option>
               {users.map((user) => (
                 <option key={user.id} value={user.id}>
-                  {user.name}
+                  {user.name || user.username}
                 </option>
               ))}
             </select>
           </div>
 
           <div className="form-group">
-            <label htmlFor="category">Category *</label>
+            <label htmlFor="category">分類 *</label>
             <select
               id="category"
               name="category"
@@ -287,32 +285,43 @@ function EditBlogPage() {
               onChange={handleInputChange}
               required
             >
-              <option value="">Select a category</option>
+              <option value="">選擇分類</option>
               {categories.map((category) => (
                 <option key={category.id} value={category.id}>
-                  {category.name}
+                  {category.name_mandarin || category.name}
                 </option>
               ))}
             </select>
           </div>
+        </div>
 
-          <div className="form-group">
-            <label>Featured Image</label>
-            <div className="image-preview">
-              {selectedImage && (
+        <div className="form-section">
+          <h3>封⾯</h3>
+          <div className="image-selection">
+            <div className="selected-image">
+              {selectedImage ? (
                 <img
                   src={selectedImage.file}
                   alt="Selected"
                   className="preview-image"
+                  onError={(e) => {
+                    console.log("Image load error");
+                    e.target.onerror = null;
+                    e.target.src =
+                      "https://via.placeholder.com/800x400?text=Image+Not+Available";
+                  }}
                 />
+              ) : (
+                <div className="no-image-placeholder">尚未選擇圖片</div>
               )}
             </div>
+
             <button
               type="button"
               className="select-image-button"
               onClick={() => setShowMediaGallery(true)}
             >
-              {selectedImage ? "Change Image" : "Select Image"}
+              {selectedImage ? "更換圖片" : "選擇圖片"}
             </button>
           </div>
         </div>
@@ -323,26 +332,25 @@ function EditBlogPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/blogs")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Updating..." : "Update Blog"}
+            {isSubmitting ? "更新中..." : "更新⽂章"}
           </button>
         </div>
       </form>
 
-      {showMediaGallery && (
-        <MediaGallery
-          onClose={() => setShowMediaGallery(false)}
-          onSelect={handleImageSelect}
-        />
-      )}
+      {isSubmitting && <LoadingSpinner text="更新⽂章中..." overlay />}
 
-      {isSubmitting && <LoadingSpinner text="Updating blog..." overlay />}
+      <MediaGallery
+        isOpen={showMediaGallery}
+        setIsOpen={setShowMediaGallery}
+        onSelectImage={handleImageSelect}
+      />
 
       <style jsx>{`
         .edit-page-container {

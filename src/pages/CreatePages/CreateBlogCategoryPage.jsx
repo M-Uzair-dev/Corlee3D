@@ -53,17 +53,15 @@ function CreateBlogCategoryPage() {
       className="dashboard-content-card create-page-container"
       style={{ position: "relative" }}
     >
-      {isSubmitting && <LoadingSpinner text="Creating category..." overlay />}
+      {isSubmitting && <LoadingSpinner text="建立分類中..." overlay />}
       <div className="create-page-header">
         <button
           className="back-button"
           onClick={() => navigate("/dashboard/blog-categories")}
         >
-          ← 返回部落格分類
+          ← 返回
         </button>
       </div>
-
-      <h2 className="create-heading">新增部落格分類</h2>
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
@@ -72,7 +70,7 @@ function CreateBlogCategoryPage() {
           <h3>分類詳細資料</h3>
 
           <div className="form-group">
-            <label htmlFor="name">Category Name *</label>
+            <label htmlFor="name">分類名稱 *</label>
             <input
               type="text"
               id="name"
@@ -85,7 +83,7 @@ function CreateBlogCategoryPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="name_mandarin">Category Name (Mandarin)</label>
+            <label htmlFor="name_mandarin">分類名稱(中⽂)</label>
             <input
               type="text"
               id="name_mandarin"
@@ -103,14 +101,14 @@ function CreateBlogCategoryPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/blog-categories")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Creating..." : "Create Category"}
+            {isSubmitting ? "建立中..." : "建立分類"}
           </button>
         </div>
       </form>
