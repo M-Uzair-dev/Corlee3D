@@ -17,7 +17,13 @@ const Thankyou = () => {
   }, []);
   return (
     <div className="thankyou">
-      <div className="thankyoucontainer">
+      <div
+        className={
+          isMandarin
+            ? "chinese-thankyoucontainer thankyoucontainer"
+            : "thankyoucontainer"
+        }
+      >
         <div className="svgcontainerinthankyou">
           <svg
             width="76"

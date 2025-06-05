@@ -52,9 +52,7 @@ function MessageDisplay(props) {
     <div className="material-section">
       <p className="material-heading-text-style">
         {props.fav
-          ? isMandarin
-            ? "收藏"
-            : "Favourites"
+          ? "Favourites"
           : props.searchterm
           ? isMandarin
             ? "搜索產品"
@@ -67,9 +65,7 @@ function MessageDisplay(props) {
       </p>
       <p className="material-description-text-style">
         {props.fav
-          ? isMandarin
-            ? "Hey，在找最喜歡的款式嗎？這邊可以瀏覽跟篩選喔！"
-            : "Hey, looking for your favorite fabrics? You can view and organize them right here."
+          ? "Hey, looking for your favorite fabrics? You can view and organize them right here."
           : props.searchterm
           ? isMandarin
             ? "匹配你搜索的產品：" + props.searchterm
@@ -81,7 +77,7 @@ function MessageDisplay(props) {
         onClick={() => setShowfilter(!showfilter)}
       >
         <SvgIcon1 className="svg-container4" />
-        {isMandarin ? "過濾" : "Filter"}
+        {isMandarin ? "篩選" : "Filter"}
       </button>
       <div
         className={

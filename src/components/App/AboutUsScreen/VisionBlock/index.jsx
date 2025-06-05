@@ -10,9 +10,7 @@ function VisionBlock() {
         alt=""
         className="vision-icon"
       />
-      <p className="visionary-heading">
-        {isMandarin ? "我們的願景" : "Our Vision"}
-      </p>
+      <p className="visionary-heading">Our Vision</p>
     </div>
   );
 }

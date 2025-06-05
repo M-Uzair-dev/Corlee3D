@@ -66,7 +66,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "的產品" : "Products"}
+              {isMandarin ? "產品" : "Products"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -78,7 +78,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "" : "Events"}
+              {isMandarin ? "活動" : "Events"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -90,7 +90,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "關於我們" : "About us"}
+              {isMandarin ? "品牌故事" : "About us"}
             </p>
             <p
               className="unique-text-block-bb"
@@ -102,7 +102,7 @@ function BottomBar(props) {
                 cursor: "pointer",
               }}
             >
-              {isMandarin ? "博客" : "Blogs"}
+              {isMandarin ? "⽂章" : "Blogs"}
             </p>
           </div>
           <div className="sidebar-container-bb" onClick={() => navigate("/")}>
@@ -151,7 +151,7 @@ function BottomBar(props) {
             }}
             className="link-underline-white-bb"
           >
-            {isMandarin ? "條款" : "Terms"}
+            {isMandarin ? "隱私權" : "Terms"}
           </a>
           <span className="brand-text-style-bb">, </span>
           <a
@@ -162,7 +162,7 @@ function BottomBar(props) {
             }}
             className="link-underline-white-bb"
           >
-            {isMandarin ? "隱私" : "Privacy"}
+            {isMandarin ? "條款" : "Privacy"}
           </a>
           <span className="brand-text-style-bb"> &amp; </span>
           <a

@@ -88,7 +88,7 @@ const GetPersonalDetails = (props) => {
             />
           </svg>
         </div>
-        <h1>{isMandarin ? "個人詳細資料" : "Personal Details"}</h1>
+        <h1>{isMandarin ? "個⼈資訊" : "Personal Details"}</h1>
         <p>
           {isMandarin ? "更新您的公司詳細資料" : "Update Your company details"}
         </p>

@@ -8,7 +8,6 @@ function StylishProductDisplay(props) {
   const navigate = useNavigate();
   const isMandarin = localStorage.getItem("isMandarin");
   const [products, setProducts] = useState(props.products);
-
   function removeDuplicates(productsArray) {
     if (productsArray.length === 0) {
     } else {
@@ -96,9 +95,13 @@ function StylishProductDisplay(props) {
               <div className="textdiv">
                 <h2>{prod.item_code}</h2>
                 <p>
-                  {prod.product_category}{" "}
+                  {isMandarin && prod.product_category_mandarin
+                    ? prod.product_category_mandarin
+                    : prod.product_category}{" "}
                   <img className="arrow" src={arrow} alt="" />{" "}
-                  {prod.finish ?? "No Finish Info"}
+                  {isMandarin && prod.finish_mandarin
+                    ? prod.finish_mandarin
+                    : prod.finish ?? "No Finish Info"}
                 </p>
               </div>
             </div>

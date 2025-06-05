@@ -91,7 +91,7 @@ const GetContactDetails = (props) => {
             />
           </svg>
         </div>
-        <h1>{isMandarin ? "聯絡詳細資料" : "Contact Details"}</h1>
+        <h1>{isMandarin ? "聯絡資訊" : "Contact Details"}</h1>
         <p>
           {isMandarin ? "更新您的聯絡詳細資料" : "Update Your contact details"}
         </p>

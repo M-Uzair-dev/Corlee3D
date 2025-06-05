@@ -7,7 +7,7 @@ function FormSectionWithMessage(props) {
   return (
     <div className="form-container">
       <p className="header-title-text-style">
-        {isMandarin ? "填寫以下表格" : "Fill out the form below"}
+        {isMandarin ? "請填寫下⽅資訊" : "Fill out the form below"}
       </p>
       <CustomerFormSection {...props} />
     </div>

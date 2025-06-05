@@ -31,7 +31,7 @@ const singleproduct = () => {
   const [colors, setColors] = useState([]);
   const [textures, setTextures] = useState([]);
 
-  let text = "(by yard)";
+  let text = isMandarin ? "(以碼為單位)" : "(by yard)";
   const navigate = useNavigate();
 
   const togglefav = async () => {
@@ -353,7 +353,7 @@ const singleproduct = () => {
                       wrapperClass=""
                     />
                   ) : (
-                    `${isMandarin ? "結帳" : "Check out"}`
+                    `${isMandarin ? "提交訂單" : "Check out"}`
                   )}
                 </button>
               </div>
@@ -363,14 +363,14 @@ const singleproduct = () => {
       </div>
       <div className="horizontaldiv">
         <div className="onedivofproduct">
-          <p className="mainkeytext">{isMandarin ? "商品編號" : "Item Code"}</p>
+          <p className="mainkeytext">{isMandarin ? "型號" : "Item Code"}</p>
           <div className="maintextans">
             {!loading ? product.item_code : "loading..."}
           </div>
         </div>
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
-          <p className="mainkeytext">{isMandarin ? "成分" : "Composition"}</p>
+          <p className="mainkeytext">{isMandarin ? "規格" : "Composition"}</p>
           <div className="maintextans">
             {!loading
               ? isMandarin && product.composition_mandarin
@@ -392,7 +392,7 @@ const singleproduct = () => {
         </div>
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
-          <p className="mainkeytext">{isMandarin ? "表面處理" : "Finish"}</p>
+          <p className="mainkeytext">{isMandarin ? "加⼯處理" : "Finish"}</p>
           <div className="maintextans">
             {!loading
               ? isMandarin && product.finish_mandarin
@@ -409,7 +409,7 @@ const singleproduct = () => {
               navigate(`/contact/${product.item_code}`);
             }}
           >
-            {isMandarin ? "需要支援嗎？" : "Need Support ?"}
+            {isMandarin ? "聯絡我們 " : "Need Support ?"}
           </div>
         </div>
       </div>

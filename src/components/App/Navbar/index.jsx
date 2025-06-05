@@ -156,8 +156,8 @@ function Navbar(props) {
           }}
         >
           <div className="maintoptext">
-            <h1>{isMandarin ? "聯絡我們" : "Contact Us"}</h1>
-            <p>{isMandarin ? "我們就在你身邊！" : "We are here for you!"}</p>
+            <h1>{isMandarin ? "聯絡窗⼝" : "Contact Us"}</h1>
+            <p>{isMandarin ? "" : "We are here for you!"}</p>
             <div className="closeicon" onClick={changeShowcall}>
               <svg
                 width="12"
@@ -217,10 +217,10 @@ function Navbar(props) {
               {/* // whatsapp, postal_code, phone, longitude, line, latitude,
               instagram, facebook, email, country, address */}
               <a href={`mailto:${localStorage.getItem("email")}`}>
-                {isMandarin ? "電子郵件" : "Email"}
+                {isMandarin ? "郵件" : "Email"}
               </a>{" "}
             </div>
-            <div className="singlecalldetail">
+            {/* <div className="singlecalldetail">
               <svg
                 width="24"
                 height="24"
@@ -241,7 +241,7 @@ function Navbar(props) {
               >
                 Whatsapp
               </p>
-            </div>
+            </div> */}
             <div className="singlecalldetail">
               <svg
                 width="24"
@@ -263,7 +263,6 @@ function Navbar(props) {
                   window.open(localStorage.getItem("line"), "_blank");
                 }}
               >
-                {" "}
                 Line
               </p>
             </div>
@@ -278,7 +277,7 @@ function Navbar(props) {
               }}
               className="needhelp"
             >
-              <p>{isMandarin ? "需要幫助嗎？" : "Need help ?"}</p>
+              <p>{isMandarin ? "業務洽詢表單" : "Need help ?"}</p>
             </p>
           </div>
         </div>
@@ -380,7 +379,7 @@ function Navbar(props) {
                 onClick={() => {
                   navigate(
                     isMandarin
-                      ? "/products/熱銷款式/查看熱銷款式"
+                      ? "/products/熱銷/查看熱銷款式"
                       : "/products/Hot Selling/Discover our most popular fabric choices."
                   );
                   setShowprod(false);
@@ -393,7 +392,7 @@ function Navbar(props) {
                 }}
               >
                 <div className="textdivinnavproductdropdown">
-                  <h1>{isMandarin ? "熱銷款式" : "Hot Selling"}</h1>
+                  <h1>{isMandarin ? "熱銷" : "Hot Selling"}</h1>
                   <p>
                     {isMandarin
                       ? "查看熱銷款式"

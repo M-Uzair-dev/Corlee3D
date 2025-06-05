@@ -72,7 +72,7 @@ function CustomerInformationForm(props) {
           {data.request_type === "product" && (
             <div className="horizontal-centered-label-container">
               <label htmlFor="name" className="bold-black-label">
-                {isMandarin ? "產品代碼" : "Item Code"}
+                {isMandarin ? "商品型號" : "Item Code"}
               </label>
               <input
                 name="item_code"
@@ -113,7 +113,7 @@ function CustomerInformationForm(props) {
             {/* Input with Label Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
             <div className="horizontal-centered-label-container">
               <label htmlFor="email" className="bold-black-label">
-                {isMandarin ? "電子郵件" : "Email"}
+                {isMandarin ? "電⼦郵件" : "Email"}
               </label>
               <input
                 id="email"
@@ -172,7 +172,7 @@ function CustomerInformationForm(props) {
             ? "提交中..."
             : "Submitting..."
           : isMandarin
-          ? "提交"
+          ? "送出"
           : "Submit"}
       </button>
     </>

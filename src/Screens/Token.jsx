@@ -1,10 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Toaster } from "sonner";
+import { Toaster, toast } from "sonner";
 import { api, setAuthToken } from "../config/api";
 import { Outlet, useNavigate } from "react-router-dom";
+
 const Token = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
+  const [showScrollTop, setShowScrollTop] = useState(false);
+
   if (token) {
     setAuthToken(token);
   }
@@ -60,7 +63,44 @@ const Token = () => {
   useEffect(() => {
     window.scrollTo(0, 0);
     getUser();
+
+    const handleScroll = () => {
+      if (window.scrollY > 200) {
+        setShowScrollTop(true);
+      } else {
+        setShowScrollTop(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
+  };
+
+  const handleResendEmail = async () => {
+    try {
+      const response = await api.post("/resend-verification-email/");
+      console.log(response);
+      if (response.status === 200) {
+        toast.success(
+          isMandarin
+            ? "驗證郵件已重新發送"
+            : "Verification email has been resent!"
+        );
+      }
+    } catch (error) {
+      const errorMessage =
+        error.response?.data?.message ||
+        (isMandarin ? "發送郵件時出錯" : "Error sending verification email");
+      toast.error(errorMessage);
+    }
+  };
 
   return (
     <>
@@ -68,9 +108,111 @@ const Token = () => {
       {emailNotVerified && (
         <div className="noemailband">
           {isMandarin ? "驗證您的地址" : "Verify your email address."}
+          <p onClick={handleResendEmail} className="resend-email-link">
+            {isMandarin ? "重新發送郵件" : "Resend Email"}
+          </p>
         </div>
       )}
       <Outlet />
+      {showScrollTop && (
+        <button
+          onClick={scrollToTop}
+          className="scroll-to-top"
+          aria-label="Scroll to top"
+        ></button>
+      )}
+      <style>
+        {`
+          ${
+            isMandarin
+              ? `
+            /* Global font family for Mandarin */
+            body, body * {
+              font-family: "Nunito Sans", sans-serif !important;
+            }
+          `
+              : ""
+          }
+
+          .scroll-to-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background-color: #ffffff;
+            color: #2d3436;
+            border: 2px solid #e8e8e8;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            box-shadow: 0 6px 16px rgba(45, 52, 54, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            animation: slideIn 0.6s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards;
+            z-index: 1000;
+          }
+
+          @keyframes slideIn {
+            0% {
+              opacity: 0;
+              transform: translateY(40px) rotate(180deg) scale(0.5);
+            }
+            60% {
+              transform: translateY(-8px) rotate(-20deg) scale(1.1);
+            }
+            80% {
+              transform: translateY(4px) rotate(10deg);
+            }
+            100% {
+              opacity: 1;
+              transform: translateY(0) rotate(0) scale(1);
+            }
+          }
+
+          .scroll-to-top:hover {
+            transform: translateY(-5px) scale(1.08);
+            box-shadow: 0 8px 20px rgba(45, 52, 54, 0.25);
+            background-color: #ffffff;
+            border-color: #1a73e8;
+          }
+
+          .scroll-to-top::before {
+            content: "↑";
+            position: relative;
+            transition: transform 0.3s ease;
+            font-weight: bold;
+          }
+
+          .scroll-to-top:hover::before {
+            transform: translateY(-3px);
+            color: #1a73e8;
+          }
+
+          .resend-email-link {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+            margin: 0;
+            padding: 0;
+            margin-left: 10px;
+            transition: color 0.2s ease;
+          }
+
+          .resend-email-link:hover {
+            color:rgb(225, 225, 225);
+          }
+
+          .noemailband {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        `}
+      </style>
     </>
   );
 };

@@ -206,13 +206,11 @@ function ContentDisplayWidgetGenerator() {
   };
   return (
     <div className="blog-post-container-blogs">
-      <p className="hero-title-text-style-blogs">
-        {isMandarin ? "我們的博客" : "OUR BLOGS"}
-      </p>
+      <p className="hero-title-text-style-blogs">BLOGS</p>
       <p className="blog-post-content-text-style-blogs">
         {isMandarin
-          ? "我們分享行業見解、趨勢分析和創新解決方案，幫助您在面料批發領域保持領先地位。"
-          : "We share industry insights, trend analysis, and innovative solutions to help you stay ahead in the fabric wholesale industry."}
+          ? "產業觀察、市場趨勢和實⽤知識都在這！"
+          : "Industry insights, trend analysis, and smart soluMons, your li_le texMle library right here !"}
       </p>
 
       <>
@@ -257,7 +255,7 @@ function ContentDisplayWidgetGenerator() {
                 <input
                   onChange={(e) => setSearchterm(e.target.value)}
                   value={searchterm}
-                  placeholder="Search an article"
+                  placeholder={isMandarin ? "搜尋⽂章" : "Search an article"}
                   type="text"
                   className="input-with-icon-blogs input-style-f62-blogs::placeholder"
                 />
@@ -269,7 +267,7 @@ function ContentDisplayWidgetGenerator() {
               onClick={() => setShowfilter(!showfilter)}
             >
               <SvgIcon5 className="svg-container6-blogs" />
-              {isMandarin ? "過濾" : "Filter"}
+              {isMandarin ? "篩選" : "Filter"}
             </button>
           </div>
         </div>
@@ -327,6 +325,8 @@ function ContentDisplayWidgetGenerator() {
                     wrapperClass=""
                   />
                 </div>
+              ) : isMandarin ? (
+                "載入更多"
               ) : (
                 messages["load_more"]
               )}

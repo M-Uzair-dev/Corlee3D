@@ -7,8 +7,8 @@ function ElegantContentBlock() {
     <div className="text-container-flex-box">
       <p className="central-text-styler">
         {isMandarin
-          ? "我們的願景是 通過品質、創意與信任，重新定義面料批發行業。我們致力於成為全球設計師、零售商和製造商最值得信賴的優質面料供應商。融合創新與傳統，我們希望編織出持久的合作關係和可持續的成功，惠及未來的每一代人。"
-          : "Our vision is to redefine the fabric wholesale industry through quality, creativity, and trust. We strive to become the most reliable source for premium textiles, empowering designers, retailers, and manufacturers across the globe. By combining innovation with tradition, we aim to weave lasting relationships and sustainable success for generations to come."}
+          ? "對我們⽽⾔，「永續經營」從來不只是⼝號，⽽是貫徹在產品、流程與夥伴 關係中的核⼼信念。\n透過與在地⼯廠及供應商的緊密合作，柏家與共樂⼒提供整合性的布料開發 服務，融合⾼機能與設計巧思，致⼒打造兼具⾼品質與環保精神的布料。"
+          : "Sustainability isn’t just a word—it’s part of everything we do. At Corlee, we follow eco-friendly pracMces in our products, our processes, and how we work with people.\nThanks to our strong partnerships with local factories and suppliers, we offer integrated woven fabric soluMons that combine advanced performance with thoughiul design."}
       </p>
       <div className="content-wrapper">
         <img

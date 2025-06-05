@@ -4378,6 +4378,9 @@ body {
   width: max-content !important;
   margin-bottom: 10px;
   transition: none !important;
+  text-align: center;
+  width: 100%;
+  margin: 0 auto;
 }
 .thankyoucontainer h1::before {
   font-size: 60px;
@@ -4391,6 +4394,9 @@ body {
   color: transparent;
   -webkit-text-stroke: 1px rgb(44, 44, 44);
   transition: none !important;
+}
+.chinese-thankyoucontainer h1::before {
+  content: "感謝您" !important;
 }
 .thankyoucontainer h1::after {
   height: 300px;
@@ -6559,4 +6565,28 @@ button:hover:not(.button-with-icon2) {
 .page-actions,
 .page-actions button {
   margin-bottom: 0 !important;
+}
+.productdetailsdic > h1 {
+  max-width: 85% !important;
+}
+.heartbutton {
+  z-index: 10;
+}
+.contact-info-section1 > div {
+  max-width: 846px;
+}
+.noemailband {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+.noemailband p {
+  font-size: 16px;
+  font-weight: 500;
+  color: rgb(255, 255, 255);
+  margin: 0 !important;
+  text-decoration: underline;
+  cursor: pointer;
 }

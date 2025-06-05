@@ -18,6 +18,10 @@
   font: 600 32px Artnoova;
   color: white;
   white-space: pre-wrap;
+  max-width: 70%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .card-with-code-snippet {
   box-sizing: border-box;

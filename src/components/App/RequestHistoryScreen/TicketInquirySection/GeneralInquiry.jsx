@@ -14,7 +14,8 @@ const GeneralInquiry = (props) => {
     >
       <div className="infotext">
         <p className="ticket">
-          {isMandarin ? "票號" : "Ticket Number"} : {props.item.request_number}
+          {isMandarin ? "追蹤號碼" : "Ticket Number"} :{" "}
+          {props.item.request_number}
         </p>
         <p className="inqtext">{isMandarin ? "一般查詢" : "General Inquiry"}</p>
       </div>

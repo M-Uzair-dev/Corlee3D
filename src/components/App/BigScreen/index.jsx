@@ -210,7 +210,7 @@ function BagScreenMainComp(props) {
                     </svg>
                   </div>
                   <div className="textdivinbagdetails">
-                    <p>{isMandarin ? "個人詳細資料" : "Personal Details"}</p>
+                    <p>{isMandarin ? "個⼈資訊" : "Personal Details"}</p>
                     <p>{user.name || "Empty"}</p>
                     <p>{user.company_name || "Empty"}</p>
                   </div>
@@ -244,7 +244,7 @@ function BagScreenMainComp(props) {
                     </svg>
                   </div>
                   <div className="textdivinbagdetails">
-                    <p>{isMandarin ? "聯絡詳細資料" : "Contact Details"}</p>
+                    <p>{isMandarin ? "聯絡資訊" : "Contact Details"}</p>
                     <p>{user.phone || "Empty"}</p>
                     <p>{user.email || "Empty"}</p>
                   </div>
@@ -325,7 +325,7 @@ function BagScreenMainComp(props) {
                     wrapperClass=""
                   />
                 ) : isMandarin ? (
-                  "結帳"
+                  "提交訂單"
                 ) : (
                   "Checkout"
                 )}

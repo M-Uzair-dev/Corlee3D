@@ -8,9 +8,10 @@ function FabricDescriptionSection() {
     <div className="fashion-text-container">
       <div className="global-fashion-styles-container">
         <p className="fashion-statement-text-style">
+          Hi, we are Corlee <br />
           {isMandarin
-            ? "嗨，我們是共樂力，您值得信賴的機能性布料夥伴。"
-            : "Hi, we are Corlee, your trusted partner for innovative woven fabric solutions."}
+            ? "您值得信賴的機能性布料夥伴。"
+            : "Your trusted partner for innovative woven fabric solutions."}
         </p>
         <p className="global-fashion-text-styles">
           {isMandarin

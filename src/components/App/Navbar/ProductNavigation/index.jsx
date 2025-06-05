@@ -93,10 +93,10 @@ function ProductNavigation(props) {
                 </p>
               )}
               <p onClick={() => navigate("/user/history")}>
-                {isMandarin ? "歷史" : "History"}
+                {isMandarin ? "訂單" : "History"}
               </p>
               <p onClick={() => navigate("/user/favourites")}>
-                {isMandarin ? "收藏" : "Favourites"}
+                {isMandarin ? "最愛" : "Favourites"}
               </p>
 
               <p
@@ -165,14 +165,14 @@ function ProductNavigation(props) {
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/blogs")}
           >
-            {isMandarin ? "博客" : "Blogs"}
+            {isMandarin ? "⽂章" : "Blogs"}
           </p>
           <p
             className="contact-info-text-style-nav"
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/about")}
           >
-            {isMandarin ? "關於我們" : "About us"}
+            {isMandarin ? "品牌故事" : "About us"}
           </p>
         </div>
         <DynamicContentDisplay

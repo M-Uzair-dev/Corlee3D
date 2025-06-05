@@ -51,7 +51,7 @@ const ProductRequest = (props) => {
     >
       <div className="infotext">
         <p className="ticket">
-          {isMandarin ? "票號" : "Ticket Number"} : {item.request_number}
+          {isMandarin ? "追蹤號碼" : "Ticket Number"} : {item.request_number}
         </p>
         <p className="inqtext">
           {isMandarin ? "產品請求" : "Products Request"}

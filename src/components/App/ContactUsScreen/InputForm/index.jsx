@@ -8,7 +8,7 @@ function InputForm(props) {
       {/* Input with Label Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
       <div className="horizontal-centered-label-container">
         <label htmlFor="name" className="bold-black-label">
-          {isMandarin ? "姓名" : "Name"}
+          {isMandarin ? "您的姓名" : "Name"}
         </label>
         <input
           name="name"

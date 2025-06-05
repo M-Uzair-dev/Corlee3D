@@ -190,13 +190,13 @@ function DynamicContentDisplay(props) {
                     onClick={() => navigate("/user/history")}
                     style={{ cursor: "pointer", minWidth: "max-content" }}
                   >
-                    {isMandarin ? "歷史" : "History"}
+                    {isMandarin ? "訂單" : "History"}
                   </p>
                   <p
                     onClick={() => navigate("/user/favourites")}
                     style={{ cursor: "pointer", minWidth: "max-content" }}
                   >
-                    {isMandarin ? "收藏" : "Favourites"}
+                    {isMandarin ? "最愛" : "Favourites"}
                   </p>
                   <p
                     onClick={() => {

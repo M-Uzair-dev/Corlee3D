@@ -5,14 +5,12 @@ function MessageDisplayBox(props) {
   const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="subject-container">
-      <p className="bold-black-label">{isMandarin ? "描述" : "Description"}</p>
+      <p className="bold-black-label">{isMandarin ? "內容" : "Description"}</p>
       <textarea
         rows={5}
         style={{ resize: "none" }}
         id="company name"
-        placeholder={
-          isMandarin ? "寫你的消息在這裡" : "Write your message here"
-        }
+        placeholder={isMandarin ? "請填寫您的訊息" : "Write your message here"}
         type="text"
         name="description"
         onChange={props.onChange}

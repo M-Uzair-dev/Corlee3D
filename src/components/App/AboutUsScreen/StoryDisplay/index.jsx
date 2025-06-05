@@ -9,7 +9,9 @@ function StoryDisplay() {
         {isMandarin ? "如何開始" : "How it started"}
       </p> */}
       <p className="hero-title">
-        {isMandarin ? "關於共樂力" : "The story of Corlee"}
+        Here Begins…
+        <br />
+        The Thread Of Our Tale.
       </p>
     </div>
   );
