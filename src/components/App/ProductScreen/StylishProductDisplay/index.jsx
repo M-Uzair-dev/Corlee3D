@@ -93,15 +93,19 @@ function StylishProductDisplay(props) {
                 }}
               ></div>
               <div className="textdiv">
-                <h2>{prod.item_code}</h2>
-                <p>
+                <h2 className="english">{prod.item_code}</h2>
+                <p >
+                  <span className={`${isMandarin && prod.product_category_mandarin ? "" : "english"}`}>
                   {isMandarin && prod.product_category_mandarin
                     ? prod.product_category_mandarin
                     : prod.product_category}{" "}
+                  </span>
                   <img className="arrow" src={arrow} alt="" />{" "}
-                  {isMandarin && prod.finish_mandarin
-                    ? prod.finish_mandarin
-                    : prod.finish ?? "No Finish Info"}
+                  <span className={`${isMandarin && prod.finish_mandarin ? "" : "english"}`}>
+                    {isMandarin && prod.finish_mandarin
+                      ? prod.finish_mandarin
+                      : prod.finish ?? "No Finish Info"}
+                  </span>
                 </p>
               </div>
             </div>

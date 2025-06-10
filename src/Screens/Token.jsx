@@ -126,10 +126,39 @@ const Token = () => {
           ${
             isMandarin
               ? `
-            /* Global font family for Mandarin */
-            body, body * {
-              font-family: "Nunito Sans", sans-serif !important;
+            *:not(.english):not(.imagestext p:nth-child(1)):not(.textdivinbagdetails *:not(:first-child)):not(input):not(.singlecalldetail:nth-child(3)>p):not(.contact-heading):not(.contact-heading-text-style):not(.contact-info-section1 *):not(.textboxdivmain h1):not(*:has(.dropdowndiv) h1), .productdetailsdic h1:not(.english){
+            font-family: "Cactus Classical Serif", serif !important;
             }
+            .hero-text-block,
+.majestic-heading-home,
+.art-noova-heading,
+.majestic-heading1,
+.fabric-type-heading,
+.fashion-statement-text-style,
+.leftsidecontent h1,
+.upcoming-events-heading,
+.golden-heading,
+.hero-title,
+.standout-text,
+.visionary-heading,
+.order-process-title,
+.order-process-child,
+.order-process-title,
+.hero-title-text-style,
+.contact-heading-text-style,
+.contact-heading,
+.request-history-title,
+.priceofproduct,
+.material-heading-text-style,
+.error-message-title,
+.email-notification-heading,
+.company-details-title,
+.password-reset-message-email,
+.containerTerms h1,
+.loginpopuswrapper h1 {
+font-size: 50px !important;
+}
+
           `
               : ""
           }

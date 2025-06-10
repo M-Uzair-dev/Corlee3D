@@ -1,0 +1,21 @@
+.maintextans-wrapper {
+  position: relative;
+  width: 15vw;
+}
+
+.maintextans {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+@media (max-width: 1075px) {
+  .maintextans-wrapper {
+    width: auto;
+  }
+  
+  .maintextans {
+    white-space: normal;
+    overflow: visible;
+  }
+} 

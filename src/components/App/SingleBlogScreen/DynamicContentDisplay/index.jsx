@@ -11,6 +11,7 @@ function DynamicContentDisplay(data) {
   return (
     <div className="content-container  content-container-in-single-blog">
       <p
+        className={`${isMandarin && data.content_mandarin ? "" : "english blogBody"}`}
         dangerouslySetInnerHTML={{
           __html:
             isMandarin && data.content_mandarin

@@ -16,7 +16,7 @@ function MessageActions(props) {
     <>
       <div className="contact-info-container">
         <div className="contact-info-container2 static">
-          <p className="contact-info-text">{props.user.phone}</p>
+          <p className="contact-info-text english">{props.user.phone}</p>
           <p
             className="highlighted-text"
             onClick={copyToClipboard}

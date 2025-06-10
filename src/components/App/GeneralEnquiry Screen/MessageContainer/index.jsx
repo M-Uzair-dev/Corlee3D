@@ -16,9 +16,9 @@ function MessageContainer(props) {
   return (
     <div className="contact-info-container3">
       <div className="contact-info-container2 static">
-        <p className="contact-info-text">{props.user.email}</p>
+        <p className="contact-info-text english">{props.user.email}</p>
         <p
-          className="highlighted-text"
+          className="highlighted-text "
           onClick={copyToClipboard}
           style={{ cursor: "pointer" }}
         >

@@ -5,6 +5,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import MediaGalleryPopup from "../../components/MediaGalleryPopup";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import { handleApiError } from "../../util/errorHandling";
+import ChipSelect from "../../components/UI/ChipSelect";
 import "./EditPages.css";
 
 function EditFabricPage() {
@@ -23,6 +24,7 @@ function EditFabricPage() {
     weight_mandarin: "",
     finish_mandarin: "",
     product_category: "",
+    extra_categories: [],
     is_hot_selling: false,
     color_images: [
       {
@@ -218,6 +220,7 @@ function EditFabricPage() {
           weight_mandarin: fabricData?.weight_mandarin || "",
           finish_mandarin: fabricData?.finish_mandarin || "",
           product_category: productCategoryId,
+          extra_categories: fabricData?.extra_categories || [],
           is_hot_selling: fabricData?.is_hot_selling || false,
           color_images: formattedColorImages,
           // Store the mapping of temporary IDs to original IDs
@@ -385,6 +388,7 @@ function EditFabricPage() {
         weight_mandarin: formData.weight_mandarin,
         finish_mandarin: formData.finish_mandarin,
         product_category: parseInt(formData.product_category, 10),
+        extra_categories: formData.extra_categories.map(parseInt),
         is_hot_selling: formData.is_hot_selling,
         color_images: formData.color_images
           .filter((image) => image.color_category)
@@ -471,7 +475,7 @@ function EditFabricPage() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="title">Title *</label>
+              <label htmlFor="title">標題 *</label>
               <input
                 type="text"
                 id="title"
@@ -487,7 +491,7 @@ function EditFabricPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="title_mandarin">Title (Mandarin)</label>
+              <label htmlFor="title_mandarin">標題 (中⽂)</label>
               <input
                 type="text"
                 id="title_mandarin"
@@ -502,7 +506,7 @@ function EditFabricPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="item_code">Item Code *</label>
+              <label htmlFor="item_code">型號 *</label>
               <input
                 type="text"
                 id="item_code"
@@ -519,7 +523,7 @@ function EditFabricPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="product_category">Product Category *</label>
+            <label htmlFor="product_category">產品種類 *</label>
             <select
               id="product_category"
               name="product_category"
@@ -528,7 +532,7 @@ function EditFabricPage() {
               required
               className={fieldErrors.product_category ? "input-error" : ""}
             >
-              <option value="">Select a category</option>
+              <option value="">選擇產品種類</option>
               {productCategories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -541,7 +545,26 @@ function EditFabricPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="description">Description</label>
+            <label htmlFor="extra_categories">額外種類</label>
+            <ChipSelect
+              options={productCategories.filter(category => category.id !== formData.product_category)}
+              value={formData.extra_categories}
+              onChange={(selectedIds) => {
+                setFormData(prev => ({
+                  ...prev,
+                  extra_categories: selectedIds
+                }));
+              }}
+              placeholder="選擇額外種類..."
+              error={!!fieldErrors.extra_categories}
+            />
+            {fieldErrors.extra_categories && (
+              <div className="field-error">{fieldErrors.extra_categories}</div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="description">描述</label>
             <textarea
               id="description"
               name="description"
@@ -552,7 +575,7 @@ function EditFabricPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="description_mandarin">Description (Mandarin)</label>
+            <label htmlFor="description_mandarin">描述 (中⽂)</label>
             <textarea
               id="description_mandarin"
               name="description_mandarin"
@@ -564,78 +587,76 @@ function EditFabricPage() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="composition">Composition</label>
+              <label htmlFor="composition">規格</label>
               <input
                 type="text"
                 id="composition"
                 name="composition"
                 value={formData.composition}
                 onChange={handleInputChange}
-                placeholder="e.g., 100% Cotton"
+                placeholder="例如：100% Cotton"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="composition_mandarin">
-                Composition (Mandarin)
-              </label>
+              <label htmlFor="composition_mandarin">規格 (中⽂)</label>
               <input
                 type="text"
                 id="composition_mandarin"
                 name="composition_mandarin"
                 value={formData.composition_mandarin}
                 onChange={handleInputChange}
-                placeholder="棉質100%"
+                placeholder="例如：棉質100%"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="weight">Weight</label>
+              <label htmlFor="weight">重量</label>
               <input
                 type="text"
                 id="weight"
                 name="weight"
                 value={formData.weight}
                 onChange={handleInputChange}
-                placeholder="e.g., 200 gsm"
+                placeholder="例如：200 gsm"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="weight_mandarin">Weight (Mandarin)</label>
+              <label htmlFor="weight_mandarin">重量 (中⽂)</label>
               <input
                 type="text"
                 id="weight_mandarin"
                 name="weight_mandarin"
                 value={formData.weight_mandarin}
                 onChange={handleInputChange}
-                placeholder="200克/平方米"
+                placeholder="例如：200克/平方米"
               />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="finish">Finish</label>
+              <label htmlFor="finish">加⼯處理</label>
               <input
                 type="text"
                 id="finish"
                 name="finish"
                 value={formData.finish}
                 onChange={handleInputChange}
-                placeholder="e.g., Soft, Matte"
+                placeholder="例如：Soft, Matte"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="finish_mandarin">Finish (Mandarin)</label>
+              <label htmlFor="finish_mandarin">加⼯處理 (中⽂)</label>
               <input
                 type="text"
                 id="finish_mandarin"
                 name="finish_mandarin"
                 value={formData.finish_mandarin}
                 onChange={handleInputChange}
-                placeholder="柔软，哑光"
+                placeholder="例如：柔软，哑光"
               />
             </div>
           </div>
@@ -648,32 +669,32 @@ function EditFabricPage() {
               checked={formData.is_hot_selling}
               onChange={handleInputChange}
             />
-            <label htmlFor="is_hot_selling">Mark as Hot Selling</label>
+            <label htmlFor="is_hot_selling">熱銷商品</label>
           </div>
         </div>
 
         <div className="form-section">
-          <h3>Color Images</h3>
+          <h3>顏色圖片</h3>
           <p className="section-info">
-            Add at least one color with a primary image
+            至少添加一個顏色和主要圖片
           </p>
 
           {formData.color_images.map((colorImage, index) => (
             <div key={index} className="color-image-container">
               <div className="color-image-header">
-                <h4>Color Variant {index + 1}</h4>
+                <h4>顏色款式 {index + 1}</h4>
                 <button
                   type="button"
                   className="remove-button"
                   onClick={() => removeColorImage(index)}
                 >
-                  Remove
+                  移除
                 </button>
               </div>
 
               <div className="form-group">
                 <label htmlFor={`color_category_${index}`}>
-                  Color Category *
+                  顏色種類 *
                 </label>
                 <select
                   id={`color_category_${index}`}
@@ -687,7 +708,7 @@ function EditFabricPage() {
                   }
                   required
                 >
-                  <option value="">Select a color</option>
+                  <option value="">選擇顏色</option>
                   {colorCategories.map((color) => (
                     <option key={color.id} value={color.id}>
                       {color?.display_name || color?.name}
@@ -698,7 +719,7 @@ function EditFabricPage() {
 
               <div className="images-grid">
                 <div className="image-item">
-                  <label>Primary Image *</label>
+                  <label>主要圖片 *</label>
                   <div className="image-preview">
                     {colorImage.primary_image ? (
                       imageDetails[colorImage.primary_image] ? (
@@ -707,7 +728,7 @@ function EditFabricPage() {
                             src={
                               imageDetails[colorImage.primary_image]?.file_url
                             }
-                            alt="Primary"
+                            alt="主要圖片"
                             className="preview-image"
                           />
                           <button
@@ -725,10 +746,10 @@ function EditFabricPage() {
                           </button>
                         </>
                       ) : (
-                        <div className="selected-image">Loading image...</div>
+                        <div className="selected-image">載入圖片中...</div>
                       )
                     ) : (
-                      <div className="no-image">No image selected</div>
+                      <div className="no-image">未選擇圖片</div>
                     )}
                   </div>
                   <button
@@ -736,19 +757,19 @@ function EditFabricPage() {
                     className="select-image-button"
                     onClick={() => openMediaGallery(index, "primary_image")}
                   >
-                    Select Image
+                    選擇圖片
                   </button>
                 </div>
 
                 <div className="image-item">
-                  <label>Additional Image 1</label>
+                  <label>附加圖片 1</label>
                   <div className="image-preview">
                     {colorImage.aux_image1 ? (
                       imageDetails[colorImage.aux_image1] ? (
                         <>
                           <img
                             src={imageDetails[colorImage.aux_image1]?.file_url}
-                            alt="Additional 1"
+                            alt="附加圖片 1"
                             className="preview-image"
                           />
                           <button
@@ -762,10 +783,10 @@ function EditFabricPage() {
                           </button>
                         </>
                       ) : (
-                        <div className="selected-image">Loading image...</div>
+                        <div className="selected-image">載入圖片中...</div>
                       )
                     ) : (
-                      <div className="no-image">No image selected</div>
+                      <div className="no-image">未選擇圖片</div>
                     )}
                   </div>
                   <button
@@ -773,19 +794,19 @@ function EditFabricPage() {
                     className="select-image-button"
                     onClick={() => openMediaGallery(index, "aux_image1")}
                   >
-                    Select Image
+                    選擇圖片
                   </button>
                 </div>
 
                 <div className="image-item">
-                  <label>Additional Image 2</label>
+                  <label>附加圖片 2</label>
                   <div className="image-preview">
                     {colorImage.aux_image2 ? (
                       imageDetails[colorImage.aux_image2] ? (
                         <>
                           <img
                             src={imageDetails[colorImage.aux_image2]?.file_url}
-                            alt="Additional 2"
+                            alt="附加圖片 2"
                             className="preview-image"
                           />
                           <button
@@ -799,10 +820,10 @@ function EditFabricPage() {
                           </button>
                         </>
                       ) : (
-                        <div className="selected-image">Loading image...</div>
+                        <div className="selected-image">載入圖片中...</div>
                       )
                     ) : (
-                      <div className="no-image">No image selected</div>
+                      <div className="no-image">未選擇圖片</div>
                     )}
                   </div>
                   <button
@@ -810,19 +831,19 @@ function EditFabricPage() {
                     className="select-image-button"
                     onClick={() => openMediaGallery(index, "aux_image2")}
                   >
-                    Select Image
+                    選擇圖片
                   </button>
                 </div>
 
                 <div className="image-item">
-                  <label>Additional Image 3</label>
+                  <label>附加圖片 3</label>
                   <div className="image-preview">
                     {colorImage.aux_image3 ? (
                       imageDetails[colorImage.aux_image3] ? (
                         <>
                           <img
                             src={imageDetails[colorImage.aux_image3]?.file_url}
-                            alt="Additional 3"
+                            alt="附加圖片 3"
                             className="preview-image"
                           />
                           <button
@@ -836,10 +857,10 @@ function EditFabricPage() {
                           </button>
                         </>
                       ) : (
-                        <div className="selected-image">Loading image...</div>
+                        <div className="selected-image">載入圖片中...</div>
                       )
                     ) : (
-                      <div className="no-image">No image selected</div>
+                      <div className="no-image">未選擇圖片</div>
                     )}
                   </div>
                   <button
@@ -847,19 +868,19 @@ function EditFabricPage() {
                     className="select-image-button"
                     onClick={() => openMediaGallery(index, "aux_image3")}
                   >
-                    Select Image
+                    選擇圖片
                   </button>
                 </div>
 
                 <div className="image-item">
-                  <label>Model Image</label>
+                  <label>3D 模型圖片</label>
                   <div className="image-preview">
                     {colorImage.model_image ? (
                       imageDetails[colorImage.model_image] ? (
                         <>
                           <img
                             src={imageDetails[colorImage.model_image]?.file_url}
-                            alt="Model"
+                            alt="3D 模型圖片"
                             className="preview-image"
                           />
                           <button
@@ -877,10 +898,10 @@ function EditFabricPage() {
                           </button>
                         </>
                       ) : (
-                        <div className="selected-image">Loading image...</div>
+                        <div className="selected-image">載入圖片中...</div>
                       )
                     ) : (
-                      <div className="no-image">No image selected</div>
+                      <div className="no-image">未選擇圖片</div>
                     )}
                   </div>
                   <button
@@ -888,7 +909,7 @@ function EditFabricPage() {
                     className="select-image-button"
                     onClick={() => openMediaGallery(index, "model_image")}
                   >
-                    Select Image
+                    選擇圖片
                   </button>
                 </div>
               </div>
@@ -900,9 +921,8 @@ function EditFabricPage() {
             className="add-color-button"
             onClick={addColorImage}
           >
-            Add Another Color
+            + 添加顏色款式
           </button>
-          {errorMessage && <div className="error-message">{errorMessage}</div>}
         </div>
 
         <div className="form-actions">
@@ -918,16 +938,23 @@ function EditFabricPage() {
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Updating..." : "Update Fabric"}
+            {isSubmitting ? (
+              <LoadingSpinner />
+            ) : (
+              "保存更改"
+            )}
           </button>
         </div>
       </form>
 
-      <MediaGalleryPopup
-        isOpen={isGalleryOpen}
-        setIsOpen={setIsGalleryOpen}
-        onSelectImage={handleSelectImage}
-      />
+      {errorMessage && <div className="error-message">{errorMessage}</div>}
+
+      {isGalleryOpen && (
+        <MediaGalleryPopup
+          onClose={() => setIsGalleryOpen(false)}
+          onSelect={handleSelectImage}
+        />
+      )}
 
       <style jsx>{`
         .create-heading {

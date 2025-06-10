@@ -93,10 +93,12 @@ function TicketInfoSection(props) {
         <>
           <div className="ticket-details-container1">
             <p className="ticket-number-text-style">
-              {isMandarin ? "票號" : "Ticket Number"}
+              {isMandarin ? "追蹤號碼" : "Ticket Number"}
             </p>
-            <p className="ticket-number-style">
-              {data.contact_request?.request_number}
+            <p className="ticket-number-style ">
+              <span className="english">
+                {data.contact_request?.request_number}
+              </span>
             </p>
             <div className="ticket-info-container">
               <div className="emptydiv"></div>
@@ -114,7 +116,7 @@ function TicketInfoSection(props) {
                   ? "一般查詢"
                   : "General Inquiry"}
               </button>
-              <p className="date-label">
+              <p className="date-label english">
                 {formatDate(data.contact_request?.created_at)}
               </p>
             </div>
@@ -155,8 +157,9 @@ function TicketInfoSection(props) {
                             ></div>
                             <div className="imagestext">
                               {" "}
-                              <p>{e.fabric.item_code}</p>
-                              <p>
+                              <p className="english">{e.fabric.item_code}</p>
+                              <p className={isMandarin &&
+                                e.fabric.product_category_name_mandarin ? "" : "english"}>
                                 {isMandarin &&
                                 e.fabric.product_category_name_mandarin
                                   ? e.fabric.product_category_name_mandarin
@@ -178,9 +181,10 @@ function TicketInfoSection(props) {
                             </div>
                             <p className="quantityofproduct">
                               {isMandarin ? "數量" : "Quantity"}
-                              <span>{text}</span>
+                              {" "}
+                              <span className="english">{text}</span>
                             </p>
-                            <p className="priceofproduct">{e.quantity}</p>
+                            <p className="priceofproduct english">{e.quantity}</p>
                           </div>
                         </div>
                       </div>
@@ -189,10 +193,10 @@ function TicketInfoSection(props) {
                 </>
               ) : (
                 <>
-                  <p className="main-heading-text-style">
+                  <p className="main-heading-text-style english">
                     {data.contact_request?.subject}
                   </p>
-                  <p className="content-block">
+                  <p className="content-block english">
                     {data.contact_request?.message}
                   </p>
                   {props.product ? (

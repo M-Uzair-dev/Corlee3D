@@ -121,15 +121,21 @@ function BottomBar(props) {
         <div className="contact-info-section1-bb">
           <div className="contact-info-container-bb">
             <div className="contact-info-container1-bb">
-              <p className="unique-text-block-bb">
+              <p className="unique-text-block-bb english">
                 {localStorage.getItem("phone")}
               </p>
               <div className="vertical-divider-bb" />
-              <p className="unique-text-block-bb">
+              <p className="unique-text-block-bb english">
                 {localStorage.getItem("email")}
               </p>
             </div>
-            <p className="contact-info-section-bb">
+            <p
+              className={`contact-info-section-bb ${
+                isMandarin && localStorage.getItem("address_mandarin")
+                  ? ""
+                  : "english"
+              }`}
+            >
               {isMandarin && localStorage.getItem("address_mandarin")
                 ? localStorage.getItem("address_mandarin")
                 : localStorage.getItem("address")}
@@ -137,7 +143,7 @@ function BottomBar(props) {
           </div>
         </div>
         <p className="footer-copyright-text-bb">
-          <span className="brand-text-style-bb">
+          <span className="brand-text-style-bb english">
             © {new Date().getFullYear()}
             {isMandarin
               ? " corlee & co. 保留所有權利。"
@@ -185,7 +191,7 @@ function BottomBar(props) {
             }}
             onClick={() => setShowLanguageModal(true)}
           >
-            English / 中文
+            <span className="english">English / </span>中文
           </a>
         </p>
 

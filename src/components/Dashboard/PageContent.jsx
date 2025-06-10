@@ -72,8 +72,8 @@ const PageContent = ({
               ...data.options,
               create:
                 page === "order" ||
-                title === "Contact Details" ||
-                title === "Contact Requests"
+                page === "contactDetails" ||
+                page === "contactRequest"
                   ? false
                   : true,
             }}

@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import MediaGalleryPopup from "../../components/MediaGalleryPopup";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import { handleApiError } from "../../util/errorHandling";
+import ChipSelect from "../../components/UI/ChipSelect";
 import "./CreatePages.css";
 
 function CreateFabricPage() {
@@ -32,6 +33,7 @@ function CreateFabricPage() {
     item_code: "",
     is_hot_selling: false,
     product_category: "",
+    extra_categories: [],
     color_images: [
       {
         color_category: "",
@@ -205,6 +207,7 @@ function CreateFabricPage() {
     const apiData = {
       ...formData,
       product_category: formData.product_category,
+      extra_categories: formData.extra_categories.map(id => parseInt(id)),
       color_images: formData.color_images.filter(
         (image) => image.color_category && image.primary_image
       ),
@@ -295,7 +298,7 @@ function CreateFabricPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="product_category">商品種類 *</label>
+            <label htmlFor="product_category">產品種類 *</label>
             <select
               id="product_category"
               name="product_category"
@@ -304,7 +307,7 @@ function CreateFabricPage() {
               required
               className={fieldErrors.product_category ? "input-error" : ""}
             >
-              <option value="">選擇種類</option>
+              <option value="">選擇產品種類</option>
               {productCategories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -313,6 +316,25 @@ function CreateFabricPage() {
             </select>
             {fieldErrors.product_category && (
               <div className="field-error">{fieldErrors.product_category}</div>
+            )}
+          </div>
+
+          <div className="form-group">
+            <label htmlFor="extra_categories">額外種類</label>
+            <ChipSelect
+              options={productCategories.filter(category => category.id !== formData.product_category)}
+              value={formData.extra_categories}
+              onChange={(selectedIds) => {
+                setFormData(prev => ({
+                  ...prev,
+                  extra_categories: selectedIds
+                }));
+              }}
+              placeholder="選擇額外種類..."
+              error={!!fieldErrors.extra_categories}
+            />
+            {fieldErrors.extra_categories && (
+              <div className="field-error">{fieldErrors.extra_categories}</div>
             )}
           </div>
 

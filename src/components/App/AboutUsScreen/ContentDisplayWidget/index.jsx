@@ -24,7 +24,7 @@ function ContentDisplayWidget({ possibleSectionTitles }) {
             </p>
             <div className="statistic-cards-group">
               <div className="statistic-card">
-                <p className="standout-text">27+</p>
+                <p className="standout-text english">27+</p>
                 <p className="info-card-text-style">
                   {isMandarin
                     ? messages2["production_experience"]
@@ -32,15 +32,15 @@ function ContentDisplayWidget({ possibleSectionTitles }) {
                 </p>
               </div>
               <div className="statistic-card">
-                <p className="standout-text">600+</p>
-                <p className="info-card-text-style">
+                <p className="standout-text english">600+</p>
+                <p className="info-card-text-style ">
                   {isMandarin
                     ? messages2["clients_worldwide"]
                     : messages["clients_worldwide"]}
                 </p>
               </div>
               <div className="statistic-card">
-                <p className="standout-text">4.9</p>
+                <p className="standout-text english">4.9</p>
                 <p className="info-card-text-style">
                   {isMandarin
                     ? messages2["stars_rating"]

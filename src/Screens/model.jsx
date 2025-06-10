@@ -4,81 +4,85 @@ import { OrbitControls, useGLTF, useTexture, Center } from "@react-three/drei";
 import * as THREE from "three";
 import "./model.css";
 
+// Enable Three.js caching
 THREE.Cache.enabled = true;
 
-// Split Model into Textured and NonTextured variants to avoid conditional hooks
-const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
-  const [texture, setTexture] = useState(null);
+// Create a global texture loader and cache
+const textureLoader = new THREE.TextureLoader();
+const textureCache = new Map();
+
+// Preload texture function
+const preloadTexture = async (url) => {
+  if (!url || textureCache.has(url)) return textureCache.get(url);
+  
+  return new Promise((resolve) => {
+    textureLoader.load(url, (texture) => {
+      texture.encoding = THREE.sRGBEncoding;
+      texture.colorSpace = "srgb-linear";
+      textureCache.set(url, texture);
+      resolve(texture);
+    });
+  });
+};
+
+// Texture cleanup function
+const cleanupTexture = (url) => {
+  const texture = textureCache.get(url);
+  if (texture) {
+    texture.dispose();
+    textureCache.delete(url);
+  }
+};
+
+const TexturedModel = ({ gltf, textureUrl, scale, modelUrl }) => {
   const modelRef = useRef();
-  const materialRef = useRef();
+  const [texture, setTexture] = useState(null);
 
   useEffect(() => {
     if (!textureUrl) return;
 
+    let isSubscribed = true;
+
     const loadTexture = async () => {
       try {
-        // Create a new image element
-        const img = new Image();
-        img.crossOrigin = "anonymous"; // Enable CORS
+        // Check cache first
+        if (textureCache.has(textureUrl)) {
+          if (isSubscribed) {
+            setTexture(textureCache.get(textureUrl));
+          }
+          return;
+        }
 
-        // Create a promise to handle the image loading
-        const loadPromise = new Promise((resolve, reject) => {
-          img.onload = () => resolve(img);
-          img.onerror = (error) => reject(error);
-        });
-
-        // Set the source and wait for it to load
-        img.src = textureUrl;
-        const loadedImg = await loadPromise;
-
-        // Create a canvas to draw the image
-        const canvas = document.createElement("canvas");
-        canvas.width = loadedImg.width;
-        canvas.height = loadedImg.height;
-        const ctx = canvas.getContext("2d");
-        ctx.drawImage(loadedImg, 0, 0);
-
-        // Create a new texture from the canvas
-        const newTexture = new THREE.Texture(canvas);
-        newTexture.needsUpdate = true;
-        newTexture.encoding = THREE.sRGBEncoding;
-        newTexture.colorSpace = "srgb-linear";
-
-        setTexture(newTexture);
+        // Load texture if not in cache
+        const newTexture = await preloadTexture(textureUrl);
+        if (isSubscribed) {
+          setTexture(newTexture);
+        }
       } catch (error) {
         console.error("Error loading texture:", error);
-        // Fallback to a default texture or handle the error as needed
       }
     };
 
     loadTexture();
 
-    // Cleanup
     return () => {
-      if (texture) {
-        texture.dispose();
-      }
+      isSubscribed = false;
     };
   }, [textureUrl]);
 
-  const { material, size } = useMemo(() => {
-    if (!texture) return { material: null, size: new THREE.Vector3() };
-
-    const box = new THREE.Box3().setFromObject(gltf.scene);
-    const size = new THREE.Vector3();
-    box.getSize(size);
+  const material = useMemo(() => {
+    if (!texture) return null;
 
     const mat = new THREE.MeshStandardMaterial({
       map: texture,
       roughness: 0.9,
       metalness: 0.0,
     });
-    mat.map.wrapS = mat.map.wrapT = THREE.RepeatWrapping;
-    mat.map.repeat.set(size.x / tileSize, size.y / tileSize);
+    mat.map.wrapS = mat.map.wrapT = THREE.ClampToEdgeWrapping;
     mat.map.needsUpdate = true;
 
-    return { material: mat, size };
-  }, [gltf, texture, tileSize]);
+    return mat;
+  }, [texture]);
 
   const clonedScene = useMemo(() => {
     if (!material) return gltf.scene.clone();
@@ -97,7 +101,7 @@ const TexturedModel = ({ gltf, textureUrl, scale, tileSize, modelUrl }) => {
   );
 };
 
-const NonTexturedModel = ({ gltf, scale, tileSize, modelUrl }) => {
+const NonTexturedModel = ({ gltf, scale, modelUrl }) => {
   const modelRef = useRef();
   const material = useMemo(
     () => new THREE.MeshStandardMaterial({ color: "gray" }),
@@ -126,17 +130,12 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
     if (gltf) onLoaded?.();
   }, [gltf, onLoaded]);
 
-  const tileSize = useMemo(
-    () => (modelUrl.includes("jacket") ? 500 : 0.1),
-    [modelUrl]
-  );
-
   return (
     <>
       <ambientLight intensity={0.5} />
       <directionalLight
         position={[5, 10, 7.5]}
-        intensity={1.2} // Increased from 1.0
+        intensity={1.2}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
@@ -154,14 +153,12 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
           gltf={gltf}
           textureUrl={textureUrl}
           scale={scale}
-          tileSize={tileSize}
           modelUrl={modelUrl}
         />
       ) : (
         <NonTexturedModel
           gltf={gltf}
           scale={scale}
-          tileSize={tileSize}
           modelUrl={modelUrl}
         />
       )}
@@ -169,20 +166,56 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
   );
 };
 
-const FabricModel = ({ textureUrl, modelUrl, scale, loadingText }) => {
+const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [], otherTextures = [] }) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
   const preloaded = useRef(new Set());
 
+  // Preload models and textures
   useEffect(() => {
-    if (!preloaded.current.has(modelUrl)) {
-      useGLTF.preload(modelUrl);
-      preloaded.current.add(modelUrl);
-    }
-    if (textureUrl && !preloaded.current.has(textureUrl)) {
-      useTexture.preload(textureUrl);
-      preloaded.current.add(textureUrl);
-    }
-  }, [modelUrl, textureUrl]);
+    const preloadAll = async () => {
+      // Preload current model and texture
+      if (!preloaded.current.has(modelUrl)) {
+        useGLTF.preload(modelUrl);
+        preloaded.current.add(modelUrl);
+      }
+      if (textureUrl && !preloaded.current.has(textureUrl)) {
+        await preloadTexture(textureUrl);
+        preloaded.current.add(textureUrl);
+      }
+
+      // Preload other models and textures in the background
+      Promise.all([
+        ...otherModels.map(model => {
+          if (!preloaded.current.has(model)) {
+            preloaded.current.add(model);
+            return useGLTF.preload(model);
+          }
+          return Promise.resolve();
+        }),
+        ...otherTextures.map(texture => {
+          if (texture && !preloaded.current.has(texture)) {
+            preloaded.current.add(texture);
+            return preloadTexture(texture);
+          }
+          return Promise.resolve();
+        })
+      ]).catch(console.error);
+    };
+
+    preloadAll();
+
+    // Cleanup function
+    return () => {
+      if (textureUrl) {
+        cleanupTexture(textureUrl);
+      }
+      otherTextures.forEach(texture => {
+        if (texture) {
+          cleanupTexture(texture);
+        }
+      });
+    };
+  }, [modelUrl, textureUrl, otherModels, otherTextures]);
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
@@ -204,7 +237,11 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText }) => {
         <Canvas
           frameloop="demand"
           camera={{ position: [0, 0.2, 3], fov: 45 }}
-          gl={{ antialias: true }}
+          gl={{ 
+            antialias: true,
+            powerPreference: "high-performance",
+            depth: true
+          }}
         >
           <Scene
             modelUrl={modelUrl}

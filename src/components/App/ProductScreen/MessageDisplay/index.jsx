@@ -65,7 +65,7 @@ function MessageDisplay(props) {
       </p>
       <p className="material-description-text-style">
         {props.fav
-          ? "Hey, looking for your favorite fabrics? You can view and organize them right here."
+          ? isMandarin ? "Hey，在找最喜歡的款式嗎？這邊可以瀏覽跟篩選喔！" :  "Hey, looking for your favorite fabrics? You can view and organize them right here."
           : props.searchterm
           ? isMandarin
             ? "匹配你搜索的產品：" + props.searchterm
@@ -103,7 +103,7 @@ function MessageDisplay(props) {
               />
             </svg>
           </div>
-          <h1>{isMandarin ? "過濾項目" : "Filter Items"}</h1>
+          <h1>{isMandarin ? "篩選項⽬" : "Filter Items"}</h1>
           <div className="sortbydiv">
             <div
               className="maintopvisiblediv"
@@ -238,6 +238,7 @@ function MessageDisplay(props) {
                       textOverflow: "ellipsis",
                       maxWidth: "80%",
                     }}
+                    className={`${isMandarin && color.display_name_mandarin ? "" : "english"}`}
                   >
                     {isMandarin && color.display_name_mandarin
                       ? color.display_name_mandarin

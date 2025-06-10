@@ -9,7 +9,7 @@ function PersonalDetailsSection(props) {
         {isMandarin ? "個人詳情" : "Personal Details"}
       </p>
       <p className="personal-details-title">
-        {isMandarin ? "姓名" : "Name"} : {props.user.name}
+        {isMandarin ? "姓名" : "Name"} : <span className="english">{props.user.name}</span>
       </p>
     </div>
   );

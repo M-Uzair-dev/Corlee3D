@@ -10,7 +10,7 @@ function VisionBlock() {
         alt=""
         className="vision-icon"
       />
-      <p className="visionary-heading">Our Vision</p>
+      <p className="visionary-heading english">Our Vision</p>
     </div>
   );
 }

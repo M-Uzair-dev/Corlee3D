@@ -8,7 +8,7 @@ function StoryDisplay() {
       {/* <p className="golden-heading">
         {isMandarin ? "如何開始" : "How it started"}
       </p> */}
-      <p className="hero-title">
+      <p className="hero-title english">
         Here Begins…
         <br />
         The Thread Of Our Tale.

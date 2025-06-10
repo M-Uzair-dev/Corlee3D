@@ -7,7 +7,7 @@ function ElegantContentBlock() {
     <div className="text-container-flex-box">
       <p className="central-text-styler">
         {isMandarin
-          ? "對我們⽽⾔，「永續經營」從來不只是⼝號，⽽是貫徹在產品、流程與夥伴 關係中的核⼼信念。\n透過與在地⼯廠及供應商的緊密合作，柏家與共樂⼒提供整合性的布料開發 服務，融合⾼機能與設計巧思，致⼒打造兼具⾼品質與環保精神的布料。"
+          ? "對我們⽽⾔，「永續經營」從來不只是⼝號，⽽是貫徹在產品、流程與夥伴關係中的核⼼信念。\n透過與在地⼯廠及供應商的緊密合作，柏家與共樂⼒提供整合性的布料開發服務，融合⾼機能與設計巧思，致⼒打造兼具⾼品質與環保精神的布料。"
           : "Sustainability isn’t just a word—it’s part of everything we do. At Corlee, we follow eco-friendly pracMces in our products, our processes, and how we work with people.\nThanks to our strong partnerships with local factories and suppliers, we offer integrated woven fabric soluMons that combine advanced performance with thoughiul design."}
       </p>
       <div className="content-wrapper">

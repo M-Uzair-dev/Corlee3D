@@ -84,7 +84,7 @@ END:VCALENDAR
         <img className="event-image-display-style" src={imgContent9} />
       </div>
       <div className="event-description-container">
-        <p className="event-description-text-styler">{eventDescription7}</p>
+        <p className="event-description-text-styler english">{eventDescription7}</p>
         <p className="event-description-text-snippet">
           <span
             style={
@@ -96,6 +96,7 @@ END:VCALENDAR
                   }
                 : {}
             }
+            className="english"
             ref={textRef}
           >
             {dynamicContentWithShowMoreButton7}
@@ -129,13 +130,13 @@ END:VCALENDAR
               );
             }}
           >
-            <SvgIcon1 className="svg-container1" />
+            <SvgIcon1 className={`svg-container1 ${isMandarin && event.location_mandarin ? "" : "english"}`} />
             {isMandarin && event.location_mandarin
               ? event.location_mandarin
               : event.location}
           </button>
           <button
-            className="button-with-icon eventbuttonwithicon"
+            className="button-with-icon eventbuttonwithicon english"
             onClick={() => {
               window.location.href = `tel:${event.phone}`;
             }}
@@ -144,7 +145,7 @@ END:VCALENDAR
             {event.phone}
           </button>
           <button
-            className="button-with-icon eventbuttonwithicon"
+            className="button-with-icon eventbuttonwithicon english"
             onClick={() => {
               window.location.href = `mailto:${event.email}`;
             }}
@@ -155,7 +156,7 @@ END:VCALENDAR
         </div>
       </div>
       <button
-        className="primary-cta-button"
+        className="primary-cta-button english"
         onClick={() => {
           window.open(event.url, "_blank");
         }}

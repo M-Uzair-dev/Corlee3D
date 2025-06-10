@@ -122,7 +122,11 @@ function FabricExplorer() {
         {categs?.map((e, i) => (
           <div className="mainwrapperofmaterial" key={i}>
             <div className="material-button-container">
-              <p className="material-heading">
+              <p
+                className={`material-heading ${
+                  isMandarin && e.name_mandarin ? "" : "english"
+                }`}
+              >
                 {isMandarin && e.name_mandarin ? e.name_mandarin : e.name}
               </p>
 

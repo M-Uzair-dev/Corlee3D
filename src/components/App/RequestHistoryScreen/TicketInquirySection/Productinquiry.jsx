@@ -15,7 +15,8 @@ const Productinquiry = (props) => {
     >
       <div className="infotext">
         <p className="ticket">
-          {isMandarin ? "追蹤號碼" : "Ticket Number"} : {item.request_number}
+          {isMandarin ? "追蹤號碼" : "Ticket Number"} :{" "}
+          <span className="english">{item.request_number}</span>
         </p>
         <p className="inqtext">{isMandarin ? "產品查詢" : "Product Inquiry"}</p>
       </div>
@@ -29,20 +30,21 @@ const Productinquiry = (props) => {
             }}
           ></div>
           <div className="textunderimg">
-            <p className="number">{item.related_fabric.item_code}</p>
-            <div className="length">2yd</div>
+            <p className="number english">{item.related_fabric.item_code}</p>
+            <div className="length english">2yd</div>
           </div>
         </div>
         <div className="productinqtextdiv">
           <div className="headingofproduct">
-            {isMandarin ? "主題" : "Subject"} : {item.subject}
+            {isMandarin ? "主題" : "Subject"} :{" "}
+            <span className="english">{item.subject}</span>
           </div>
-          <p className="productdesc">{item.message}</p>
+          <p className="productdesc english">{item.message}</p>
         </div>
       </div>{" "}
       <div className="datediv">
         <p className="datep">
-          {isMandarin ? "日期" : "Date"} : {props.date}
+          {isMandarin ? "日期" : "Date"} : <span className="english">{props.date}</span>
         </p>
       </div>
     </div>

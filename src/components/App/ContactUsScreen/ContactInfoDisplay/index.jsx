@@ -18,7 +18,7 @@ function ContactInfoDisplay() {
         <div className="contact-info-section">
           <p className="header-title">Visit Us</p>
           <p className="location-details-text-style">
-            {localStorage.getItem("address")}
+            {isMandarin && localStorage.getItem("address_mandarin") ? localStorage.getItem("address_mandarin") :localStorage.getItem("address")}
           </p>
         </div>
         <ImageContainer />

@@ -69,3 +69,26 @@
   margin-top: 5px;
   font-weight: 500;
 }
+
+select[multiple] {
+  padding: 8px;
+  background-color: white;
+}
+
+select[multiple] option {
+  padding: 8px;
+  margin: 2px 0;
+  border-radius: 4px;
+}
+
+select[multiple] option:checked {
+  background-color: #e3e8ff;
+  color: #000;
+}
+
+.help-text {
+  color: #666;
+  font-size: 12px;
+  margin-top: 4px;
+  display: block;
+}

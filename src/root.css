@@ -6,11 +6,36 @@ body *:not(p h1 h2 h3 h4 h5 h6 span) {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
-
+.ticket-details-container1 {
+  gap: 10px;
+}
+.productinquiryproductsection >p{
+  font-size: 25px;
+}
+.productsimageandtextdiv {
+  width: 25%;
+}
+.content-block {
+  margin-top: 10px;
+}
+.ticket-number-style  {
+  font-size: 40px;
+}
+.personal-details-title1, .contact-details-heading{
+  font-size: 20px;
+}
+.personal-details-title1 {
+  margin-bottom: 20px;
+}
+.personal-details-container {
+  margin-bottom: 50px !important;
+}
 body *:not(.content-container-in-single-blog *) {
   font-family: "Poppins", sans-serif;
 }
-
+.blogBody {
+  font-family: "Poppins", sans-serif !important;
+}
 body {
   margin: 0;
   padding: 0;
@@ -2010,7 +2035,7 @@ body {
   margin: 0;
 }
 .ticket-details-section > *:nth-child(2) {
-  width: 34%;
+  width: 30%;
   margin: 0;
   background-color: rgba(0, 0, 0, 0.05);
   display: flex;
@@ -2735,6 +2760,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 1;
 }
 .productdetailsdic > h1 {
   margin: 0;
@@ -3712,9 +3738,7 @@ body {
   text-align: center;
   z-index: 100;
 }
-.heartbutton {
-  z-index: -1;
-}
+
 .circlemust .dropdowndiv p {
   padding: 10px 20px;
   background-color: black;
@@ -5138,10 +5162,7 @@ button:hover:not(.button-with-icon2) {
   width: 2px;
   background-color: rgba(0, 0, 0, 0.13);
 }
-.heartbutton svg {
-  position: relative;
-  z-index: -1;
-}
+
 .bagpage {
   margin-top: 30px;
 }
@@ -6569,8 +6590,10 @@ button:hover:not(.button-with-icon2) {
 .productdetailsdic > h1 {
   max-width: 85% !important;
 }
-.heartbutton {
+
+.card-container-nav {
   z-index: 10;
+  position: relative;
 }
 .contact-info-section1 > div {
   max-width: 846px;
@@ -6589,4 +6612,20 @@ button:hover:not(.button-with-icon2) {
   margin: 0 !important;
   text-decoration: underline;
   cursor: pointer;
+}
+
+@media (max-width : 1050px){
+  .onedivofproduct {
+    gap: 0;
+    padding: 20px 0;
+  }
+  .mainkeytext {
+    margin: 16px 20px;
+  }
+}
+.dropdowndiv {
+  z-index: 11 !important;
+}
+*:has(.dropdowndiv){
+  z-index: 10 !important;
 }

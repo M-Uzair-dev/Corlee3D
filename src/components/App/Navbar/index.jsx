@@ -418,9 +418,10 @@ function Navbar(props) {
                     onClick={() => {
                       navigate(
                         isMandarin
-                          ? `/products/${categ.name_mandarin}/${categ.description_mandarin}`
-                          : `/products/${categ.name}/${categ.description}`
+                          ? `/products/${categ.name_mandarin}/${categ.description_mandarin || `「${categ.name_mandarin}」類別的產品`}`
+                          : `/products/${categ.name}/${categ.description || "Products for " + categ.name + " category"}`
                       );
+                      
                       setShowprod(false);
                       setOpen(false);
                     }}
@@ -430,20 +431,34 @@ function Navbar(props) {
                       }
                     }}
                   >
-                    <div className="textdivinnavproductdropdown">
-                      <h1>
+                    <div
+                      className={`textdivinnavproductdropdown ${
+                        isMandarin && categ.name_mandarin ? "" : "english"
+                      }`}
+                    >
+                      <h1
+                        className={`${
+                          isMandarin && categ.name_mandarin ? "" : "english"
+                        }`}
+                      >
                         {isMandarin && categ.name_mandarin
                           ? categ.name_mandarin
                           : categ.name}
                       </h1>
-                      <p>
+                      <p
+                        className={`${
+                          isMandarin && categ.description_mandarin ? "" : "english"
+                        }`}
+                      >
                         {isMandarin && categ.description_mandarin
                           ? categ.description_mandarin
                           : categ.description}
                       </p>
                     </div>
                     <div
-                      className="iconinproductnavdropdown"
+                      className={`iconinproductnavdropdown ${
+                        isMandarin && categ.name_mandarin ? "" : "english"
+                      }`}
                       onClick={(e) => {
                         e.stopPropagation();
 
@@ -513,7 +528,11 @@ function Navbar(props) {
                         backgroundSize: "cover",
                       }}
                     ></div>
-                    <div className="textdropdowninnav">
+                    <div
+                      className={`textdropdowninnav ${
+                        isMandarin && product.title_mandarin ? "" : "english"
+                      }`}
+                    >
                       {isMandarin && product.title_mandarin
                         ? product.title_mandarin
                         : product.title}

@@ -13,7 +13,12 @@ function EnhancedContentSection() {
       <div className="client-satisfaction-section">
         <div className="order-process-container">
           <p className="order-process-title">
-            {isMandarin ? "500+ 滿意客戶" : messages["500_happy_clients"]}
+            <span className="english">
+              {
+                isMandarin ? "500+" : "Our 500+"
+              }
+            </span>
+            {isMandarin ? "滿意客戶" : "Happy Clients"}
           </p>
           <p className="order-process-description">
             {isMandarin

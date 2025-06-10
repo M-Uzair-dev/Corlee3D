@@ -23,7 +23,7 @@ function TrendyDisplay(props) {
   return (
     <div className="product-card">
       <div className="product-card-container1">
-        <p className="unique-header-text-style">{props.item_code}</p>
+        <p className="unique-header-text-style english">{props.item_code}</p>
         <div
           className="card-with-code-snippet"
           onClick={(e) => {
@@ -40,7 +40,7 @@ function TrendyDisplay(props) {
       >
         <p className="hot-selling-text-emoji">🔥</p>
         <p className="hot-selling-text-style">
-          {isMandarin ? "热销" : "Hot Selling"}
+          {isMandarin ? "熱銷" : "Hot Selling"}
         </p>
       </div>
     </div>

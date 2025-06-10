@@ -29,12 +29,12 @@ function TechInfoBox(data) {
   return (
     <div className="technology-card">
       <div className="technology-card2">
-        <p className="tech-title-bold">
+        <p className={`tech-title-bold ${isMandarin && data.category_name_mandarin ? "" : "english"}`}>
           {isMandarin && data.category_name_mandarin
             ? data.category_name_mandarin
             : data.category_name}
         </p>
-        <p className="tech-lauda-bold">
+        <p className={`tech-lauda-bold ${isMandarin && data.title_mandarin ? "" : "english"}`}>
           {isMandarin && data.title_mandarin ? data.title_mandarin : data.title}
         </p>
         <div className="technology-card1">
@@ -46,14 +46,14 @@ function TechInfoBox(data) {
             className="profile-image-container"
           />
           <div className="fisher-info-container">
-            <p className="ice-fisher-paragraph">{data.author_name}</p>
+            <p className="ice-fisher-paragraph english">{data.author_name}</p>
             <img
               src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_1091_9036_2d85b9.svg"
               alt=""
               className="ice-fisher-style"
             />
           </div>
-          <p className="event-date-text-style">{formatDate(data.created_at)}</p>
+          <p className="event-date-text-style english">{formatDate(data.created_at)}</p>
         </div>
       </div>
     </div>

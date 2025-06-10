@@ -51,7 +51,8 @@ const ProductRequest = (props) => {
     >
       <div className="infotext">
         <p className="ticket">
-          {isMandarin ? "追蹤號碼" : "Ticket Number"} : {item.request_number}
+          {isMandarin ? "追蹤號碼" : "Ticket Number"} :{" "}
+          <span className="english">{item.request_number}</span>
         </p>
         <p className="inqtext">
           {isMandarin ? "產品請求" : "Products Request"}
@@ -85,11 +86,13 @@ const ProductRequest = (props) => {
                     : "imagedetailsdiv"
                 }
               >
-                <p className="ticketnumber">
+                <p className="ticketnumber english">
                   {item?.related_order?.items[index]?.fabric?.item_code}
                 </p>{" "}
                 <p className="lengthofimagediv">
-                  {item?.related_order?.items[index]?.quantity}yd
+                  <span className="english">
+                    {item?.related_order?.items[index]?.quantity}yd
+                  </span>
                 </p>{" "}
               </div>
             </div>
@@ -98,7 +101,7 @@ const ProductRequest = (props) => {
       </div>{" "}
       <div className="datediv">
         <p className="datep">
-          {isMandarin ? "日期" : "Date"} : {props.date}
+          {isMandarin ? "日期" : "Date"} : <span className="english">{props.date}</span>
         </p>
       </div>
     </div>

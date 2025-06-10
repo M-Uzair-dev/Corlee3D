@@ -206,11 +206,13 @@ function ContentDisplayWidgetGenerator() {
   };
   return (
     <div className="blog-post-container-blogs">
-      <p className="hero-title-text-style-blogs">BLOGS</p>
-      <p className="blog-post-content-text-style-blogs">
-        {isMandarin
+      <p className="hero-title-text-style-blogs english">BLOGS</p>
+      <p className="blog-post-content-text-style-blogs english">
+        {/* {isMandarin
           ? "產業觀察、市場趨勢和實⽤知識都在這！"
-          : "Industry insights, trend analysis, and smart soluMons, your li_le texMle library right here !"}
+          : "Industry insights, trend analysis, and smart soluMons, your li_le texMle library right here !"} */}
+          Industry insights, trend analysis, and smart solu=ons, your liTle tex=le library right
+          here !
       </p>
 
       <>
@@ -507,7 +509,10 @@ function ContentDisplayWidgetGenerator() {
                         togglecateg(isMandarin ? c.name_mandarin : c.name)
                       }
                     >
-                      <p style={{ textAlign: "center", width: "100%" }}>
+                      <p
+                        style={{ textAlign: "center", width: "100%" }}
+                        className={`${isMandarin && c.name_mandarin ? "" : "english"}`}
+                      >
                         {isMandarin && c.name_mandarin
                           ? c.name_mandarin
                           : c.name}

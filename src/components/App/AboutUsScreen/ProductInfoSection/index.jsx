@@ -13,7 +13,7 @@ function ProductInfoSection() {
             alt=""
             className="image-block"
           />
-          <h1 className="containsline">1</h1>
+          <h1 className="containsline english">1</h1>
           <p>{isMandarin ? "詢問價格" : "Inquiry quotation"}</p>
         </div>
         <div className="order-process-child">
@@ -22,7 +22,7 @@ function ProductInfoSection() {
             alt=""
             className="image-block"
           />
-          <h1>2</h1>
+          <h1 className="containsline english">2</h1>
           <p>{isMandarin ? "準備下單" : "Place your order"}</p>
         </div>
         <div className="order-process-child">
@@ -31,7 +31,7 @@ function ProductInfoSection() {
             alt=""
             className="image-block"
           />
-          <h1>3</h1>
+          <h1 className="containsline english">3</h1>
           <p>{isMandarin ? "開始製造" : "Manufacturing your product"}</p>
         </div>
         <div className="order-process-child">
@@ -40,7 +40,7 @@ function ProductInfoSection() {
             alt=""
             className="image-block"
           />
-          <h1>4</h1>
+          <h1 className="containsline english">4</h1>
           <p>{isMandarin ? "品檢包裝" : "Inspection & packaging"}</p>
         </div>
         <div className="order-process-child">
@@ -49,7 +49,7 @@ function ProductInfoSection() {
             alt=""
             className="image-block"
           />
-          <h1>5</h1>
+          <h1 className="containsline english">5</h1>
           <p>{isMandarin ? "完⼯出貨" : "Completion & Shipment"}</p>
         </div>
       </div>
