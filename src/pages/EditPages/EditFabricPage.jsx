@@ -388,7 +388,9 @@ function EditFabricPage() {
         weight_mandarin: formData.weight_mandarin,
         finish_mandarin: formData.finish_mandarin,
         product_category: parseInt(formData.product_category, 10),
-        extra_categories: formData.extra_categories.map(parseInt),
+        extra_categories: formData.extra_categories
+          .filter(id => id && id !== "None" && !isNaN(parseInt(id, 10)))
+          .map(id => parseInt(id, 10)),
         is_hot_selling: formData.is_hot_selling,
         color_images: formData.color_images
           .filter((image) => image.color_category)
@@ -457,21 +459,11 @@ function EditFabricPage() {
         </button>
       </div>
 
-      <h2
-        className="create-heading"
-        onClick={() => {
-          console.log("Current form data:", formData);
-          console.log("Image details:", imageDetails);
-          console.log("Product categories:", productCategories);
-          console.log("Color categories:", colorCategories);
-        }}
-      >
-        編輯布料
-      </h2>
+      <h2 className="create-heading">編輯布料</h2>
 
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-section">
-          <h3>布料詳細資料</h3>
+          <h3>布料詳情</h3>
 
           <div className="form-row">
             <div className="form-group">
@@ -491,7 +483,7 @@ function EditFabricPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="title_mandarin">標題 (中⽂)</label>
+              <label htmlFor="title_mandarin">標題 (中文)</label>
               <input
                 type="text"
                 id="title_mandarin"
@@ -506,7 +498,7 @@ function EditFabricPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="item_code">型號 *</label>
+              <label htmlFor="item_code">商品編號 *</label>
               <input
                 type="text"
                 id="item_code"
@@ -523,7 +515,7 @@ function EditFabricPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="product_category">產品種類 *</label>
+            <label htmlFor="product_category">商品種類 *</label>
             <select
               id="product_category"
               name="product_category"
@@ -532,7 +524,7 @@ function EditFabricPage() {
               required
               className={fieldErrors.product_category ? "input-error" : ""}
             >
-              <option value="">選擇產品種類</option>
+              <option value="">選擇商品種類</option>
               {productCategories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -575,7 +567,7 @@ function EditFabricPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="description_mandarin">描述 (中⽂)</label>
+            <label htmlFor="description_mandarin">描述 (中文)</label>
             <textarea
               id="description_mandarin"
               name="description_mandarin"
@@ -587,26 +579,24 @@ function EditFabricPage() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="composition">規格</label>
+              <label htmlFor="composition">成分</label>
               <input
                 type="text"
                 id="composition"
                 name="composition"
                 value={formData.composition}
                 onChange={handleInputChange}
-                placeholder="例如：100% Cotton"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="composition_mandarin">規格 (中⽂)</label>
+              <label htmlFor="composition_mandarin">成分 (中文)</label>
               <input
                 type="text"
                 id="composition_mandarin"
                 name="composition_mandarin"
                 value={formData.composition_mandarin}
                 onChange={handleInputChange}
-                placeholder="例如：棉質100%"
               />
             </div>
 
@@ -618,45 +608,41 @@ function EditFabricPage() {
                 name="weight"
                 value={formData.weight}
                 onChange={handleInputChange}
-                placeholder="例如：200 gsm"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="weight_mandarin">重量 (中⽂)</label>
+              <label htmlFor="weight_mandarin">重量 (中文)</label>
               <input
                 type="text"
                 id="weight_mandarin"
                 name="weight_mandarin"
                 value={formData.weight_mandarin}
                 onChange={handleInputChange}
-                placeholder="例如：200克/平方米"
               />
             </div>
           </div>
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="finish">加⼯處理</label>
+              <label htmlFor="finish">後加工</label>
               <input
                 type="text"
                 id="finish"
                 name="finish"
                 value={formData.finish}
                 onChange={handleInputChange}
-                placeholder="例如：Soft, Matte"
               />
             </div>
 
             <div className="form-group">
-              <label htmlFor="finish_mandarin">加⼯處理 (中⽂)</label>
+              <label htmlFor="finish_mandarin">後加工 (中文)</label>
               <input
                 type="text"
                 id="finish_mandarin"
                 name="finish_mandarin"
                 value={formData.finish_mandarin}
                 onChange={handleInputChange}
-                placeholder="例如：柔软，哑光"
               />
             </div>
           </div>
@@ -669,20 +655,18 @@ function EditFabricPage() {
               checked={formData.is_hot_selling}
               onChange={handleInputChange}
             />
-            <label htmlFor="is_hot_selling">熱銷商品</label>
+            <label htmlFor="is_hot_selling">標記為熱銷商品</label>
           </div>
         </div>
 
         <div className="form-section">
-          <h3>顏色圖片</h3>
-          <p className="section-info">
-            至少添加一個顏色和主要圖片
-          </p>
+          <h3>顏色</h3>
+          <p className="section-info">至少需要一個顏色和主圖</p>
 
           {formData.color_images.map((colorImage, index) => (
             <div key={index} className="color-image-container">
               <div className="color-image-header">
-                <h4>顏色款式 {index + 1}</h4>
+                <h4>不同顏色 {index + 1}</h4>
                 <button
                   type="button"
                   className="remove-button"
@@ -693,9 +677,7 @@ function EditFabricPage() {
               </div>
 
               <div className="form-group">
-                <label htmlFor={`color_category_${index}`}>
-                  顏色種類 *
-                </label>
+                <label htmlFor={`color_category_${index}`}>顏色 *</label>
                 <select
                   id={`color_category_${index}`}
                   value={colorImage.color_category}
@@ -719,7 +701,7 @@ function EditFabricPage() {
 
               <div className="images-grid">
                 <div className="image-item">
-                  <label>主要圖片 *</label>
+                  <label>主圖 *</label>
                   <div className="image-preview">
                     {colorImage.primary_image ? (
                       imageDetails[colorImage.primary_image] ? (
@@ -728,7 +710,7 @@ function EditFabricPage() {
                             src={
                               imageDetails[colorImage.primary_image]?.file_url
                             }
-                            alt="主要圖片"
+                            alt="主圖"
                             className="preview-image"
                           />
                           <button
@@ -762,14 +744,14 @@ function EditFabricPage() {
                 </div>
 
                 <div className="image-item">
-                  <label>附加圖片 1</label>
+                  <label>副圖 1</label>
                   <div className="image-preview">
                     {colorImage.aux_image1 ? (
                       imageDetails[colorImage.aux_image1] ? (
                         <>
                           <img
                             src={imageDetails[colorImage.aux_image1]?.file_url}
-                            alt="附加圖片 1"
+                            alt="副圖 1"
                             className="preview-image"
                           />
                           <button
@@ -799,14 +781,14 @@ function EditFabricPage() {
                 </div>
 
                 <div className="image-item">
-                  <label>附加圖片 2</label>
+                  <label>副圖 2</label>
                   <div className="image-preview">
                     {colorImage.aux_image2 ? (
                       imageDetails[colorImage.aux_image2] ? (
                         <>
                           <img
                             src={imageDetails[colorImage.aux_image2]?.file_url}
-                            alt="附加圖片 2"
+                            alt="副圖 2"
                             className="preview-image"
                           />
                           <button
@@ -836,14 +818,14 @@ function EditFabricPage() {
                 </div>
 
                 <div className="image-item">
-                  <label>附加圖片 3</label>
+                  <label>副圖 3</label>
                   <div className="image-preview">
                     {colorImage.aux_image3 ? (
                       imageDetails[colorImage.aux_image3] ? (
                         <>
                           <img
                             src={imageDetails[colorImage.aux_image3]?.file_url}
-                            alt="附加圖片 3"
+                            alt="副圖 3"
                             className="preview-image"
                           />
                           <button
@@ -873,14 +855,14 @@ function EditFabricPage() {
                 </div>
 
                 <div className="image-item">
-                  <label>3D 模型圖片</label>
+                  <label>3D 模型圖</label>
                   <div className="image-preview">
                     {colorImage.model_image ? (
                       imageDetails[colorImage.model_image] ? (
                         <>
                           <img
                             src={imageDetails[colorImage.model_image]?.file_url}
-                            alt="3D 模型圖片"
+                            alt="3D 模型圖"
                             className="preview-image"
                           />
                           <button
@@ -921,7 +903,7 @@ function EditFabricPage() {
             className="add-color-button"
             onClick={addColorImage}
           >
-            + 添加顏色款式
+            增加顏色
           </button>
         </div>
 
@@ -931,18 +913,14 @@ function EditFabricPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/fabrics")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? (
-              <LoadingSpinner />
-            ) : (
-              "保存更改"
-            )}
+            {isSubmitting ? "更新中..." : "更新資料"}
           </button>
         </div>
       </form>

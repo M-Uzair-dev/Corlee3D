@@ -1,4 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useEffect } from "react";
+import AOS from "aos";
+import "aos/dist/aos.css";
 import Home from "../Screens/Home";
 import Login from "../Screens/Login";
 import ForgotPasswordEnterEmail from "../Screens/ForgotPassword-EnterEmail";
@@ -31,6 +34,14 @@ import Dashboard from "../Screens/Dashboard";
 import DashboardPassword from "../Screens/DashboardPassword";
 
 function Approuter() {
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+      easing: 'ease-out-cubic'
+    });
+  }, []);
+
   return (
     <Router>
       <Routes>

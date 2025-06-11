@@ -1,13 +1,13 @@
 import "./style.css";
-
+import image from "/images/IMG_0718-min.jpg"
 function ImageContainer() {
   return (
     <div className="image-wrapper">
       <img
-        src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_1091_3654_60f27e.webp"
+        src={image}
         className="image-container-outer"
       />
-    </div>
+    </div>  
   );
 }
 

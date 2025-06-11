@@ -3,6 +3,7 @@ import SvgIcon1 from "./icons/SvgIcon1";
 import "./style.css";
 import messages from "./messages.json";
 import Container from "../../UI/Container";
+import image from "/images/IMG_6864-min.jpg"
 
 function EventsComponent({ eventDisplayWidgetArgs }) {
   const isMandarin = localStorage.getItem("isMandarin");
@@ -33,7 +34,7 @@ function EventsComponent({ eventDisplayWidgetArgs }) {
             </div>
 
             <img
-              src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_1091_8731_66f01e.webp"
+              src={image}
               className="mainimage"
             />
           </div>

@@ -1,10 +1,10 @@
 import "./style.css";
-
+import image from "/images/(32)1G7146-min.jpg"
 function ImageContainer3() {
   return (
     <div className="vertical-spacing-container">
       <img
-        src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_1091_2366_1d1ae1.webp"
+        src={image}
         className="masked-image-container"
       />
     </div>

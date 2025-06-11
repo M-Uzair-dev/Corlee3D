@@ -30,8 +30,8 @@ function ViewOrderPage() {
         });
       } catch (error) {
         console.error("Error fetching order:", error);
-        toast.error("Failed to load order data");
-        setErrorMessage("Could not fetch order data. Please try again later.");
+        toast.error("載入訂單資料失敗");
+        setErrorMessage("無法載入訂單資料，請稍後再試。");
       } finally {
         setIsLoading(false);
       }
@@ -67,7 +67,7 @@ function ViewOrderPage() {
       >
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>正在載入訂單資料...</p>
+          <p>載入訂單資料中...</p>
         </div>
       </div>
     );
@@ -96,7 +96,7 @@ function ViewOrderPage() {
 
       <div className="order-summary">
         <div className="order-summary-item">
-          <span>訂單編號：</span>
+          <span>訂單號碼：</span>
           <strong>{orderData?.order_id}</strong>
         </div>
         <div className="order-summary-item">
@@ -121,7 +121,7 @@ function ViewOrderPage() {
                 </p>
               </div>
               <div className="detail-item">
-                <span>公司：</span>
+                <span>公司名：</span>
                 <p>{orderData.user.company_name || "未提供"}</p>
               </div>
             </div>
@@ -149,7 +149,7 @@ function ViewOrderPage() {
 
       {orderData.items && orderData.items.length > 0 && (
         <div className="view-section">
-          <h3>訂單項目</h3>
+          <h3>訂單內容</h3>
 
           <div className="order-items-wrapper">
             <div className="order-items">

@@ -52,7 +52,7 @@ const Header = ({ title }) => {
         </div>
       )}
 
-      <style jsx>{`
+      <style>{`
         .header {
           display: flex;
           justify-content: space-between;

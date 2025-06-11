@@ -1,10 +1,11 @@
 import "./style.css";
+import image from "/images/(24)1DN7101-min.jpg";
 
 function ImageContainer2() {
   return (
     <div className="image-container2-home">
       <img
-        src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_1091_2314_122d61.webp"
+        src={image}
         className="image-container1-home"
       />
     </div>

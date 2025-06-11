@@ -9,20 +9,26 @@ import messages from "./messages.json";
 import messages2 from "./messages2.json";
 import { useNavigate } from "react-router-dom";
 import arrow from "../../../../../public/pngegg.png";
+import image from "/images/IMG_0668-min.jpg"
+import image2 from "/images/IMG_0662-min.jpg"
 
 function FabricInfoDisplay1({ fabricInfoOptions }) {
   const navigate = useNavigate();
   const isMandarin = localStorage.getItem("isMandarin");
   return (
     <div className="global-fashion-fabric-styles">
-      <FabricDescriptionSection />
+      <div data-aos="fade-up" data-aos-duration="1000">
+        <FabricDescriptionSection />
+      </div>
+      
       <div className="fabric-gallery-container">
         <img
-          src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_1091_2366_1d1ae1.webp"
+          src={image}
           className="image-container-with-clipping-path"
+          data-aos="fade-right"
+          data-aos-duration="1000"
         />
-        <div className="fashion-text-container2">
-          {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
+        <div className="fashion-text-container2" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
           <button
             className="button-with-icon2"
             onClick={() => {
@@ -37,14 +43,17 @@ function FabricInfoDisplay1({ fabricInfoOptions }) {
           <ImageContainer3 />
         </div>
         <img
-          src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_1091_2366_1d1ae1.webp"
+          src={image2}
           className="image-container-with-clipping-path"
+          data-aos="fade-left"
+          data-aos-duration="1000"
         />
       </div>
 
       <FabricExplorer />
+      
       <div className="custom-fabric-features-section">
-        <div className="custom-fabric-description-container">
+        <div className="custom-fabric-description-container" data-aos="fade-right" data-aos-duration="1000">
           <p className="majestic-heading1">
             {isMandarin
               ? messages2["we_analyzeltbr_gtwe_refineltbr_gtwe_innovate"]
@@ -66,9 +75,14 @@ function FabricInfoDisplay1({ fabricInfoOptions }) {
             <img className="arrow arrowdiff" src={arrow} alt="arrow" />
           </p>
         </div>
-        <FabricDisplayRenderer fabricInfoOptions={fabricInfoOptions} />
+        <div data-aos="fade-left" data-aos-duration="1000" data-aos-delay="200">
+          <FabricDisplayRenderer fabricInfoOptions={fabricInfoOptions} />
+        </div>
       </div>
-      <RealizationDisplay />
+      
+      <div data-aos="fade-up" data-aos-duration="1000">
+        <RealizationDisplay />
+      </div>
     </div>
   );
 }

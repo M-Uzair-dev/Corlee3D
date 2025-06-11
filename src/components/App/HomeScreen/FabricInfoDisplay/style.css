@@ -7,6 +7,8 @@
   padding: 51px 21.5px 51px 23px;
   background: black;
   border-radius: 24px;
+  min-width: 300px;
+  width: 100%;
 }
 .art-noova-heading {
   flex: 0 0 auto;

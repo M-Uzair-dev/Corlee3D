@@ -1,77 +1,183 @@
 import React, { useState } from "react";
 import { api } from "../config/api";
+import { toast } from "sonner";
 
 const ImageUploader = ({ onUploadSuccess }) => {
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [previewUrl, setPreviewUrl] = useState(null);
-  const [uploadedImage, setUploadedImage] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [previewUrls, setPreviewUrls] = useState([]);
+  const [uploadedImages, setUploadedImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
 
   // Handle file selection
   const handleFileChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      setSelectedFile(file);
+    try {
+      console.log("File selection started");
+      const files = Array.from(event.target.files);
+      console.log("Selected files:", files.map(f => ({ name: f.name, size: f.size, type: f.type })));
+      
+      setSelectedFiles(files);
 
-      // Create a preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
+      // Create previews
+      const newPreviewUrls = files.map(file => URL.createObjectURL(file));
+      console.log("Created preview URLs:", newPreviewUrls);
+      
+      setPreviewUrls(prevUrls => {
+        // Clean up old preview URLs
+        console.log("Cleaning up old preview URLs");
+        prevUrls.forEach(url => URL.revokeObjectURL(url));
+        return newPreviewUrls;
+      });
+    } catch (err) {
+      console.error("Error in file selection:", err);
+      toast.error("Error selecting files: " + err.message);
     }
   };
 
   // Handle the upload process
-  const handleUpload = async () => {
-    if (!selectedFile) {
-      setError("Please select a file first");
+  const handleUpload = async (e) => {
+    e.preventDefault(); // Prevent form submission
+    console.log("Upload process started");
+    
+    if (selectedFiles.length === 0) {
+      const errorMsg = "Please select files first";
+      console.log("Upload error:", errorMsg);
+      setError(errorMsg);
       return;
     }
 
     setIsLoading(true);
     setError(null);
 
-    // Create a FormData object to handle the file upload
-    const formData = new FormData();
-    formData.append("file", selectedFile);
-
     try {
-      const response = await api.post("/media/create/", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      // Create a FormData object to handle the file upload
+      const formData = new FormData();
+      
+      // Log detailed file information before appending
+      console.log("Files to upload:", selectedFiles.map(f => ({
+        name: f.name,
+        type: f.type,
+        size: f.size,
+        lastModified: f.lastModified
+      })));
+
+      selectedFiles.forEach(file => {
+        formData.append('files[]', file);
+        console.log("Appending file to FormData:", file.name);
       });
 
+      // Log FormData entries to verify content
+      console.log("FormData entries:");
+      for (let pair of formData.entries()) {
+        console.log("FormData entry -", "key:", pair[0], "value:", pair[1] instanceof File ? {
+          name: pair[1].name,
+          type: pair[1].type,
+          size: pair[1].size
+        } : pair[1]);
+      }
+
+      // Log request configuration
+      const requestConfig = {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          "Accept": "application/json",
+        },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          console.log("Upload progress:", percentCompleted + "%");
+        },
+      };
+      console.log("Request configuration:", {
+        url: "/multiple-media-uploads/",
+        headers: requestConfig.headers
+      });
+
+      console.log("Sending request to /multiple-media-uploads/");
+      console.log("API base URL:", api.defaults.baseURL);
+      console.log("Full request URL:", api.defaults.baseURL + "/multiple-media-uploads/");
+      
+      const response = await api.post("/multiple-media-uploads/", formData, requestConfig);
+
+      // Log detailed response information
+      console.log("Response received");
+      console.log("Response type:", typeof response);
+      console.log("Upload response status:", response.status);
+      console.log("Upload response headers:", response.headers);
+      console.log("Upload response:", response);
+      console.log("Upload response data:", response.data);
+      
       const data = response.data;
-      setUploadedImage(data);
+      
+      if (data && data.uploaded_files && data.uploaded_files.length > 0) {
+        console.log("Successfully uploaded files:", data.uploaded_files);
+        setUploadedImages(data.uploaded_files);
+        toast.success(`Successfully uploaded ${data.uploaded_files.length} files`);
+      } else {
+        console.error("Upload response missing expected data structure:", data);
+        throw new Error("No files were uploaded successfully");
+      }
+
       setIsLoading(false);
 
       // Call the onUploadSuccess callback if provided
       if (onUploadSuccess && typeof onUploadSuccess === "function") {
-        onUploadSuccess(data);
+        console.log("Calling onUploadSuccess with:", data.uploaded_files);
+        onUploadSuccess(data.uploaded_files);
       }
 
-      // You can use the media ID returned in the response
-      console.log("Uploaded media ID:", data.id);
-      console.log("Media URL:", data.file_url);
+      // Log any errors
+      if (data.errors && data.errors.length > 0) {
+        console.warn("Some files failed to upload:", data.errors);
+        const errorMsg = `${data.errors.length} files failed to upload. Check console for details.`;
+        setError(errorMsg);
+        toast.error(errorMsg);
+      }
     } catch (err) {
-      setError(`Upload failed: ${err.message}`);
+      console.error("Upload failed:", err);
+      console.error("Error details:", {
+        message: err.message,
+        name: err.name,
+        code: err.code,
+        response: {
+          data: err.response?.data,
+          status: err.response?.status,
+          headers: err.response?.headers,
+          config: err.response?.config
+        },
+        request: err.request
+      });
+      
+      const errorMsg = `Upload failed: ${err.response?.data?.message || err.message}`;
+      setError(errorMsg);
+      toast.error(errorMsg);
       setIsLoading(false);
     }
   };
 
   // Reset the uploader
-  const handleReset = () => {
-    setSelectedFile(null);
-    setPreviewUrl(null);
-    setUploadedImage(null);
+  const handleReset = (e) => {
+    e.preventDefault(); // Prevent form submission
+    console.log("Resetting uploader state");
+    
+    setSelectedFiles([]);
+    setPreviewUrls(prevUrls => {
+      prevUrls.forEach(url => URL.revokeObjectURL(url));
+      return [];
+    });
+    setUploadedImages([]);
     setError(null);
   };
 
+  // Cleanup preview URLs when component unmounts
+  React.useEffect(() => {
+    return () => {
+      console.log("Component unmounting, cleaning up preview URLs");
+      previewUrls.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, [previewUrls]);
+
   return (
-    <div className="image-uploader">
+    <form onSubmit={handleUpload} className="image-uploader">
       <h3>Upload New Media</h3>
 
       {/* File input */}
@@ -81,33 +187,42 @@ const ImageUploader = ({ onUploadSuccess }) => {
           accept="image/*"
           onChange={handleFileChange}
           id="file-input"
+          multiple
         />
         <label htmlFor="file-input" className="file-input-label">
-          Choose File
+          Choose Files
         </label>
-        {selectedFile && <span className="file-name">{selectedFile.name}</span>}
+        {selectedFiles.length > 0 && (
+          <span className="file-name">{selectedFiles.length} files selected</span>
+        )}
       </div>
 
-      {/* Image preview */}
-      {previewUrl && (
-        <div className="image-preview">
-          <h4>Preview : </h4>
-          <img src={previewUrl} alt="Preview" />
+      {/* Image previews */}
+      {previewUrls.length > 0 && (
+        <div className="image-previews">
+          <h4>Previews:</h4>
+          <div className="preview-grid">
+            {previewUrls.map((url, index) => (
+              <div key={index} className="preview-item">
+                <img src={url} alt={`Preview ${index + 1}`} />
+              </div>
+            ))}
+          </div>
         </div>
       )}
 
       <div className="upload-actions">
         {/* Upload button */}
         <button
-          onClick={handleUpload}
-          disabled={!selectedFile || isLoading}
+          type="submit"
+          disabled={selectedFiles.length === 0 || isLoading}
           className="upload-button"
         >
-          {isLoading ? "Uploading..." : "Upload Image"}
+          {isLoading ? "Uploading..." : "Upload Images"}
         </button>
 
-        {selectedFile && (
-          <button onClick={handleReset} className="cancel-button">
+        {selectedFiles.length > 0 && (
+          <button onClick={handleReset} className="cancel-button" type="button">
             Cancel
           </button>
         )}
@@ -117,14 +232,18 @@ const ImageUploader = ({ onUploadSuccess }) => {
       {error && <div className="error-message">{error}</div>}
 
       {/* Upload success */}
-      {uploadedImage && (
+      {uploadedImages.length > 0 && (
         <div className="upload-success">
           <h4>Upload Successful!</h4>
-          <div className="upload-success-preview">
-            <img src={uploadedImage.file_url} alt="Uploaded" />
+          <div className="upload-success-grid">
+            {uploadedImages.map((image, index) => (
+              <div key={index} className="upload-success-preview">
+                <img src={image.file_url} alt={`Uploaded ${index + 1}`} />
+              </div>
+            ))}
           </div>
-          <button onClick={handleReset} className="reset-button">
-            Upload Another Image
+          <button onClick={handleReset} className="reset-button" type="button">
+            Upload More Images
           </button>
         </div>
       )}
@@ -186,6 +305,27 @@ const ImageUploader = ({ onUploadSuccess }) => {
           display: none;
         }
 
+        .preview-grid, .upload-success-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+          gap: 16px;
+          margin: 16px 0;
+        }
+
+        .preview-item, .upload-success-preview {
+          position: relative;
+          aspect-ratio: 1;
+          border-radius: 4px;
+          overflow: hidden;
+          border: 1px solid #eee;
+        }
+
+        .preview-item img, .upload-success-preview img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
         .upload-actions {
           display: flex;
           gap: 10px;
@@ -212,6 +352,11 @@ const ImageUploader = ({ onUploadSuccess }) => {
           background: #2e8b46;
         }
 
+        .upload-button:disabled {
+          background: #ccc;
+          cursor: not-allowed;
+        }
+
         .reset-button {
           background: #4285f4;
           color: white;
@@ -230,54 +375,20 @@ const ImageUploader = ({ onUploadSuccess }) => {
           background: #e4e4e4;
         }
 
-        .upload-button:disabled {
-          background: #ccc;
-          cursor: not-allowed;
-        }
-
         .error-message {
           color: #ea4335;
-          margin: 10px 0;
-          padding: 8px;
-          background-color: rgba(234, 67, 53, 0.1);
-          border-radius: 4px;
+          margin: 8px 0;
           font-size: 14px;
         }
 
-        .image-preview {
-          margin: 16px 0;
-          justify-content: start !important;
-          align-items: start !important;
-          padding: 10px !important;
-          gap: 10px !important;
-        }
-
-        .image-preview img {
-          max-width: 100%;
-          height: 100%;
-          border-radius: 4px;
-          border: 1px solid #eee;
-        }
-
         .upload-success {
-          margin: 16px 0;
+          margin-top: 16px;
           padding: 16px;
-          background-color: rgba(52, 168, 83, 0.1);
+          background: #f8f9fa;
           border-radius: 4px;
-        }
-
-        .upload-success-preview {
-          margin: 10px 0;
-        }
-
-        .upload-success-preview img {
-          max-width: 100%;
-          max-height: 200px;
-          border-radius: 4px;
-          border: 1px solid #eee;
         }
       `}</style>
-    </div>
+    </form>
   );
 };
 

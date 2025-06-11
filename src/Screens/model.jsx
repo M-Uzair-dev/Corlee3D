@@ -56,7 +56,7 @@ const TexturedModel = ({ gltf, textureUrl, scale, modelUrl }) => {
         // Load texture if not in cache
         const newTexture = await preloadTexture(textureUrl);
         if (isSubscribed) {
-          setTexture(newTexture);
+        setTexture(newTexture);
         }
       } catch (error) {
         console.error("Error loading texture:", error);
@@ -174,14 +174,14 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [
   useEffect(() => {
     const preloadAll = async () => {
       // Preload current model and texture
-      if (!preloaded.current.has(modelUrl)) {
-        useGLTF.preload(modelUrl);
-        preloaded.current.add(modelUrl);
-      }
-      if (textureUrl && !preloaded.current.has(textureUrl)) {
+    if (!preloaded.current.has(modelUrl)) {
+      useGLTF.preload(modelUrl);
+      preloaded.current.add(modelUrl);
+    }
+    if (textureUrl && !preloaded.current.has(textureUrl)) {
         await preloadTexture(textureUrl);
-        preloaded.current.add(textureUrl);
-      }
+      preloaded.current.add(textureUrl);
+    }
 
       // Preload other models and textures in the background
       Promise.all([

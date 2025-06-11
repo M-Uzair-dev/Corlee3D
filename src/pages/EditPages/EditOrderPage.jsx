@@ -49,8 +49,8 @@ function EditOrderPage() {
         });
       } catch (error) {
         console.error("Error fetching order:", error);
-        toast.error("Failed to load order data");
-        setErrorMessage("Could not fetch order data. Please try again later.");
+              toast.error("載入訂單資料失敗");
+      setErrorMessage("無法載入訂單資料，請稍後再試。");
       } finally {
         setIsLoading(false);
       }
@@ -93,7 +93,7 @@ function EditOrderPage() {
   // Remove item from order
   const handleRemoveItem = (index) => {
     if (formData.items.length <= 1) {
-      toast.error("Order must have at least one item");
+      toast.error("訂單至少需要一個項目");
       return;
     }
 
@@ -127,7 +127,7 @@ function EditOrderPage() {
       console.log("Payload:", payload);
       await api.patch(`/orders/${id}/`, payload);
 
-      toast.success("Order updated successfully");
+      toast.success("訂單更新成功");
       navigate("/dashboard/orders");
     } catch (error) {
       console.error("Error updating order:", error);
@@ -138,7 +138,7 @@ function EditOrderPage() {
             .join(", ") ||
           "Failed to update order"
       );
-      toast.error("Failed to update order");
+      toast.error("更新訂單失敗");
     } finally {
       setIsSubmitting(false);
     }
@@ -158,7 +158,7 @@ function EditOrderPage() {
       >
         <div className="loading-container">
           <div className="loading-spinner"></div>
-          <p>Loading order data...</p>
+          <p>載入訂單資料中...</p>
         </div>
       </div>
     );
@@ -181,49 +181,49 @@ function EditOrderPage() {
 
       <div className="order-summary">
         <div className="order-summary-item">
-          <span>Order Number:</span>
+          <span>訂單號碼：</span>
           <strong>{orderData?.order_id}</strong>
         </div>
         <div className="order-summary-item">
-          <span>Order Date:</span>
+          <span>訂單日期：</span>
           <strong>
             {orderData?.order_date
               ? new Date(orderData.order_date).toLocaleDateString()
-              : "Unknown"}
+              : "未知"}
           </strong>
         </div>
         <div className="order-summary-item">
-          <span>Customer:</span>
+          <span>客戶：</span>
           <strong>
-            {orderData?.user?.name || orderData?.user?.username || "Unknown"}
+            {orderData?.user?.name || orderData?.user?.username || "未知"}
           </strong>
         </div>
         <div className="order-summary-item">
-          <span>Company:</span>
-          <strong>{orderData?.user?.company_name || "Not specified"}</strong>
+          <span>公司名：</span>
+          <strong>{orderData?.user?.company_name || "未提供"}</strong>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="edit-form">
         {formData.items && formData.items.length > 0 && (
           <div className="form-section">
-            <h3>Order Items</h3>
+            <h3>訂單內容</h3>
             <p className="order-edit-note">
-              You can edit quantities or remove items from this order.
+              請於下方變更數量或移除品項
             </p>
 
             {formData.items.length === 0 ? (
-              <div className="no-items">No items in this order</div>
+              <div className="no-items">無訂單項目</div>
             ) : (
               <div className="order-items-wrapper">
                 <div className="order-items">
                   <div className="order-items-scroll-container">
                     <div className="items-header">
-                      <div className="item-header-cell">Product</div>
-                      <div className="item-header-cell">Image</div>
-                      <div className="item-header-cell">Color</div>
-                      <div className="item-header-cell">Quantity</div>
-                      <div className="item-header-cell">Action</div>
+                      <div className="item-header-cell">產品</div>
+                      <div className="item-header-cell">圖片</div>
+                      <div className="item-header-cell">顏色</div>
+                      <div className="item-header-cell">數量</div>
+                      <div className="item-header-cell">移除</div>
                     </div>
 
                     <div className="order-items-container">
@@ -239,11 +239,11 @@ function EditOrderPage() {
                                 onError={(e) => {
                                   e.target.onerror = null;
                                   e.target.src =
-                                    "https://via.placeholder.com/80?text=No+Image";
+                                    "https://via.placeholder.com/80?text=無圖片";
                                 }}
                               />
                             ) : (
-                              <div className="no-image">No Image</div>
+                              <div className="no-image">無圖片</div>
                             )}
                           </div>
                           <div className="item-cell">{item.color}</div>
@@ -290,7 +290,7 @@ function EditOrderPage() {
                               className="remove-item-btn"
                               onClick={() => handleRemoveItem(index)}
                             >
-                              Remove
+                              移除
                             </button>
                           </div>
                         </div>
@@ -309,19 +309,19 @@ function EditOrderPage() {
             className="cancel-button"
             onClick={() => navigate("/dashboard/orders")}
           >
-            Cancel
+            取消
           </button>
           <button
             type="submit"
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Updating..." : "Update Order"}
+            {isSubmitting ? "更新中..." : "更新訂單"}
           </button>
         </div>
       </form>
 
-      {isSubmitting && <LoadingSpinner text="Updating order..." overlay />}
+      {isSubmitting && <LoadingSpinner text="更新訂單中..." overlay />}
 
       <style jsx>{`
         .edit-page-container {

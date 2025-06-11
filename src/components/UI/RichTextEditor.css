@@ -1,0 +1,185 @@
+/* Custom styles for the Quill editor */
+.ql-editor {
+  min-height: 300px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+/* Image resize handles */
+.ql-editor .image-resizer {
+  border: 1px dashed #999;
+  position: absolute;
+}
+
+.ql-editor .image-resizer .resize-handle {
+  width: 7px;
+  height: 7px;
+  background-color: #4285f4;
+  border: 1px solid white;
+  position: absolute;
+}
+
+.ql-editor .image-resizer .resize-handle.se {
+  bottom: -5px;
+  right: -5px;
+  cursor: se-resize;
+}
+
+.ql-editor .image-resizer .resize-handle.sw {
+  bottom: -5px;
+  left: -5px;
+  cursor: sw-resize;
+}
+
+.ql-editor .image-resizer .resize-handle.ne {
+  top: -5px;
+  right: -5px;
+  cursor: ne-resize;
+}
+
+.ql-editor .image-resizer .resize-handle.nw {
+  top: -5px;
+  left: -5px;
+  cursor: nw-resize;
+}
+
+/* Image size display */
+.ql-editor .image-size-display {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 4px 8px;
+  font-size: 12px;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  border-top-left-radius: 4px;
+}
+
+.rich-text-editor {
+  margin-bottom: 20px;
+}
+
+.rich-text-editor .ql-editor {
+  min-height: 300px;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.rich-text-editor .ql-editor img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
+  cursor: default;
+}
+
+/* Image resize module styles */
+.rich-text-editor .ql-editor .image-resizer {
+  position: relative;
+  display: inline-block;
+}
+
+.rich-text-editor .ql-editor .image-resizer img {
+  display: block;
+}
+
+.rich-text-editor .ql-editor .image-resizer .resize-handle {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background-color: #4285f4;
+  border: 1px solid white;
+  border-radius: 50%;
+}
+
+.rich-text-editor .ql-editor .image-resizer .resize-handle.se {
+  bottom: -4px;
+  right: -4px;
+  cursor: se-resize;
+}
+
+.rich-text-editor .ql-editor .image-resizer .resize-handle.sw {
+  bottom: -4px;
+  left: -4px;
+  cursor: sw-resize;
+}
+
+.rich-text-editor .ql-editor .image-resizer .resize-handle.ne {
+  top: -4px;
+  right: -4px;
+  cursor: ne-resize;
+}
+
+.rich-text-editor .ql-editor .image-resizer .resize-handle.nw {
+  top: -4px;
+  left: -4px;
+  cursor: nw-resize;
+}
+
+.rich-text-editor .ql-editor .image-resizer.active {
+  outline: 2px solid #4285f4;
+}
+
+.rich-text-editor .ql-editor .image-resizer .overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+}
+
+.rich-text-editor .ql-editor .image-resizer.active .overlay {
+  display: block;
+}
+
+.rich-text-editor .ql-editor .image-size-label {
+  position: absolute;
+  bottom: -20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 12px;
+  pointer-events: none;
+}
+
+/* Toolbar styles */
+.rich-text-editor .ql-toolbar {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background-color: #f8f9fa;
+  border-color: #e2e8f0;
+}
+
+.rich-text-editor .ql-container {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  border-color: #e2e8f0;
+}
+
+/* Focus states */
+.rich-text-editor .ql-container.ql-focus {
+  border-color: #4285f4;
+}
+
+/* Image resize handles */
+.rich-text-editor .ql-editor img::after {
+  content: '';
+  position: absolute;
+  right: -5px;
+  bottom: -5px;
+  width: 10px;
+  height: 10px;
+  background: #4285f4;
+  border: 2px solid white;
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.rich-text-editor .ql-editor img:hover::after {
+  opacity: 1;
+} 

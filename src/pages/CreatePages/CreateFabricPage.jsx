@@ -266,7 +266,7 @@ function CreateFabricPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="title_mandarin">標題 (中⽂)</label>
+              <label htmlFor="title_mandarin">標題 (中文)</label>
               <input
                 type="text"
                 id="title_mandarin"
@@ -298,7 +298,7 @@ function CreateFabricPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="product_category">產品種類 *</label>
+            <label htmlFor="product_category">商品種類 *</label>
             <select
               id="product_category"
               name="product_category"
@@ -307,7 +307,7 @@ function CreateFabricPage() {
               required
               className={fieldErrors.product_category ? "input-error" : ""}
             >
-              <option value="">選擇產品種類</option>
+              <option value="">選擇商品種類</option>
               {productCategories.map((category) => (
                 <option key={category.id} value={category.id}>
                   {category.name}
@@ -350,7 +350,7 @@ function CreateFabricPage() {
           </div>
 
           <div className="form-group">
-            <label htmlFor="description_mandarin">描述(中⽂)</label>
+            <label htmlFor="description_mandarin">描述 (中文)</label>
             <textarea
               id="description_mandarin"
               name="description_mandarin"
@@ -373,7 +373,7 @@ function CreateFabricPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="composition_mandarin">成分(中⽂)</label>
+              <label htmlFor="composition_mandarin">成分 (中文)</label>
               <input
                 type="text"
                 id="composition_mandarin"
@@ -395,7 +395,7 @@ function CreateFabricPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="weight_mandarin">重量(中⽂)</label>
+              <label htmlFor="weight_mandarin">重量 (中文)</label>
               <input
                 type="text"
                 id="weight_mandarin"
@@ -408,7 +408,7 @@ function CreateFabricPage() {
 
           <div className="form-row">
             <div className="form-group">
-              <label htmlFor="finish">後加⼯</label>
+              <label htmlFor="finish">後加工</label>
               <input
                 type="text"
                 id="finish"
@@ -419,7 +419,7 @@ function CreateFabricPage() {
             </div>
 
             <div className="form-group">
-              <label htmlFor="finish_mandarin">後加⼯(中⽂)</label>
+              <label htmlFor="finish_mandarin">後加工 (中文)</label>
               <input
                 type="text"
                 id="finish_mandarin"
@@ -443,13 +443,13 @@ function CreateFabricPage() {
         </div>
 
         <div className="form-section">
-          <h3>顏⾊</h3>
+          <h3>顏色</h3>
           <p className="section-info">至少需要一個顏色和主圖</p>
 
           {formData.color_images.map((colorImage, index) => (
             <div key={index} className="color-image-container">
               <div className="color-image-header">
-                <h4>不同顏⾊ {index + 1}</h4>
+                <h4>不同顏色 {index + 1}</h4>
                 <button
                   type="button"
                   className="remove-button"
@@ -460,7 +460,7 @@ function CreateFabricPage() {
               </div>
 
               <div className="form-group">
-                <label htmlFor={`color_category_${index}`}>顏⾊ *</label>
+                <label htmlFor={`color_category_${index}`}>顏色 *</label>
                 <select
                   id={`color_category_${index}`}
                   value={colorImage.color_category}
@@ -638,7 +638,7 @@ function CreateFabricPage() {
                 </div>
 
                 <div className="image-item">
-                  <label>3D模型圖</label>
+                  <label>3D 模型圖</label>
                   <div className="image-preview">
                     {colorImage.model_image ? (
                       imageDetails[colorImage.model_image] ? (
@@ -686,7 +686,7 @@ function CreateFabricPage() {
             className="add-color-button"
             onClick={addColorImage}
           >
-            增加顏⾊
+            增加顏色
           </button>
         </div>
         <div className="form-actions">
@@ -702,7 +702,7 @@ function CreateFabricPage() {
             className="submit-button"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "建立中..." : "增加布料"}
+            {isSubmitting ? "建立中..." : "新增布料"}
           </button>
         </div>
       </form>

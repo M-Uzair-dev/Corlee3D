@@ -16,6 +16,7 @@ function FabricExplorer() {
     try {
       setLoading(true);
       const response = await api.get("/categories/");
+      console.log("HERE ARE THE CATEGORIES :", response.data.results);
       if (response.status === 200) {
         setCategs(response.data.results);
         setLoading(false);
@@ -70,14 +71,14 @@ function FabricExplorer() {
   }, []);
   return (
     <>
-      <div className="fabric-range-section">
+      <div className="fabric-range-section" data-aos="fade-up" data-aos-duration="1000">
         <div className="fabric-types-section">
           <p className="fabric-type-heading">
             {isMandarin ? "精選布料推薦" : "Our Selection of Fabrics"}
           </p>
           <p className="fabric-type-description">
             {isMandarin
-              ? "我們提供多款創新的環保布料，快來試試我們的 3D 模擬功能，找到 最適合您的布料吧！"
+              ? "我們提供多款創新的環保布料，快來試試我們的 3D 模擬功能，找到最適合您的布料吧！"
               : "From premium materials to sustainable choices, use our 3D simulator to find your perfect fabric match today!"}
           </p>
         </div>
@@ -90,7 +91,7 @@ function FabricExplorer() {
           </div>
         </div>
       </div>
-      <div className="material-container">
+      <div className="material-container" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
         <div className="arrowdiv1" onClick={handleClick2}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +121,16 @@ function FabricExplorer() {
           </svg>
         </div>
         {categs?.map((e, i) => (
-          <div className="mainwrapperofmaterial" key={i}>
+          <div
+            className="mainwrapperofmaterial"
+            key={i}
+            style={{
+              backgroundImage: `url(${e.image_url || "https://d2e8m995jm0i5z.cloudfront.net/websiteimages/div__1ku4mui_253c17.webp"})`,
+            }}
+            data-aos="fade-up"
+            data-aos-duration="1000"
+            data-aos-delay={400 + (i * 200)}
+          >
             <div className="material-button-container">
               <p
                 className={`material-heading ${

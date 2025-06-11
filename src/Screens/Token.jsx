@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { api, setAuthToken } from "../config/api";
 import { Outlet, useNavigate } from "react-router-dom";
-
+import Lenis from "lenis";
 const Token = () => {
+  
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -11,7 +12,16 @@ const Token = () => {
   if (token) {
     setAuthToken(token);
   }
-
+  useEffect(() => {
+    const lenis = new Lenis({
+      lerp: 0.05,
+    });
+    let raf = (time) => {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    };
+    requestAnimationFrame(raf);
+  }, []);
   const getinfo = async () => {
     const response = await api.get("/contact-details/");
     const data = response.data.results[0];
@@ -129,9 +139,8 @@ const Token = () => {
             *:not(.english):not(.imagestext p:nth-child(1)):not(.textdivinbagdetails *:not(:first-child)):not(input):not(.singlecalldetail:nth-child(3)>p):not(.contact-heading):not(.contact-heading-text-style):not(.contact-info-section1 *):not(.textboxdivmain h1):not(*:has(.dropdowndiv) h1), .productdetailsdic h1:not(.english){
             font-family: "Cactus Classical Serif", serif !important;
             }
-            .hero-text-block,
+            
 .majestic-heading-home,
-.art-noova-heading,
 .majestic-heading1,
 .fabric-type-heading,
 .fashion-statement-text-style,
@@ -156,9 +165,47 @@ const Token = () => {
 .password-reset-message-email,
 .containerTerms h1,
 .loginpopuswrapper h1 {
-font-size: 50px !important;
+font-size: 46px !important;
+line-height: 1.2 !important;
 }
-
+.hero-text-block. art-noova-heading {
+font-size: 36px !important;
+}
+@media(max-width: 768px) {
+.majestic-heading-home,
+.majestic-heading1,
+.fabric-type-heading,
+.fashion-statement-text-style,
+.leftsidecontent h1,
+.upcoming-events-heading,
+.golden-heading,
+.hero-title,
+.standout-text,
+.visionary-heading,
+.order-process-title,
+.order-process-child,
+.order-process-title,
+.hero-title-text-style,
+.contact-heading-text-style,
+.contact-heading,
+.request-history-title,
+.priceofproduct,
+.material-heading-text-style,
+.error-message-title,
+.email-notification-heading,
+.company-details-title,
+.password-reset-message-email,
+.containerTerms h1,
+.loginpopuswrapper h1 {
+font-size: 36px !important;
+}
+.hero-text-block. art-noova-heading {
+font-size: 26px !important;
+}
+}
+.vertical-section-container {
+max-height: 550px !important;
+}
           `
               : ""
           }

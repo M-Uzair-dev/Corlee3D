@@ -1,10 +1,11 @@
 import "./style.css";
+import image from "/images/IMG_0708-min.jpg";
 
 function ImageContainer1() {
   return (
     <div className="vertical-margin-top-24px">
       <img
-        src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_1091_2317_d8a6fc.webp"
+        src={image}
         className="image-container-styles1"
       />
     </div>

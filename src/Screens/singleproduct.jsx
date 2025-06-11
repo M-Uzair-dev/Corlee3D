@@ -373,7 +373,7 @@ const singleproduct = () => {
         </div>
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
-          <p className="mainkeytext">{isMandarin ? "規格" : "Composition"}</p>
+          <p className="mainkeytext">{isMandarin ? "成份" : "Composition"}</p>
                               <div className="maintextans-wrapper">
             <Tooltip 
               title={!loading ? (isMandarin && product.composition_mandarin ? product.composition_mandarin : product.composition) : "loading..."} 

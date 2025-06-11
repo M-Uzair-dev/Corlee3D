@@ -211,7 +211,7 @@ function ContentDisplayWidgetGenerator() {
         {/* {isMandarin
           ? "產業觀察、市場趨勢和實⽤知識都在這！"
           : "Industry insights, trend analysis, and smart soluMons, your li_le texMle library right here !"} */}
-          Industry insights, trend analysis, and smart solu=ons, your liTle tex=le library right
+          Industry insights, trend analysis, and smart solutions, your little textile library right
           here !
       </p>
 

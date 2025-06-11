@@ -4,8 +4,7 @@ import { api } from "../../config/api";
 import { toast } from "sonner";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import MediaGallery from "../../components/MediaGalleryPopup";
-import ReactQuill from "react-quill";
-import "react-quill/dist/quill.snow.css";
+import RichTextEditor from "../../components/UI/RichTextEditor";
 import "./EditPages.css";
 
 function EditBlogPage() {
@@ -202,59 +201,19 @@ function EditBlogPage() {
 
           <div className="form-group">
             <label htmlFor="content">內⽂ *</label>
-            <ReactQuill
+            <RichTextEditor
               value={formData.content}
               onChange={handleContentChange}
-              modules={{
-                toolbar: [
-                  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                  ["bold", "italic", "underline", "strike"],
-                  [{ list: "ordered" }, { list: "bullet" }],
-                  ["link", "image"],
-                  ["clean"],
-                ],
-              }}
-              formats={[
-                "header",
-                "bold",
-                "italic",
-                "underline",
-                "strike",
-                "list",
-                "bullet",
-                "link",
-                "image",
-              ]}
-              style={{ height: "400px", marginBottom: "50px" }}
+              placeholder="請輸入內文..."
             />
           </div>
 
           <div className="form-group">
             <label htmlFor="content_mandarin">內⽂(中⽂)</label>
-            <ReactQuill
+            <RichTextEditor
               value={formData.content_mandarin}
               onChange={handleContentMandarinChange}
-              modules={{
-                toolbar: [
-                  [{ header: [1, 2, 3, 4, 5, 6, false] }],
-                  ["bold", "italic", "underline", "strike"],
-                  [{ list: "ordered" }, { list: "bullet" }],
-                  ["link", "image"],
-                  ["clean"],
-                ],
-              }}
-              formats={[
-                "header",
-                "bold",
-                "italic",
-                "underline",
-                "strike",
-                "list",
-                "bullet",
-                "link",
-                "image",
-              ]}
-              style={{ height: "400px", marginBottom: "50px" }}
+              placeholder="請輸入中文內文..."
             />
           </div>
 

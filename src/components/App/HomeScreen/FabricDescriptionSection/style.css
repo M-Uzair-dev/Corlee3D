@@ -23,6 +23,15 @@
   text-align: center;
   white-space: pre-wrap;
 }
+.fashion-statement-text-style span {
+  opacity: 0;
+  transform: translateY(20px);
+}
+.fashion-statement-text-style span[data-aos].aos-animate {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
 .global-fashion-text-styles {
   box-sizing: border-box;
   flex: 0 0 auto;
@@ -34,4 +43,11 @@
   color: #666666;
   text-align: center;
   white-space: pre-wrap;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.global-fashion-text-styles.aos-animate {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
 }
