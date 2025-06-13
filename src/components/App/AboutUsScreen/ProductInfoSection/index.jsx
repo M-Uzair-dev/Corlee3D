@@ -49,7 +49,7 @@ function ProductInfoSection() {
             alt=""
             className="image-block"
           />
-          <h1 className="containsline english">5</h1>
+          <h1 className="english">5</h1>
           <p>{isMandarin ? "完⼯出貨" : "Completion & Shipment"}</p>
         </div>
       </div>

@@ -4,7 +4,6 @@ import { api, setAuthToken } from "../config/api";
 import { Outlet, useNavigate } from "react-router-dom";
 import Lenis from "lenis";
 const Token = () => {
-  
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
   const [showScrollTop, setShowScrollTop] = useState(false);
@@ -136,8 +135,8 @@ const Token = () => {
           ${
             isMandarin
               ? `
-            *:not(.english):not(.imagestext p:nth-child(1)):not(.textdivinbagdetails *:not(:first-child)):not(input):not(.singlecalldetail:nth-child(3)>p):not(.contact-heading):not(.contact-heading-text-style):not(.contact-info-section1 *):not(.textboxdivmain h1):not(*:has(.dropdowndiv) h1), .productdetailsdic h1:not(.english){
-            font-family: "Cactus Classical Serif", serif !important;
+            *:not(.english):not(.dashboard-container *):not(.adddiv):not(.imagestext p:nth-child(1)):not(.textdivinbagdetails *:not(:first-child)):not(input):not(.singlecalldetail:nth-child(3)>p):not(.contact-heading):not(.contact-heading-text-style):not(.contact-info-section1 *):not(.textboxdivmain h1):not(*:has(.dropdowndiv) h1), .productdetailsdic h1:not(.english), .horizontal-menu-with-icons-nav *{
+             font-family: "Noto Serif TC", serif;
             }
             
 .majestic-heading-home,
@@ -203,6 +202,8 @@ font-size: 36px !important;
 font-size: 26px !important;
 }
 }
+.loginpopupheader::after {
+display: none !important;}
 .vertical-section-container {
 max-height: 550px !important;
 }
