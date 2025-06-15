@@ -9,11 +9,11 @@ function OrderProcessSection() {
       <div className="order-process-flow-container">
         <div className="vertical-centered-container">
           <div className="order-process-container">
-            <p className="order-process-title english">They trust our work</p>
+            <p className="order-process-title english">Order Process</p>
             <p className="order-process-description">
               {isMandarin
-                ? "我們的產品透過策略夥伴，成功打入多個知名品牌供應鏈"
-                : "Our products are trusted by leading brands, thanks to strategic partners."}
+                ? "從第一步詢價到最後出貨，我們致力於讓流程更簡單省心，始終以品質為本，讓您全程滿意。"
+                : "From initial request to final delivery, we make the process easy, always focused on quality and your satisfaction."}
             </p>
           </div>
         </div>

@@ -14,16 +14,13 @@ function EnhancedContentSection() {
         <div className="order-process-container">
           <p className="order-process-title">
             <span className="english">
-              {
-                isMandarin ? "500+" : "Our 500+"
-              }
+            They trust our work
             </span>
-            {isMandarin ? "滿意客戶" : "Happy Clients"}
           </p>
           <p className="order-process-description">
             {isMandarin
-              ? "一起認識那些選擇共樂力的品牌，也邀請您成為我們下一位合作夥伴！"
-              : "Discover the brands that choose Corlee for their fabric needs, and build a trusted partnership with us!"}
+              ? "我們的產品透過策略夥伴，成功打入多個知名品牌供應鏈。"
+              : "Our products are trusted by leading brands, thanks to strategic partners."}
           </p>
         </div>
       </div>

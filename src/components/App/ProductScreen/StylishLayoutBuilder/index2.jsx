@@ -77,7 +77,7 @@ function StylishLayoutBuilder(props) {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                fontSize: "24px",
+                fontSize: "2em",
                 fontWeight: "600",
                 color: "black",
                 textAlign: "center",
@@ -86,7 +86,7 @@ function StylishLayoutBuilder(props) {
                 maxWidth: "20000px !important",
               }}
             >
-              {isMandarin ? "沒有收藏的產品" : "No products in favourites"}
+              {isMandarin ? "尚無最愛清單" : "No products in favourites"}
             </p>
           )}
         </>

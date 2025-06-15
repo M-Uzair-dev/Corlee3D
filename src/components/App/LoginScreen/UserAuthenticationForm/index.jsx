@@ -43,7 +43,7 @@ function UserAuthenticationForm() {
       toast.error(
         `${Object.keys(error.response.data)[0]} : ${
           error.response.data[Object.keys(error.response.data)[0]]
-        }` || (isMandarin ? "發生錯誤" : "Something went wrong")
+        }` || (isMandarin ? "帳號或密碼錯誤" : "Something went wrong")
       );
       setLoading(false);
     }
@@ -86,7 +86,7 @@ function UserAuthenticationForm() {
               cursor: "pointer",
             }}
           >
-            {isMandarin ? "忘記密碼？" : "Forgot password?"}
+            {isMandarin ? "忘記密碼?" : "Forgot password?"}
           </p>
         </div>
         <button
@@ -99,14 +99,14 @@ function UserAuthenticationForm() {
               ? "載入中..."
               : "Loading..."
             : isMandarin
-            ? "登錄"
+            ? "登入"
             : "Login"}
         </button>
         {error && <p className="error-message">{error}</p>}
       </form>
       <div className="account-info-container">
         <p className="account-info-text-style">
-          {isMandarin ? "沒有帳戶？" : "Don't have an account?"}
+          {isMandarin ? "没有Corlee帳戶?" : "Don't have an account?"}
         </p>
         <p
           className="sign-up-link-style"
@@ -115,7 +115,7 @@ function UserAuthenticationForm() {
             navigate("/signup");
           }}
         >
-          {isMandarin ? "註冊" : "Sign up"}
+          {isMandarin ? "建立帳戶" : "Sign up"}
         </p>
       </div>
     </div>

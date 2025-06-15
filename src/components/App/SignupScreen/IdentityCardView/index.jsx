@@ -8,7 +8,7 @@ function IdentityCardView(props) {
       <input
         type="text"
         className="id-label-text-style"
-        placeholder={isMandarin ? "身份证" : "ID"}
+        placeholder={isMandarin ? "帳號" : "ID"}
         name="username"
         onChange={props.onChange}
         value={props.value}

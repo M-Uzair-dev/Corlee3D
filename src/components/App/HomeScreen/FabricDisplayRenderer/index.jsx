@@ -28,7 +28,7 @@ function FabricDisplayRenderer() {
     {
       fabricDesignCategory: isMandarin ? "品質控制" : "Quality control",
       fabricCraftingDescription: isMandarin
-        ? "品質是我們最重視的核⼼。\n\n每⼀塊布料都會經過層層的測試和嚴格檢驗，確保符合我們⾼標準的品質和穩定度。\n\n我們的⽬標是成為您可靠的機能性布料夥伴"
+        ? "品質是我們最重視的核⼼。\n\n每⼀塊布料都會經過層層的測試和嚴格檢驗，確保符合我們⾼標準的品質和穩定度。\n\n我們的⽬標是成為您可靠的機能性布料夥伴。"
         : "Quality is at the heart of everything we do. \n\nEvery fabric undergoes rigorous tesMng and inspecMon to ensure it meets our high standards of quality and consistency. \n\n Our goal is to deliver products you can trust and rely on every Mme.",
     },
   ];

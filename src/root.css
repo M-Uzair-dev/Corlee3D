@@ -63,7 +63,10 @@ body {
   align-items: center;
   gap: 10px;
 }
-
+.header-title {
+  font-size: 46px !important;
+  line-height: 1.2 !important;
+}
 @media (max-width: 1340px) {
   .horizontal-menu-with-icons-nav {
     gap: 20px !important;
@@ -6232,8 +6235,10 @@ button:hover:not(.button-with-icon2) {
 .fabric-type-heading,
 .fashion-statement-text-style,
 .leftsidecontent h1,
+.fashion-statement-text-style span:nth-child(1),
 .letsgoanddiscussit,
 .upcoming-events-heading,
+.english,
 .tech-card-subtitle-text-style,
 .hero-title-text-style-blogs,
 .golden-heading,
@@ -6271,7 +6276,7 @@ button:hover:not(.button-with-icon2) {
 .containerTerms h1,
 .fashion-statement-text-style *,
 .loginpopuswrapper h1 {
-  font-family: "Artnoova", sans-serif !important;
+  font-family: "Artnoova", sans-serif ;
 }
 
 .thankyoucontainer h1,
@@ -6595,3 +6600,20 @@ button:hover:not(.button-with-icon2) {
 .adddiv svg {
   scale: 0.6;
 }
+.fabric-design-description-list {
+  width : 100%;}
+  
+
+  .header-title ,.hero-title {
+    font-size: 35px !important;
+  }
+
+  @media (max-width : 730px){
+    .header-title ,.hero-title {
+      font-size: 36px !important;
+      margin: 0 !important;
+    }
+    .contact-info-text-style {
+      margin-left: 0 !important;
+    }
+  }

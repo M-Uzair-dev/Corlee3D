@@ -71,7 +71,7 @@ function StylishProductDisplay(props) {
             width: "100%",
           }}
         >
-          {isMandarin ? "沒有相關產品" : "No Related Products"}
+          {isMandarin ? "無相關商品" : "No Related Products"}
         </h1>
       ) : (
         <div className="products">

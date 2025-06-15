@@ -23,6 +23,10 @@ function RealizationDisplay() {
           <img
             src={image1}
             className="hero-image-container1-home"
+            alt="Fabric realization showcase"
+            loading="lazy"
+            width="100%"
+            height="447"
           />
           <ImageContainer5 />
         </div>
@@ -30,6 +34,10 @@ function RealizationDisplay() {
           <img
             src={image2}
             className="image-container-fullscreen-home"
+            alt="Fabric realization display"
+            loading="lazy"
+            width="100%"
+            height="383"
           />
           <ImageContainer />
         </div>
@@ -37,6 +45,10 @@ function RealizationDisplay() {
           <img
             src={image3}
             className="profile-image-container1-home"
+            alt="Fabric profile view"
+            loading="lazy"
+            width="100%"
+            height="351"
           />
           <ImageContainer2 />
         </div>
@@ -44,6 +56,10 @@ function RealizationDisplay() {
           <img
             src={image4}
             className="hero-image-container-home"
+            alt="Fabric hero showcase"
+            loading="lazy"
+            width="100%"
+            height="507"
           />
           <ImageContainer1 />
         </div>
@@ -51,6 +67,10 @@ function RealizationDisplay() {
           <img
             src={image5}
             className="profile-image-container-home"
+            alt="Fabric profile display"
+            loading="lazy"
+            width="100%"
+            height="383"
           />
           <ImageContainer4 />
         </div>

@@ -7,6 +7,10 @@ function ImageContainer1() {
       <img
         src={image}
         className="image-container-styles1"
+        alt="Fabric display"
+        loading="lazy"
+        width="282"
+        height="313"
       />
     </div>
   );

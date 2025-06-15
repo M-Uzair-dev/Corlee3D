@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import Navbar from "../components/App/Navbar";
 import SignupComponent from "../components/App/SignupScreen";
+import BottomBar from "../components/App/BottomBar";
 import { useEffect } from "react";
 
 function Signup() {
@@ -14,6 +15,7 @@ function Signup() {
     <>
       <Navbar />
       <SignupComponent />
+      <BottomBar />
     </>
   );
 }

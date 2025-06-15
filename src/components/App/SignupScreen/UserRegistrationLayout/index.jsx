@@ -90,6 +90,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
             name="mobile_phone"
             onChange={handleChange}
             value={formData.mobile_phone}
+            required
           />
         </div>
       </div>
@@ -104,7 +105,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
             ? "載入中..."
             : "Loading..."
           : isMandarin
-          ? "創建帳戶"
+          ? "建立帳號"
           : "Create account"}
       </button>
       {error && <p className="error-message">{error}</p>}

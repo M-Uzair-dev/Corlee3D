@@ -18,7 +18,7 @@ function WelcomePage() {
       setLoading(true);
       const { token, error } = await googleLogin();
       if (error) {
-        toast.error("Google login failed.");
+        toast.error(isMandarin ? "Google 登入失敗" : "Google login failed.");
         setLoading(false);
         return;
       }
@@ -58,11 +58,11 @@ function WelcomePage() {
     <div className="hero-section2">
       <div className="central-content-panel">
         <p className="hero-title-text-style">
-          {isMandarin ? "您好" : "Welcome to Corlee"}
+          {isMandarin ? "登入您的Corlee帳戶" : "Welcome to Corlee"}
         </p>
         <p className="central-text-block">
           {isMandarin
-            ? "快登入看更多！"
+            ? "註冊以加入最愛及查看訂單"
             : "Access your account and discover more!"}
         </p>
         <button
@@ -76,7 +76,7 @@ function WelcomePage() {
               ? "載入中..."
               : "Loading..."
             : isMandarin
-            ? "使用 Google 登錄"
+            ? "使用Google登入"
             : "Login with google"}
         </button>
         <StylishContentBlock />

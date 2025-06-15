@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import LoginComponent from "../components/App/LoginScreen";
 import Navbar from "../components/App/Navbar";
+import BottomBar from "../components/App/BottomBar";
 import { useEffect } from "react";
 
 function Login() {
@@ -14,6 +15,7 @@ function Login() {
     <>
       <Navbar />
       <LoginComponent />
+      <BottomBar />
     </>
   );
 }

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { Toaster, toast } from "sonner";
 import { api, setAuthToken } from "../config/api";
 import { Outlet, useNavigate } from "react-router-dom";
-import Lenis from "lenis";
 const Token = () => {
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
@@ -11,16 +10,7 @@ const Token = () => {
   if (token) {
     setAuthToken(token);
   }
-  useEffect(() => {
-    const lenis = new Lenis({
-      lerp: 0.05,
-    });
-    let raf = (time) => {
-      lenis.raf(time);
-      requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
-  }, []);
+  
   const getinfo = async () => {
     const response = await api.get("/contact-details/");
     const data = response.data.results[0];
@@ -135,7 +125,7 @@ const Token = () => {
           ${
             isMandarin
               ? `
-            *:not(.english):not(.dashboard-container *):not(.adddiv):not(.imagestext p:nth-child(1)):not(.textdivinbagdetails *:not(:first-child)):not(input):not(.singlecalldetail:nth-child(3)>p):not(.contact-heading):not(.contact-heading-text-style):not(.contact-info-section1 *):not(.textboxdivmain h1):not(*:has(.dropdowndiv) h1), .productdetailsdic h1:not(.english), .horizontal-menu-with-icons-nav *{
+            *:not(.english):not(.material-heading-text-style):not(.fashion-statement-text-style span:nth-child(1)):not(.dashboard-container *):not(.adddiv):not(.imagestext p:nth-child(1)):not(.textdivinbagdetails *:not(:first-child)):not(input):not(.singlecalldetail:nth-child(3)>p):not(.contact-heading):not(.contact-heading-text-style):not(.contact-info-section1 *):not(.textboxdivmain h1):not(*:has(.dropdowndiv) h1), .productdetailsdic h1:not(.english), .horizontal-menu-with-icons-nav *{
              font-family: "Noto Serif TC", serif;
             }
             
@@ -207,8 +197,60 @@ display: none !important;}
 .vertical-section-container {
 max-height: 550px !important;
 }
+.english,.material-heading-text-style{
+  font-family: "Artnoova", sans-serif !important;
+}
+
           `
-              : ""
+              : `.hero-text-block,
+.majestic-heading-home,
+.art-noova-heading,
+.majestic-heading1,
+.fabric-type-heading,
+.fashion-statement-text-style,
+.leftsidecontent h1,
+.letsgoanddiscussit,
+.upcoming-events-heading,
+.tech-card-subtitle-text-style,
+.hero-title-text-style-blogs,
+.golden-heading,
+.hero-title,
+.standout-text,
+.visionary-heading,
+.order-process-title,
+.order-process-child,
+.order-process-title,
+.textdivinnavproductdropdown h1,
+.hero-title-text-style,
+.contact-heading-text-style,
+.contact-heading,
+.request-history-title,
+.ticket-number-style,
+.ticket-number-style,
+.color,
+.quantityofproduct,
+.priceofproduct,
+.imagestext p:nth-child(1),
+.main-heading-text-style,
+.material-heading-text-style,
+.headingdiv h1,
+.textinbagproduct p,
+.productdetailsdic h1,
+.colorsinproduct,
+.quantitydivinproduct,
+.textdiv h2,
+.detailsdivmaincontainer > h1,
+.thankyoucontainer h1,
+.error-message-title,
+.email-notification-heading,
+.company-details-title,
+.password-reset-message-email,
+.containerTerms h1,
+.fashion-statement-text-style *,
+.loginpopuswrapper h1 {
+  font-family: "Artnoova", sans-serif !important;
+}
+`
           }
 
           .scroll-to-top {

@@ -27,6 +27,10 @@ function FabricInfoDisplay1({ fabricInfoOptions }) {
           className="image-container-with-clipping-path"
           data-aos="fade-right"
           data-aos-duration="1000"
+          alt="Fabric showcase with clipping path"
+          loading="lazy"
+          width="403"
+          height="387"
         />
         <div className="fashion-text-container2" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
           <button
@@ -47,6 +51,10 @@ function FabricInfoDisplay1({ fabricInfoOptions }) {
           className="image-container-with-clipping-path"
           data-aos="fade-left"
           data-aos-duration="1000"
+          alt="Fabric showcase with clipping path"
+          loading="lazy"
+          width="403"
+          height="387"
         />
       </div>
 

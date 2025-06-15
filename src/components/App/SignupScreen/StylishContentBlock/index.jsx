@@ -9,7 +9,7 @@ function StylishContentBlock(props) {
       <input
         type="text"
         className="id-label-text-style"
-        placeholder={isMandarin ? "姓名" : "Name"}
+        placeholder={isMandarin ? "您的名字" : "Name"}
         name="name"
         onChange={props.onChange}
         value={props.value}

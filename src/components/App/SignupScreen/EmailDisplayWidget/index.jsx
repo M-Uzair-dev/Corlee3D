@@ -9,7 +9,7 @@ function EmailDisplayWidget(props) {
       <input
         type="text"
         className="id-label-text-style"
-        placeholder={isMandarin ? "邮箱" : "Email"}
+        placeholder={isMandarin ? "電子郵件" : "Email"}
         name="email"
         onChange={props.onChange}
         value={props.value}

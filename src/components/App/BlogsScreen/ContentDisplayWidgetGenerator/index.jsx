@@ -208,11 +208,11 @@ function ContentDisplayWidgetGenerator() {
     <div className="blog-post-container-blogs">
       <p className="hero-title-text-style-blogs english">BLOGS</p>
       <p className="blog-post-content-text-style-blogs english">
-        {/* {isMandarin
-          ? "產業觀察、市場趨勢和實⽤知識都在這！"
-          : "Industry insights, trend analysis, and smart soluMons, your li_le texMle library right here !"} */}
-          Industry insights, trend analysis, and smart solutions, your little textile library right
-          here !
+        {
+          isMandarin
+          ? "這裡是小小紡織資料庫，關於產業洞察、趨勢分析、科技創新都在這"
+          : "Industry insights, trend analysis, and smart solutions, your little textile library right here !"
+        }
       </p>
 
       <>

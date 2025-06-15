@@ -28,6 +28,7 @@ import PasswordResetSuccess from "../Screens/PasswordResetSuccess";
 import Product from "../Screens/singleproduct";
 import Protected from "../Screens/Protected";
 import Token from "../Screens/Token";
+import Smooth from "../Screens/smooth";
 import Thankyou from "../Screens/Thankyou";
 import ProductRequest from "../Screens/ProductRequest";
 import Dashboard from "../Screens/Dashboard";
@@ -38,7 +39,7 @@ function Approuter() {
     AOS.init({
       duration: 800,
       once: true,
-      easing: 'ease-out-cubic'
+      easing: "ease-out-cubic",
     });
   }, []);
 
@@ -46,56 +47,60 @@ function Approuter() {
     <Router>
       <Routes>
         <Route path="/user" element={<Protected />}>
-          <Route path="/user" element={<Token />}>
-            <Route path="/user/bag" element={<BagScreen />} />
-            <Route path="/user/favourites" element={<Favourites />} />
-            <Route
-              path="/user/generalenquiry/:id"
-              element={<GeneralEnquiry />}
-            />
-            <Route
-              path="/user/productrequest/:id"
-              element={<ProductRequest />}
-            />
-            <Route
-              path="/user/productenquiry/:id"
-              element={<ProductEnquiry />}
-            />
-            <Route path="/user/history" element={<RequestHistory />} />
+          <Route element={<Smooth />}>
+            <Route element={<Token />}>
+              <Route path="bag" element={<BagScreen />} />
+              <Route path="favourites" element={<Favourites />} />
+              <Route
+                path="generalenquiry/:id"
+                element={<GeneralEnquiry />}
+              />
+              <Route
+                path="productrequest/:id"
+                element={<ProductRequest />}
+              />
+              <Route
+                path="productenquiry/:id"
+                element={<ProductEnquiry />}
+              />
+              <Route path="history" element={<RequestHistory />} />
+            </Route>
           </Route>
         </Route>
         <Route path="/" element={<Token />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/dashboard-password" element={<DashboardPassword />} />
-          <Route path="/dashboard/*" element={<Dashboard />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/addCompanyDetails" element={<Continiewithgoogle />} />
-          <Route path="/about" element={<AboutUs />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/events" element={<Events />} />
-          <Route path="/products" element={<Products />} />
-          <Route path="/products/:searchterm" element={<Products />} />
-          <Route path="/products/:name/:desc" element={<Products />} />
-          <Route path="/product/:productid" element={<Product />} />
-          <Route path="/blog/:id" element={<SingleBlog />} />
-          <Route path="/contact/:value" element={<ContactUs />} />
-          <Route path="/thankyou/:id" element={<Thankyou />} />
-          <Route path="/forgot" element={<ForgotPasswordEnterEmail />} />
-          <Route path="/emailsent/:email" element={<EmailSent />} />
-          <Route path="/noemail/:email" element={<EmailNotExists />} />
-          <Route path="/terms" element={<Terms />} />
-          <Route path="/privacy" element={<Privacy />} />
-          <Route path="/accessibility" element={<Accessibility />} />
-          <Route
-            path="/newPass/:uid/:token"
-            element={<ForgotPasswordReset />}
-          />
-          <Route path="/success" element={<PasswordResetSuccess />} />
-          <Route
-            path="/verify-email/:token"
-            element={<PasswordResetSuccess isEmailVerified={true} />}
-          />
+          <Route path="dashboard/*" element={<Dashboard />} />
+            <Route path="dashboard-password" element={<DashboardPassword />} />
+          <Route element={<Smooth />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/addCompanyDetails" element={<Continiewithgoogle />} />
+            <Route path="/about" element={<AboutUs />} />
+            <Route path="/blogs" element={<Blogs />} />
+            <Route path="/events" element={<Events />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="/products/:searchterm" element={<Products />} />
+            <Route path="/products/:name/:desc" element={<Products />} />
+            <Route path="/product/:productid" element={<Product />} />
+            <Route path="/blog/:id" element={<SingleBlog />} />
+            <Route path="/contact/:value" element={<ContactUs />} />
+            <Route path="/thankyou/:id" element={<Thankyou />} />
+            <Route path="/forgot" element={<ForgotPasswordEnterEmail />} />
+            <Route path="/emailsent/:email" element={<EmailSent />} />
+            <Route path="/noemail/:email" element={<EmailNotExists />} />
+            <Route path="/terms" element={<Terms />} />
+            <Route path="/privacy" element={<Privacy />} />
+            <Route path="/accessibility" element={<Accessibility />} />
+            <Route
+              path="/newPass/:uid/:token"
+              element={<ForgotPasswordReset />}
+            />
+            <Route path="/success" element={<PasswordResetSuccess />} />
+            <Route
+              path="/verify-email/:token"
+              element={<PasswordResetSuccess isEmailVerified={true} />}
+            />
+          </Route>
         </Route>
       </Routes>
     </Router>

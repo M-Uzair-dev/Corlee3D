@@ -72,7 +72,7 @@ function UserSignupSection() {
       <UserRegistrationLayout loading={loading} setLoading={setLoading} />
       <div className="account-actions-container">
         <p className="login-prompt-text-style">
-          {isMandarin ? "已經有帳戶？" : "Already have an account?"}
+          {isMandarin ? "已經有帳號？" : "Already have an account?"}
         </p>
         <p
           className="login-link-text-style"
@@ -81,7 +81,7 @@ function UserSignupSection() {
           }}
           style={{ cursor: "pointer" }}
         >
-          {isMandarin ? "登錄" : "Login"}
+          {isMandarin ? "登入" : "Login"}
         </p>
       </div>
     </div>

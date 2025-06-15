@@ -10,8 +10,8 @@ function PasswordRecoveryMessage() {
       </p>
       <p className="password-reset-message1-email">
         {isMandarin
-          ? "不用擔心，輸入您的賬戶郵箱地址，我們將發送重置密碼的鏈接"
-          : "Don't worry, enter your account email address, and we will send a link to reset your password"}
+          ? "別擔心，請輸入註冊電子郵件，我們會寄送重設密碼連結。"
+          : "Don't worry, enter your account email address, and we will send a link to reset your password."}
       </p>
     </div>
   );
