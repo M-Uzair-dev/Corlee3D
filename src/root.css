@@ -6276,7 +6276,7 @@ button:hover:not(.button-with-icon2) {
 .containerTerms h1,
 .fashion-statement-text-style *,
 .loginpopuswrapper h1 {
-  font-family: "Artnoova", sans-serif ;
+  font-family: "Artnoova", sans-serif;
 }
 
 .thankyoucontainer h1,
@@ -6601,19 +6601,42 @@ button:hover:not(.button-with-icon2) {
   scale: 0.6;
 }
 .fabric-design-description-list {
-  width : 100%;}
-  
+  width: 100%;
+}
 
-  .header-title ,.hero-title {
-    font-size: 35px !important;
-  }
+.header-title,
+.hero-title {
+  font-size: 35px !important;
+}
 
-  @media (max-width : 730px){
-    .header-title ,.hero-title {
-      font-size: 36px !important;
-      margin: 0 !important;
-    }
-    .contact-info-text-style {
-      margin-left: 0 !important;
-    }
+@media (max-width: 730px) {
+  .header-title,
+  .hero-title {
+    font-size: 36px !important;
+    margin: 0 !important;
   }
+  .contact-info-text-style {
+    margin-left: 0 !important;
+  }
+}
+@media (max-width: 800px) {
+  .carousel-realization-container{
+    margin-bottom: 100px;
+  }
+}@media (max-width: 750px) {
+  .carousel-realization-container{
+    margin-bottom: 250px;
+  }
+}@media (max-width: 700px) {
+  .carousel-realization-container{
+    margin-bottom: 350px;
+  }
+}@media (max-width: 600px) {
+  .carousel-realization-container{
+    margin-bottom: 450px;
+  }
+}@media (max-width: 500px) {
+  .carousel-realization-container{
+    margin-bottom: 500px;
+  }
+}

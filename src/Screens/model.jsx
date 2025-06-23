@@ -34,7 +34,7 @@ const cleanupTexture = (url) => {
   }
 };
 
-const TexturedModel = ({ gltf, textureUrl, scale, modelUrl }) => {
+const TexturedModel = ({ gltf, textureUrl, scale, modelUrl, textureScale = [2, 2] }) => {
   const modelRef = useRef();
   const [texture, setTexture] = useState(null);
 
@@ -73,16 +73,40 @@ const TexturedModel = ({ gltf, textureUrl, scale, modelUrl }) => {
   const material = useMemo(() => {
     if (!texture) return null;
 
+    // Clone the texture to avoid modifying the cached version
+    const textureClone = texture.clone();
+    
+    // Use different approaches for jackets vs other garments
+    const isJacket = modelUrl.includes('jacket');
+    
+    if (isJacket) {
+      // Traditional method for jackets - use the old approach
+      textureClone.wrapS = textureClone.wrapT = THREE.ClampToEdgeWrapping;
+      textureClone.repeat.set(1, 1); // No repeat, just stretch to fit
+      textureClone.offset.set(0, 0); // No offset
+      // Use basic filtering
+      textureClone.magFilter = THREE.LinearFilter;
+      textureClone.minFilter = THREE.LinearFilter;
+      textureClone.generateMipmaps = false; // Disable mipmaps
+    } else {
+      // Modern method for other garments
+      textureClone.wrapS = textureClone.wrapT = THREE.RepeatWrapping;
+      textureClone.repeat.set(textureScale[0], textureScale[1]);
+      textureClone.magFilter = THREE.LinearFilter;
+      textureClone.minFilter = THREE.LinearMipmapLinearFilter;
+      textureClone.generateMipmaps = true;
+    }
+    
+    textureClone.needsUpdate = true;
+
     const mat = new THREE.MeshStandardMaterial({
-      map: texture,
+      map: textureClone,
       roughness: 0.9,
       metalness: 0.0,
     });
-    mat.map.wrapS = mat.map.wrapT = THREE.ClampToEdgeWrapping;
-    mat.map.needsUpdate = true;
 
     return mat;
-  }, [texture]);
+  }, [texture, textureScale, modelUrl]);
 
   const clonedScene = useMemo(() => {
     if (!material) return gltf.scene.clone();
@@ -123,7 +147,7 @@ const NonTexturedModel = ({ gltf, scale, modelUrl }) => {
   );
 };
 
-const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
+const Scene = ({ modelUrl, textureUrl, scale, onLoaded, textureScale }) => {
   const gltf = useGLTF(modelUrl, true);
 
   useEffect(() => {
@@ -154,6 +178,7 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
           textureUrl={textureUrl}
           scale={scale}
           modelUrl={modelUrl}
+          textureScale={textureScale}
         />
       ) : (
         <NonTexturedModel
@@ -166,7 +191,7 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded }) => {
   );
 };
 
-const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [], otherTextures = [] }) => {
+const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [], otherTextures = [], textureScale = [2, 2] }) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
   const preloaded = useRef(new Set());
 
@@ -248,6 +273,7 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [
             textureUrl={textureUrl}
             scale={scale}
             onLoaded={() => setInitialLoaded(true)}
+            textureScale={textureScale}
           />
           <OrbitControls
             enableDamping
