@@ -22,6 +22,22 @@ function UserRegistrationLayout({ loading, setLoading }) {
 
   const handlesubmit = async () => {
     try {
+      // Add validation for required fields
+      if (!formData.mobile_phone || !formData.mobile_phone.trim()) {
+        toast.error(isMandarin ? "此欄位為必填。" : "This field is required.");
+        return;
+      }
+      if (!formData.email || !formData.email.trim()) {
+        toast.error(isMandarin ? "此欄位為必填。" : "This field is required.");
+        return;
+      }
+      // Basic email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(formData.email)) {
+        toast.error(isMandarin ? "請輸入有效的電⼦郵件。" : "Enter a valid email address.");
+        return;
+      }
+
       setLoading(true);
       const response = await api.post("/register/", formData);
       if (response.status === 201) {
@@ -32,7 +48,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
         setAuthToken(token);
         navigate("/");
 
-        toast.success("Account created successfully");
+        toast.success(isMandarin ? "帳號已成功註冊。" : "Account created successfully");
       }
       setLoading(false);
     } catch (error) {
@@ -84,7 +100,7 @@ function UserRegistrationLayout({ loading, setLoading }) {
         <div className="flex-grow-shrink-basis">
           {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder={isMandarin ? "手機" : "Mobile phone"}
+            placeholder={isMandarin ? "⼿機" : "Mobile phone"}
             type="text"
             className="input-field-with-border input-style-f62::placeholder"
             name="mobile_phone"

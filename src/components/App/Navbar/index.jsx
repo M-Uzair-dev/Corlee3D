@@ -156,7 +156,7 @@ function Navbar(props) {
           }}
         >
           <div className="maintoptext">
-            <h1>{isMandarin ? "聯絡窗⼝" : "Contact Us"}</h1>
+            <h1>{isMandarin ? "聯絡我們" : "Contact Us"}</h1>
             <p>{isMandarin ? "" : "We are here for you!"}</p>
             <div className="closeicon" onClick={changeShowcall}>
               <svg

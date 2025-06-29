@@ -16,7 +16,7 @@ function EmailSenderWidget() {
       setLoading(true);
       if (inputvalue === "") {
         toast.error(
-          isMandarin ? "請輸入您的電子郵件地址" : "Enter your email address"
+          isMandarin ? "請輸入電⼦郵件" : "Enter your email address"
         );
       } else {
         const res = await api.post("/password_reset/", {
@@ -24,7 +24,7 @@ function EmailSenderWidget() {
         });
         if (res.status === 200) {
           toast.success(
-            isMandarin ? "電子郵件已發送成功" : "Email sent successfully"
+            isMandarin ? "信件發送成功" : "Email sent successfully"
           );
           setLoading(false);
           navigate(`/emailsent/${inputvalue}`);

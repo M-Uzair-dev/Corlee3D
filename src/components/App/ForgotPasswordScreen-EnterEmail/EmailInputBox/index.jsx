@@ -10,7 +10,7 @@ function EmailInputBox(props) {
         onChange={(e) => {
           props.setInputvalue(e.target.value);
         }}
-        placeholder={isMandarin ? "邮箱地址" : "Email address"}
+        placeholder={isMandarin ? "電⼦郵件地址" : "Email address"}
         type="text"
         className="input-field-container input-style-f62::placeholder"
       />

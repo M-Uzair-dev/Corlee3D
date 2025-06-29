@@ -21,6 +21,17 @@ function UserAuthenticationForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate empty fields
+    if (!formData.username.trim()) {
+      toast.error(isMandarin ? "此欄位不得留空" : "This field may not be blank.");
+      return;
+    }
+    if (!formData.password.trim()) {
+      toast.error(isMandarin ? "此欄位不得留空" : "This field may not be blank.");
+      return;
+    }
+
     try {
       setLoading(true);
       const response = await api.post("/login/", formData);
@@ -43,7 +54,7 @@ function UserAuthenticationForm() {
       toast.error(
         `${Object.keys(error.response.data)[0]} : ${
           error.response.data[Object.keys(error.response.data)[0]]
-        }` || (isMandarin ? "帳號或密碼錯誤" : "Something went wrong")
+        }` || (isMandarin ? "帳號或密碼錯誤" : "Unable to log in with provided credentials")
       );
       setLoading(false);
     }

@@ -20,7 +20,7 @@ function UserSignupSection() {
       setLoading(true);
       const { token, error } = await googleLogin();
       if (error) {
-        toast.error("Google login failed.");
+        toast.error(isMandarin ? "Google 登入失敗" : "Google login failed");
         setLoading(false);
         return;
       }

@@ -1,8 +1,9 @@
 import UserAuthenticationMessage from "../UserAuthenticationMessage";
 import "./style.css";
-import messages from "./messages.json";
 
 function SecureAccessMessage() {
+  const isMandarin = localStorage.getItem("isMandarin");
+  
   return (
     <div className="login-prompt-container">
       <img
@@ -12,7 +13,7 @@ function SecureAccessMessage() {
       />
       <UserAuthenticationMessage />
       <p className="login-prompt-text-style">
-        {messages["please_login_continue"]}
+        {isMandarin ? "請先登入以繼續。" : "Please login to continue"}
       </p>
     </div>
   );

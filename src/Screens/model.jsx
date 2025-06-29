@@ -80,9 +80,9 @@ const TexturedModel = ({ gltf, textureUrl, scale, modelUrl, textureScale = [2, 2
     const isJacket = modelUrl.includes('jacket');
     
     if (isJacket) {
-      // Traditional method for jackets - use the old approach
+      // Traditional method for jackets - but now allow scale adjustment
       textureClone.wrapS = textureClone.wrapT = THREE.ClampToEdgeWrapping;
-      textureClone.repeat.set(1, 1); // No repeat, just stretch to fit
+      textureClone.repeat.set(textureScale[0], textureScale[1]); // Now uses textureScale for jackets too
       textureClone.offset.set(0, 0); // No offset
       // Use basic filtering
       textureClone.magFilter = THREE.LinearFilter;
@@ -194,6 +194,10 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded, textureScale }) => {
 const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [], otherTextures = [], textureScale = [2, 2] }) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
   const preloaded = useRef(new Set());
+  
+  // Add state for texture scale testing
+  const [testTextureScale, setTestTextureScale] = useState(textureScale[0]);
+  const [isTestingMode, setIsTestingMode] = useState(false);
 
   // Preload models and textures
   useEffect(() => {
@@ -242,8 +246,59 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [
     };
   }, [modelUrl, textureUrl, otherModels, otherTextures]);
 
+  // Determine which texture scale to use
+  const currentTextureScale = isTestingMode ? [testTextureScale, testTextureScale] : textureScale;
+
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      {/* Texture Scale Testing Controls */}
+      <div style={{
+        position: "absolute",
+        top: "10px",
+        left: "10px",
+        zIndex: 1000,
+        background: "rgba(255, 255, 255, 0.9)",
+        padding: "10px",
+        borderRadius: "8px",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.1)",
+        display: "flex",
+        flexDirection: "column",
+        gap: "8px",
+        minWidth: "200px"
+      }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <input
+            type="checkbox"
+            id="testingMode"
+            checked={isTestingMode}
+            onChange={(e) => setIsTestingMode(e.target.checked)}
+          />
+          <label htmlFor="testingMode" style={{ fontSize: "14px", fontWeight: "500" }}>
+            Testing Mode
+          </label>
+        </div>
+        
+        {isTestingMode && (
+          <>
+            <div style={{ fontSize: "12px", color: "#666" }}>
+              Texture Scale: {testTextureScale.toFixed(1)}
+            </div>
+            <input
+              type="range"
+              min="0.1"
+              max="10"
+              step="0.1"
+              value={testTextureScale}
+              onChange={(e) => setTestTextureScale(parseFloat(e.target.value))}
+              style={{ width: "100%" }}
+            />
+            <div style={{ fontSize: "11px", color: "#999", textAlign: "center" }}>
+              Model: {modelUrl.split('/').pop().replace('.glb', '')}
+            </div>
+          </>
+        )}
+      </div>
+
       <Suspense
         fallback={
           <div className="loading-container">
@@ -273,7 +328,7 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [
             textureUrl={textureUrl}
             scale={scale}
             onLoaded={() => setInitialLoaded(true)}
-            textureScale={textureScale}
+            textureScale={currentTextureScale}
           />
           <OrbitControls
             enableDamping

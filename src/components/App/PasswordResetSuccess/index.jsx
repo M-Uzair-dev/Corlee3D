@@ -53,12 +53,12 @@ function ComponentYouSelected(props) {
                 ? "加載中..."
                 : props.email
                 ? "驗證"
-                : "返回登錄"
+                : "返回登入"
               : loading
               ? "Loading..."
               : props.email
               ? "Verify"
-              : "Return to login"}
+              : "返回登入"}
           </button>
         </div>
       </div>

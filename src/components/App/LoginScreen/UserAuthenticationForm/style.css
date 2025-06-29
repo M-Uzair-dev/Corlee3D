@@ -55,7 +55,27 @@
   margin-left: -1px;
 }
 .img-content-66044729 {
-  content: url("https://d2e8m995jm0i5z.cloudfront.net/websiteimages/img_d74c1d.svg");
+  /* Use CSS to create a checkmark instead of relying on external image */
+  width: 16px;
+  height: 16px;
+  position: relative;
+}
+
+.img-content-66044729::after {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 2px;
+  width: 5px;
+  height: 10px;
+  border: solid #000;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+/* Fallback content if image fails to load */
+.img-content-66044729::before {
+  content: "";
 }
 .remember-me-label {
   margin-left: 7px;

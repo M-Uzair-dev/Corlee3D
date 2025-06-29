@@ -32,7 +32,7 @@ function ContentDisplayWidget({ possibleSectionTitles }) {
                 </p>
               </div>
               <div className="statistic-card">
-                <p className="standout-text english">600+</p>
+                <p className="standout-text english">100+</p>
                 <p className="info-card-text-style ">
                   {isMandarin
                     ? messages2["clients_worldwide"]

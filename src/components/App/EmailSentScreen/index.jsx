@@ -19,7 +19,7 @@ function ComponentYouSelected(props) {
                 className="primary-button-style"
                 onClick={() => navigate("/login")}
               >
-                {isMandarin ? "返回登錄" : "Return to login"}
+                {isMandarin ? "返回登入" : "Return to login"}
               </button>
             </div>
           </div>

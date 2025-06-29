@@ -3713,7 +3713,7 @@ body {
   color: white;
   overflow: hidden;
   text-align: center;
-  z-index: 100;
+  z-index: 999999999;
 }
 .heartbutton {
   z-index: -1;
@@ -4557,7 +4557,25 @@ body {
   content: "Login Required";
 }
 .loginpopupheader::after {
-  content: "需要登录";
+  content: "需要登入";
+}
+
+/* Smaller font size for Chinese login popup header */
+.loginpopupheader {
+  font-size: 45px !important;
+}
+
+.loginpopupheader::after {
+  font-size: 45px !important;
+}
+
+/* Smaller font size for Chinese login popup header */
+.loginpopupheader {
+  font-size: 45px !important;
+}
+
+.loginpopupheader::after {
+  font-size: 45px !important;
 }
 .loginpopuswrapper p {
   margin: 0 0 20px 0;
@@ -4614,6 +4632,12 @@ body {
   .loginpopuswrapper h1,
   .loginpopuswrapper h1::after {
     font-size: 45px;
+  }
+  
+  /* Even smaller for Chinese on mobile */
+  .loginpopupheader,
+  .loginpopupheader::after {
+    font-size: 35px !important;
   }
 }
 @media (max-width: 447px) {
@@ -6620,23 +6644,46 @@ button:hover:not(.button-with-icon2) {
   }
 }
 @media (max-width: 800px) {
-  .carousel-realization-container{
+  .carousel-realization-container, .hero-section1{
     margin-bottom: 100px;
   }
 }@media (max-width: 750px) {
-  .carousel-realization-container{
+  .carousel-realization-container, .hero-section1{
     margin-bottom: 250px;
   }
 }@media (max-width: 700px) {
-  .carousel-realization-container{
+  .carousel-realization-container, .hero-section1{
     margin-bottom: 350px;
   }
 }@media (max-width: 600px) {
-  .carousel-realization-container{
+  .carousel-realization-container, .hero-section1{
     margin-bottom: 450px;
   }
 }@media (max-width: 500px) {
-  .carousel-realization-container{
+  .carousel-realization-container, .hero-section1{
     margin-bottom: 500px;
   }
+}
+.productsimageandtextdiv{
+  align-items: start;
+  width: auto;
+  min-width: 170px;
+
+}.imagesoftheproducts{
+  height: 240px;
+  width: 170px;
+}
+.global-fashion-fabric-styles >*:nth-child(1){
+  pointer-events: none;
+}
+
+.fabric-design-description-container {
+  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15), 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.fabric-design-description-container:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
 }

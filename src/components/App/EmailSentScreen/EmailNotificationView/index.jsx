@@ -10,15 +10,20 @@ function EmailNotificationView(props) {
         <SvgIcon1 className="svg-container" />
       </div>
       <p className="email-notification-heading">
-        {isMandarin ? "郵箱正在路上！" : "Email is on the way!"}
+        {isMandarin ? "信件送達中！" : "Email is on the way!"}
       </p>
       <p className="password-reset-message-text-style">
         <span>
           {isMandarin
-            ? "我們發送了重置密碼的說明。如果它沒有很快出現，請檢查您的垃圾郵件文件夾。我們向 "
+            ? "我們已寄出重設密碼連結⾄ "
             : "We sent you reset password instructions. If it doesn't show up soon, check your spam folder. We sent an email to "}
         </span>
         <span className="email-notification-text-style">{props.email}</span>
+        <span>
+          {isMandarin
+            ? "，如果沒收到請檢查您的垃圾信箱。"
+            : ""}
+        </span>
       </p>
     </div>
   );

@@ -23,7 +23,7 @@ function FPEnterEmail() {
                 navigate(-1);
               }}
             >
-              {isMandarin ? "返回登錄" : "Back to login"}
+              {isMandarin ? "返回登入" : "Back to login"}
             </p>
           </div>
         </div>

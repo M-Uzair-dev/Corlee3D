@@ -27,7 +27,7 @@ function EventsComponent({ eventDisplayWidgetArgs }) {
                   : "Schedule a personalized meeting with Corlee to explore your business needs in detail. Book your appointment today and get solutions tailored just for you."}
               </p>
               {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
-              <button className="event-card-button">
+              <button className="event-card-button" onClick={()=>{window.open("_blank", "https://calendly.com/corleeandco/30min")}}>
                 {isMandarin ? "立即預約" : "Book Now"}
                 <SvgIcon1 className="svg-container" />
               </button>

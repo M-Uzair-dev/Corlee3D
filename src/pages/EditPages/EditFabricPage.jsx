@@ -927,12 +927,11 @@ function EditFabricPage() {
 
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
-      {isGalleryOpen && (
         <MediaGalleryPopup
-          onClose={() => setIsGalleryOpen(false)}
-          onSelect={handleSelectImage}
+        isOpen={isGalleryOpen}
+        setIsOpen={setIsGalleryOpen}
+        onSelectImage={handleSelectImage}
         />
-      )}
 
       <style jsx>{`
         .create-heading {

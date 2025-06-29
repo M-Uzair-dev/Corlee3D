@@ -456,7 +456,7 @@ const singleproduct = () => {
           textureUrl={image || ""}
           scale={
             model === "/models/jacket.glb"
-              ? 0.7
+              ? 0.003
               : model === "/models/shirt.glb"
               ? 2.5
               : model === "/models/pants.glb"
