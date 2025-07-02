@@ -6644,23 +6644,23 @@ button:hover:not(.button-with-icon2) {
   }
 }
 @media (max-width: 800px) {
-  .carousel-realization-container, .hero-section1{
+  .carousel-realization-container, .hero-section1, .sighupcontainer{
     margin-bottom: 100px;
   }
 }@media (max-width: 750px) {
-  .carousel-realization-container, .hero-section1{
+  .carousel-realization-container, .hero-section1, .sighupcontainer{
     margin-bottom: 250px;
   }
 }@media (max-width: 700px) {
-  .carousel-realization-container, .hero-section1{
+  .carousel-realization-container, .hero-section1, .sighupcontainer{
     margin-bottom: 350px;
   }
 }@media (max-width: 600px) {
-  .carousel-realization-container, .hero-section1{
+  .carousel-realization-container, .hero-section1, .sighupcontainer{
     margin-bottom: 450px;
   }
 }@media (max-width: 500px) {
-  .carousel-realization-container, .hero-section1{
+  .carousel-realization-container, .hero-section1, .sighupcontainer{
     margin-bottom: 500px;
   }
 }
@@ -6686,4 +6686,39 @@ button:hover:not(.button-with-icon2) {
 .fabric-design-description-container:hover {
   transform: translateY(-12px);
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25), 0 10px 20px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.1);
+}
+.ticket-details-container1 {
+  gap: 5px;
+}
+.ticket-number-text-style, .button-general-inquiry-style {
+  font-size: 20px !important;
+}
+.ticket-number-style  span {
+  font-size: 40px;
+  line-height: 1;
+}
+.ticket-number-style  {
+  height: max-content;
+}
+.ticket-number-text-style {
+  margin-bottom: -20px;
+}
+.main-heading-text-style, .personal-details-title1, .contact-details-heading, .productinquiryproductsection> p,.imagestext>p:nth-child(1)  {
+  font-size: 26px;
+}
+.content-block {
+  margin-top: 5px;
+}
+.productinquiryproductdiv {
+  gap: 0px;
+}
+.color, .quantityofproduct {
+  font-size: 20px;
+}
+.colorcircle {
+  height: 30px;
+  width: 30px;
+}
+.personal-details-title,.contact-info-text  {
+  font-size: 16px;
 }

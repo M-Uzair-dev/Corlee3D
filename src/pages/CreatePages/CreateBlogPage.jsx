@@ -1,15 +1,67 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo, useCallback, useMemo, lazy, Suspense } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../config/api";
 import { toast } from "sonner";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import MediaGalleryPopup from "../../components/MediaGalleryPopup";
-import RichTextEditor from "../../components/UI/RichTextEditor";
 import "./CreatePages.css";
+
+// Lazy load the heavy RichTextEditor component
+const RichTextEditor = lazy(() => import("../../components/UI/RichTextEditor"));
+
+// Cache for users and categories to avoid redundant API calls
+const usersCache = new Map();
+const categoriesCache = new Map();
+
+// Memoized loading fallback for RichTextEditor
+const EditorLoading = memo(() => (
+  <div style={{ 
+    height: "300px", 
+    border: "1px solid #ddd", 
+    borderRadius: "4px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#f9f9f9"
+  }}>
+    <LoadingSpinner text="載入編輯器..." />
+  </div>
+));
+
+// Memoized image selection component
+const ImageSelection = memo(({ selectedImage, onSelectImage }) => (
+  <div className="image-selection">
+    <div className="selected-image">
+      {selectedImage ? (
+        <img
+          src={selectedImage.file}
+          alt="Selected"
+          className="preview-image"
+          onError={(e) => {
+            console.log("Image load error");
+            e.target.onerror = null;
+            e.target.src =
+              "https://via.placeholder.com/800x400?text=Image+Not+Available";
+          }}
+        />
+      ) : (
+        <div className="no-image-placeholder">尚未選擇圖片</div>
+      )}
+    </div>
+
+    <button
+      type="button"
+      className="select-image-button"
+      onClick={onSelectImage}
+    >
+      {selectedImage ? "更換圖片" : "選擇圖片"}
+    </button>
+  </div>
+));
 
 function CreateBlogPage() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
@@ -26,63 +78,43 @@ function CreateBlogPage() {
   const [categories, setCategories] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    fetchUsers();
-    fetchCategories();
-  }, []);
-
-  const fetchUsers = async () => {
-    try {
-      const response = await api.get("/users/");
-      setUsers(response.data.results || []);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      toast.error("Failed to load users");
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get("/blog-categories/");
-      console.log("Fetched categories:", response.data);
-      setCategories(response.data || []);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      toast.error("Failed to load categories");
-    }
-  };
-
-  const handleInputChange = (e) => {
+  // Memoized handlers
+  const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }, []);
 
-  const handleContentChange = (content) => {
+  const handleContentChange = useCallback((content) => {
     setFormData((prev) => ({
       ...prev,
       content,
     }));
-  };
+  }, []);
 
-  const handleContentMandarinChange = (content) => {
+  const handleContentMandarinChange = useCallback((content) => {
     setFormData((prev) => ({
       ...prev,
       content_mandarin: content,
     }));
-  };
+  }, []);
 
-  const handleSelectImage = async (imageId) => {
+  const handleSelectImageClick = useCallback(() => {
+    setIsGalleryOpen(true);
+  }, []);
+
+  const handleSelectImage = useCallback(async (imageId) => {
     if (imageId) {
       try {
         // Fetch the image details to get the URL
         const response = await api.get(`/media/${imageId}/`);
-        setSelectedImage({
+        const imageData = {
           id: imageId,
           file: response.data.file_url,
-        });
+        };
+        setSelectedImage(imageData);
         setFormData((prev) => ({
           ...prev,
           photo: imageId,
@@ -93,9 +125,61 @@ function CreateBlogPage() {
         toast.error("Failed to load image details");
       }
     }
-  };
+  }, []);
 
-  const handleSubmit = async (e) => {
+  // Optimized parallel data fetching with caching
+  const fetchInitialData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      
+      const promises = [];
+      
+      // Check cache for users
+      if (usersCache.has('users')) {
+        setUsers(usersCache.get('users'));
+      } else {
+        promises.push(
+          api.get("/users/").then(response => {
+            const userData = response.data.results || [];
+            usersCache.set('users', userData);
+            setUsers(userData);
+            return userData;
+          })
+        );
+      }
+      
+      // Check cache for categories
+      if (categoriesCache.has('categories')) {
+        setCategories(categoriesCache.get('categories'));
+      } else {
+        promises.push(
+          api.get("/blog-categories/").then(response => {
+            const categoryData = response.data || [];
+            categoriesCache.set('categories', categoryData);
+            setCategories(categoryData);
+            return categoryData;
+          })
+        );
+      }
+
+      // Wait for any pending API calls
+      if (promises.length > 0) {
+        await Promise.all(promises);
+      }
+      
+    } catch (error) {
+      console.error("Error fetching initial data:", error);
+      toast.error("Failed to load initial data");
+    } finally {
+      setIsLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchInitialData();
+  }, [fetchInitialData]);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage("");
@@ -116,7 +200,99 @@ function CreateBlogPage() {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [formData, navigate]);
+
+  // Memoized form sections
+  const BasicInfoSection = useMemo(() => (
+    <div className="form-section">
+      <h3>⽂章資訊</h3>
+
+      <div className="form-group">
+        <label htmlFor="title">標題 *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={formData.title}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="title_mandarin">標題(中⽂)</label>
+        <input
+          type="text"
+          id="title_mandarin"
+          name="title_mandarin"
+          value={formData.title_mandarin}
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="content">內⽂ *</label>
+        <Suspense fallback={<EditorLoading />}>
+          <RichTextEditor
+            value={formData.content}
+            onChange={handleContentChange}
+            placeholder="請輸入內文..."
+          />
+        </Suspense>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="content_mandarin">內⽂(中⽂)</label>
+        <Suspense fallback={<EditorLoading />}>
+          <RichTextEditor
+            value={formData.content_mandarin}
+            onChange={handleContentMandarinChange}
+            placeholder="請輸入中文內文..."
+          />
+        </Suspense>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="author">作者 *</label>
+        <select
+          id="author"
+          name="author"
+          value={formData.author}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">選擇作者</option>
+          {users.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.name || user.username}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="category">分類 *</label>
+        <select
+          id="category"
+          name="category"
+          value={formData.category}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">選擇分類</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name_mandarin || category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  ), [formData, handleInputChange, handleContentChange, handleContentMandarinChange, users, categories]);
+
+  if (isLoading) {
+    return <LoadingSpinner text="載入頁面中..." />;
+  }
 
   return (
     <div className="dashboard-content-card create-page-container">
@@ -134,116 +310,14 @@ function CreateBlogPage() {
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="create-form">
-        <div className="form-section">
-          <h3>⽂章資訊</h3>
-
-          <div className="form-group">
-            <label htmlFor="title">標題 *</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="title_mandarin">標題(中⽂)</label>
-            <input
-              type="text"
-              id="title_mandarin"
-              name="title_mandarin"
-              value={formData.title_mandarin}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="content">內⽂ *</label>
-            <RichTextEditor
-              value={formData.content}
-              onChange={handleContentChange}
-              placeholder="請輸入內文..."
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="content_mandarin">內⽂(中⽂)</label>
-            <RichTextEditor
-              value={formData.content_mandarin}
-              onChange={handleContentMandarinChange}
-              placeholder="請輸入中文內文..."
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="author">作者 *</label>
-            <select
-              id="author"
-              name="author"
-              value={formData.author}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">選擇作者</option>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name || user.username}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="category">分類 *</label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">選擇分類</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name_mandarin || category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        {BasicInfoSection}
 
         <div className="form-section">
           <h3>封⾯</h3>
-          <div className="image-selection">
-            <div className="selected-image">
-              {selectedImage ? (
-                <img
-                  src={selectedImage.file}
-                  alt="Selected"
-                  className="preview-image"
-                  onError={(e) => {
-                    console.log("Image load error");
-                    e.target.onerror = null;
-                    e.target.src =
-                      "https://via.placeholder.com/800x400?text=Image+Not+Available";
-                  }}
-                />
-              ) : (
-                <div className="no-image-placeholder">尚未選擇圖片</div>
-              )}
-            </div>
-
-            <button
-              type="button"
-              className="select-image-button"
-              onClick={() => setIsGalleryOpen(true)}
-            >
-              {selectedImage ? "更換圖片" : "選擇圖片"}
-            </button>
-          </div>
+          <ImageSelection
+            selectedImage={selectedImage}
+            onSelectImage={handleSelectImageClick}
+          />
         </div>
 
         <div className="form-actions">
@@ -461,4 +535,4 @@ function CreateBlogPage() {
   );
 }
 
-export default CreateBlogPage;
+export default memo(CreateBlogPage);

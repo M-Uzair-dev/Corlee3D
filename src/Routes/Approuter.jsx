@@ -34,6 +34,31 @@ import ProductRequest from "../Screens/ProductRequest";
 import Dashboard from "../Screens/Dashboard";
 import DashboardPassword from "../Screens/DashboardPassword";
 
+// Dashboard wrapper component that forces refresh to eliminate smooth scroll issues
+function DashboardRefresh({ children }) {
+  useEffect(() => {
+    // Check if we're navigating to dashboard and need a refresh
+    const currentPath = window.location.pathname;
+    const isDashboardRoute = currentPath.startsWith('/dashboard');
+    const hasRefreshed = sessionStorage.getItem('dashboardRefreshed');
+    
+    if (isDashboardRoute && !hasRefreshed) {
+      // Mark that we've refreshed for this session
+      sessionStorage.setItem('dashboardRefreshed', 'true');
+      // Force a hard refresh to clear any smooth scroll state
+      window.location.reload();
+      return;
+    }
+    
+    // Clear the refresh flag when leaving dashboard
+    if (!isDashboardRoute && hasRefreshed) {
+      sessionStorage.removeItem('dashboardRefreshed');
+    }
+  }, []);
+
+  return children;
+}
+
 function Approuter() {
   useEffect(() => {
     AOS.init({
@@ -68,8 +93,22 @@ function Approuter() {
           </Route>
         </Route>
         <Route path="/" element={<Token />}>
-          <Route path="dashboard/*" element={<Dashboard />} />
-            <Route path="dashboard-password" element={<DashboardPassword />} />
+          <Route 
+            path="dashboard/*" 
+            element={
+              <DashboardRefresh>
+                <Dashboard />
+              </DashboardRefresh>
+            } 
+          />
+          <Route 
+            path="dashboard-password" 
+            element={
+              <DashboardRefresh>
+                <DashboardPassword />
+              </DashboardRefresh>
+            } 
+          />
           <Route element={<Smooth />}>
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />

@@ -1,24 +1,25 @@
-import { useEffect } from "react";
+import { useEffect, memo } from "react";
 import BlogsComponent from "../components/App/BlogsScreen";
 import BottomBar from "../components/App/BottomBar";
 import Navbar from "../components/App/Navbar";
-import { mockData } from "../util";
+
+// Memoized components to prevent unnecessary re-renders
+const MemoizedBlogsComponent = memo(BlogsComponent);
+const MemoizedBottomBar = memo(BottomBar);
+const MemoizedNavbar = memo(Navbar);
 
 function Blogs() {
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
   return (
     <>
-      <Navbar />
-      <BlogsComponent
-        generateContentDisplayWidgetArgs={
-          mockData.generateContentDisplayWidgetArgs
-        }
-      />
-      <BottomBar />
+      <MemoizedNavbar />
+      <MemoizedBlogsComponent />
+      <MemoizedBottomBar />
     </>
   );
 }
 
-export default Blogs;
+export default memo(Blogs);

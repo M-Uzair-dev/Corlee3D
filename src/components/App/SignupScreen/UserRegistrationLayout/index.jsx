@@ -22,19 +22,38 @@ function UserRegistrationLayout({ loading, setLoading }) {
 
   const handlesubmit = async () => {
     try {
-      // Add validation for required fields
-      if (!formData.mobile_phone || !formData.mobile_phone.trim()) {
-        toast.error(isMandarin ? "此欄位為必填。" : "This field is required.");
+      // Validate required fields with specific error messages
+      if (!formData.username || !formData.username.trim()) {
+        toast.error(isMandarin ? "請輸入用戶名。" : "Please enter a username.");
+        return;
+      }
+      if (!formData.name || !formData.name.trim()) {
+        toast.error(isMandarin ? "請輸入姓名。" : "Please enter your name.");
         return;
       }
       if (!formData.email || !formData.email.trim()) {
-        toast.error(isMandarin ? "此欄位為必填。" : "This field is required.");
+        toast.error(isMandarin ? "請輸入電子郵件。" : "Please enter an email address.");
         return;
       }
       // Basic email validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(formData.email)) {
-        toast.error(isMandarin ? "請輸入有效的電⼦郵件。" : "Enter a valid email address.");
+        toast.error(isMandarin ? "請輸入有效的電子郵件。" : "Please enter a valid email address.");
+        return;
+      }
+      if (!formData.password || !formData.password.trim()) {
+        toast.error(isMandarin ? "請輸入密碼。" : "Please enter a password.");
+        return;
+      }
+      // REQUIRED: Mobile phone validation
+      if (!formData.mobile_phone || !formData.mobile_phone.trim()) {
+        toast.error(isMandarin ? "請輸入手機號碼。手機號碼為必填項目。" : "Please enter a mobile phone number. Mobile phone is required.");
+        return;
+      }
+      // Basic mobile phone validation
+      const phoneRegex = /^[\+]?[\d\s\-\(\)]{10,}$/;
+      if (!phoneRegex.test(formData.mobile_phone.trim())) {
+        toast.error(isMandarin ? "請輸入有效的手機號碼。" : "Please enter a valid mobile phone number.");
         return;
       }
 
@@ -87,7 +106,6 @@ function UserRegistrationLayout({ loading, setLoading }) {
       <AddressInputWidget value={formData.address} onChange={handleChange} />
       <div className="hierarchical-flex-container">
         <div className="flexbox-item">
-          {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
             placeholder={isMandarin ? "電話" : "Phone"}
             type="text"
@@ -98,19 +116,18 @@ function UserRegistrationLayout({ loading, setLoading }) {
           />
         </div>
         <div className="flex-grow-shrink-basis">
-          {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
           <input
-            placeholder={isMandarin ? "⼿機" : "Mobile phone"}
-            type="text"
+            placeholder={isMandarin ? "手機號碼 *" : "Mobile phone *"}
+            type="tel"
             className="input-field-with-border input-style-f62::placeholder"
             name="mobile_phone"
             onChange={handleChange}
             value={formData.mobile_phone}
             required
+            aria-required="true"
           />
         </div>
       </div>
-      {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
       <button
         className="account-creation-button-style"
         disabled={loading}

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UsernameInputWidget from "../UsernameInputWidget";
 import PasswordInputWidget from "../PasswordInputWidget";
 import "./style.css";
@@ -13,10 +13,26 @@ function UserAuthenticationForm() {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const navigate = useNavigate();
+
+  // Load saved credentials if remember me was checked
+  useEffect(() => {
+    const savedUsername = localStorage.getItem("rememberedUsername");
+    const savedRememberMe = localStorage.getItem("rememberMe") === "true";
+    
+    if (savedRememberMe && savedUsername) {
+      setFormData(prev => ({ ...prev, username: savedUsername }));
+      setRememberMe(true);
+    }
+  }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleRememberMeChange = (e) => {
+    setRememberMe(e.target.checked);
   };
 
   const handleSubmit = async (e) => {
@@ -42,6 +58,19 @@ function UserAuthenticationForm() {
         const token = response.data.token;
         localStorage.setItem("token", token);
         localStorage.setItem("NameLetter", response.data.user.name[0]);
+        
+        // Handle remember me functionality
+        if (rememberMe) {
+          localStorage.setItem("rememberMe", "true");
+          localStorage.setItem("rememberedUsername", formData.username);
+          // Set longer token expiration (optional - depends on backend)
+          localStorage.setItem("rememberMeExpiration", (Date.now() + 30 * 24 * 60 * 60 * 1000).toString()); // 30 days
+        } else {
+          localStorage.removeItem("rememberMe");
+          localStorage.removeItem("rememberedUsername");
+          localStorage.removeItem("rememberMeExpiration");
+        }
+        
         console.log(response);
         setAuthToken(token);
         navigate("/");
@@ -51,11 +80,27 @@ function UserAuthenticationForm() {
       }
       setLoading(false);
     } catch (error) {
-      toast.error(
-        `${Object.keys(error.response.data)[0]} : ${
-          error.response.data[Object.keys(error.response.data)[0]]
-        }` || (isMandarin ? "帳號或密碼錯誤" : "Unable to log in with provided credentials")
-      );
+      // Fixed translation logic - properly handle error message fallback
+      let errorMessage;
+      
+      if (error.response?.data) {
+        const errorData = error.response.data;
+        const firstKey = Object.keys(errorData)[0];
+        const firstError = errorData[firstKey];
+        
+        // Check if it's the specific login error
+        if (typeof firstError === 'string' && firstError.includes('Unable to log in with provided credentials')) {
+          errorMessage = isMandarin ? "帳號或密碼錯誤" : "Unable to log in with provided credentials";
+        } else if (firstError) {
+          errorMessage = `${firstKey}: ${firstError}`;
+        } else {
+          errorMessage = isMandarin ? "帳號或密碼錯誤" : "Unable to log in with provided credentials";
+        }
+      } else {
+        errorMessage = isMandarin ? "帳號或密碼錯誤" : "Unable to log in with provided credentials";
+      }
+      
+      toast.error(errorMessage);
       setLoading(false);
     }
   };
@@ -75,15 +120,13 @@ function UserAuthenticationForm() {
         />
         <div className="login-section">
           <div className="login-section1">
-            <div className="checkbox-container">
-              <input
-                id="remember-me"
-                type="checkbox"
-                defaultChecked={false}
-                className="hidden-input"
-              />
-              <img className="hidden-icon img-content-66044729" />
-            </div>
+            <input
+              id="remember-me"
+              type="checkbox"
+              checked={rememberMe}
+              onChange={handleRememberMeChange}
+              className="normal-checkbox"
+            />
             <label htmlFor="remember-me" className="remember-me-label">
               {isMandarin ? "記住我" : "Remember me"}
             </label>

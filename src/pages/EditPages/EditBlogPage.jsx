@@ -1,11 +1,64 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo, useCallback, useMemo, lazy, Suspense } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { api } from "../../config/api";
 import { toast } from "sonner";
 import LoadingSpinner from "../../components/UI/LoadingSpinner";
 import MediaGallery from "../../components/MediaGalleryPopup";
-import RichTextEditor from "../../components/UI/RichTextEditor";
 import "./EditPages.css";
+
+// Lazy load the heavy RichTextEditor component
+const RichTextEditor = lazy(() => import("../../components/UI/RichTextEditor"));
+
+// Cache for users, categories, and blog data
+const usersCache = new Map();
+const categoriesCache = new Map();
+const blogCache = new Map();
+
+// Memoized loading fallback for RichTextEditor
+const EditorLoading = memo(() => (
+  <div style={{ 
+    height: "300px", 
+    border: "1px solid #ddd", 
+    borderRadius: "4px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    background: "#f9f9f9"
+  }}>
+    <LoadingSpinner text="載入編輯器..." />
+  </div>
+));
+
+// Memoized image selection component
+const ImageSelection = memo(({ selectedImage, onSelectImage }) => (
+  <div className="image-selection">
+    <div className="selected-image">
+      {selectedImage ? (
+        <img
+          src={selectedImage.file}
+          alt="Selected"
+          className="preview-image"
+          onError={(e) => {
+            console.log("Image load error");
+            e.target.onerror = null;
+            e.target.src =
+              "https://via.placeholder.com/800x400?text=Image+Not+Available";
+          }}
+        />
+      ) : (
+        <div className="no-image-placeholder">尚未選擇圖片</div>
+      )}
+    </div>
+
+    <button
+      type="button"
+      className="select-image-button"
+      onClick={onSelectImage}
+    >
+      {selectedImage ? "更換圖片" : "選擇圖片"}
+    </button>
+  </div>
+));
 
 function EditBlogPage() {
   const navigate = useNavigate();
@@ -27,110 +80,152 @@ function EditBlogPage() {
   const [categories, setCategories] = useState([]);
   const [selectedImage, setSelectedImage] = useState(null);
 
-  useEffect(() => {
-    fetchBlogData();
-    fetchUsers();
-    fetchCategories();
-  }, [id]);
+  // Memoized cache keys
+  const blogCacheKey = useMemo(() => `blog_${id}`, [id]);
 
-  const fetchBlogData = async () => {
-    try {
-      setIsLoading(true);
-      const response = await api.get(`/blogs/${id}/`);
-      console.log("Fetched blog data:", response.data);
-
-      // Find the user by username
-      const userResponse = await api.get("/users/");
-      const user = userResponse?.data?.results?.find(
-        (u) => u.username === response.data.author_name
-      );
-
-      // Find the category by name
-      const categoryResponse = await api.get("/blog-categories/");
-      const category = categoryResponse?.data?.find(
-        (c) => c.name === response.data.category_name
-      );
-
-      console.log("Found category:", category);
-
-      setFormData({
-        title: response.data.title || "",
-        content: response.data.content || "",
-        title_mandarin: response.data.title_mandarin || "",
-        content_mandarin: response.data.content_mandarin || "",
-        author: user?.id || "",
-        photo: response.data.image_id || null,
-        category: category?.id || "",
-      });
-
-      if (response.data.image_id) {
-        setSelectedImage({
-          id: response.data.image_id,
-          file: response.data.photo_url,
-        });
-      }
-      setIsLoading(false);
-    } catch (error) {
-      console.error("Error fetching blog:", error);
-      toast.error("Failed to load blog");
-      setErrorMessage("Failed to load blog. Please try again.");
-      setIsLoading(false);
-    }
-  };
-
-  const fetchUsers = async () => {
-    try {
-      const response = await api.get("/users/");
-      setUsers(response.data.results || []);
-    } catch (error) {
-      console.error("Error fetching users:", error);
-      toast.error("Failed to load users");
-    }
-  };
-
-  const fetchCategories = async () => {
-    try {
-      const response = await api.get("/blog-categories/");
-      console.log("Fetched categories:", response.data);
-      setCategories(response.data || []);
-    } catch (error) {
-      console.error("Error fetching categories:", error);
-      toast.error("Failed to load categories");
-    }
-  };
-
-  const handleInputChange = (e) => {
+  // Memoized handlers
+  const handleInputChange = useCallback((e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
       ...prev,
       [name]: value,
     }));
-  };
+  }, []);
 
-  const handleContentChange = (content) => {
+  const handleContentChange = useCallback((content) => {
     setFormData((prev) => ({
       ...prev,
       content,
     }));
-  };
+  }, []);
 
-  const handleContentMandarinChange = (content) => {
+  const handleContentMandarinChange = useCallback((content) => {
     setFormData((prev) => ({
       ...prev,
       content_mandarin: content,
     }));
-  };
+  }, []);
 
-  const handleImageSelect = (image) => {
+  const handleImageSelect = useCallback((image) => {
     setSelectedImage(image);
     setFormData((prev) => ({
       ...prev,
       photo: image.id,
     }));
     setShowMediaGallery(false);
-  };
+  }, []);
 
-  const handleSubmit = async (e) => {
+  // Optimized data fetching with parallel calls and caching
+  const fetchAllData = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      
+      const promises = [];
+      
+      // Fetch blog data
+      if (blogCache.has(blogCacheKey)) {
+        const cachedBlog = blogCache.get(blogCacheKey);
+        setFormData(cachedBlog.formData);
+        setSelectedImage(cachedBlog.selectedImage);
+      } else {
+        promises.push(
+          api.get(`/blogs/${id}/`).then(response => {
+            console.log("Fetched blog data:", response.data);
+            return response.data;
+          })
+        );
+      }
+      
+      // Fetch users
+      if (usersCache.has('users')) {
+        setUsers(usersCache.get('users'));
+      } else {
+        promises.push(
+          api.get("/users/").then(response => {
+            const userData = response.data.results || [];
+            usersCache.set('users', userData);
+            setUsers(userData);
+            return userData;
+          })
+        );
+      }
+      
+      // Fetch categories
+      if (categoriesCache.has('categories')) {
+        setCategories(categoriesCache.get('categories'));
+      } else {
+        promises.push(
+          api.get("/blog-categories/").then(response => {
+            const categoryData = response.data || [];
+            categoriesCache.set('categories', categoryData);
+            setCategories(categoryData);
+            return categoryData;
+          })
+        );
+      }
+
+      // Wait for all API calls to complete
+      const results = await Promise.all(promises);
+      
+      // Process blog data if it was fetched
+      if (!blogCache.has(blogCacheKey) && results.length > 0) {
+        const blogData = results.find(result => result && result.title !== undefined);
+        if (blogData) {
+          // Get users and categories for processing
+          const currentUsers = usersCache.get('users') || users;
+          const currentCategories = categoriesCache.get('categories') || categories;
+          
+          // Find the user by username
+          const user = currentUsers.find(u => u.username === blogData.author_name);
+          
+          // Find the category by name
+          const category = currentCategories.find(c => c.name === blogData.category_name);
+          
+          console.log("Found category:", category);
+
+          const processedFormData = {
+            title: blogData.title || "",
+            content: blogData.content || "",
+            title_mandarin: blogData.title_mandarin || "",
+            content_mandarin: blogData.content_mandarin || "",
+            author: user?.id || "",
+            photo: blogData.image_id || null,
+            category: category?.id || "",
+          };
+
+          let processedSelectedImage = null;
+          if (blogData.image_id) {
+            processedSelectedImage = {
+              id: blogData.image_id,
+              file: blogData.photo_url,
+            };
+          }
+
+          // Cache the processed data
+          blogCache.set(blogCacheKey, {
+            formData: processedFormData,
+            selectedImage: processedSelectedImage,
+          });
+
+          setFormData(processedFormData);
+          setSelectedImage(processedSelectedImage);
+        }
+      }
+      
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      toast.error("Failed to load blog");
+      setErrorMessage("Failed to load blog. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [id, blogCacheKey, users, categories]);
+
+  useEffect(() => {
+    fetchAllData();
+  }, [fetchAllData]);
+
+  const handleSubmit = useCallback(async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setErrorMessage("");
@@ -139,6 +234,10 @@ function EditBlogPage() {
       console.log("Submitting blog data:", formData);
       const response = await api.put(`/blogs/${id}/`, formData);
       console.log("Updated blog response:", response.data);
+      
+      // Clear cache to ensure fresh data on next load
+      blogCache.delete(blogCacheKey);
+      
       toast.success("Blog updated successfully");
       navigate("/dashboard/blogs");
     } catch (error) {
@@ -151,7 +250,95 @@ function EditBlogPage() {
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [formData, id, blogCacheKey, navigate]);
+
+  // Memoized form sections
+  const BasicInfoSection = useMemo(() => (
+    <div className="form-section">
+      <h3>⽂章資訊</h3>
+
+      <div className="form-group">
+        <label htmlFor="title">標題 *</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          value={formData.title}
+          onChange={handleInputChange}
+          required
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="title_mandarin">標題(中⽂)</label>
+        <input
+          type="text"
+          id="title_mandarin"
+          name="title_mandarin"
+          value={formData.title_mandarin}
+          onChange={handleInputChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="content">內⽂ *</label>
+        <Suspense fallback={<EditorLoading />}>
+          <RichTextEditor
+            value={formData.content}
+            onChange={handleContentChange}
+            placeholder="請輸入內文..."
+          />
+        </Suspense>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="content_mandarin">內⽂(中⽂)</label>
+        <Suspense fallback={<EditorLoading />}>
+          <RichTextEditor
+            value={formData.content_mandarin}
+            onChange={handleContentMandarinChange}
+            placeholder="請輸入中文內文..."
+          />
+        </Suspense>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="author">作者 *</label>
+        <select
+          id="author"
+          name="author"
+          value={formData.author}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">選擇作者</option>
+          {users.map((user) => (
+            <option key={user.id} value={user.id}>
+              {user.name || user.username}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="category">分類 *</label>
+        <select
+          id="category"
+          name="category"
+          value={formData.category}
+          onChange={handleInputChange}
+          required
+        >
+          <option value="">選擇分類</option>
+          {categories.map((category) => (
+            <option key={category.id} value={category.id}>
+              {category.name_mandarin || category.name}
+            </option>
+          ))}
+        </select>
+      </div>
+    </div>
+  ), [formData, handleInputChange, handleContentChange, handleContentMandarinChange, users, categories]);
 
   if (isLoading) {
     return <LoadingSpinner text="載入⽂章中..." />;
@@ -173,116 +360,14 @@ function EditBlogPage() {
       {errorMessage && <div className="error-message">{errorMessage}</div>}
 
       <form onSubmit={handleSubmit} className="edit-form">
-        <div className="form-section">
-          <h3>⽂章資訊</h3>
-
-          <div className="form-group">
-            <label htmlFor="title">標題 *</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={formData.title}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="title_mandarin">標題(中⽂)</label>
-            <input
-              type="text"
-              id="title_mandarin"
-              name="title_mandarin"
-              value={formData.title_mandarin}
-              onChange={handleInputChange}
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="content">內⽂ *</label>
-            <RichTextEditor
-              value={formData.content}
-              onChange={handleContentChange}
-              placeholder="請輸入內文..."
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="content_mandarin">內⽂(中⽂)</label>
-            <RichTextEditor
-              value={formData.content_mandarin}
-              onChange={handleContentMandarinChange}
-              placeholder="請輸入中文內文..."
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="author">作者 *</label>
-            <select
-              id="author"
-              name="author"
-              value={formData.author}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">選擇作者</option>
-              {users.map((user) => (
-                <option key={user.id} value={user.id}>
-                  {user.name || user.username}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="category">分類 *</label>
-            <select
-              id="category"
-              name="category"
-              value={formData.category}
-              onChange={handleInputChange}
-              required
-            >
-              <option value="">選擇分類</option>
-              {categories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name_mandarin || category.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
+        {BasicInfoSection}
 
         <div className="form-section">
           <h3>封⾯</h3>
-          <div className="image-selection">
-            <div className="selected-image">
-              {selectedImage ? (
-                <img
-                  src={selectedImage.file}
-                  alt="Selected"
-                  className="preview-image"
-                  onError={(e) => {
-                    console.log("Image load error");
-                    e.target.onerror = null;
-                    e.target.src =
-                      "https://via.placeholder.com/800x400?text=Image+Not+Available";
-                  }}
-                />
-              ) : (
-                <div className="no-image-placeholder">尚未選擇圖片</div>
-              )}
-            </div>
-
-            <button
-              type="button"
-              className="select-image-button"
-              onClick={() => setShowMediaGallery(true)}
-            >
-              {selectedImage ? "更換圖片" : "選擇圖片"}
-            </button>
-          </div>
+          <ImageSelection
+            selectedImage={selectedImage}
+            onSelectImage={() => setShowMediaGallery(true)}
+          />
         </div>
 
         <div className="form-actions">
@@ -484,4 +569,4 @@ function EditBlogPage() {
   );
 }
 
-export default EditBlogPage;
+export default memo(EditBlogPage);

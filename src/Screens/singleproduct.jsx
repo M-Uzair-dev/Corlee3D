@@ -465,11 +465,11 @@ const singleproduct = () => {
           }
           textureScale={
             model === "/models/jacket.glb"
-              ? [1, 1] // Fixed scale for jacket using traditional method
+              ? [2.7, 2.7] // Fixed scale for jacket using traditional method
               : model === "/models/shirt.glb"
-              ? [1.3, 1.3]
+              ? [3.6, 3.6]
               : model === "/models/pants.glb"
-              ? [1.5, 1.5]
+              ? [3.6, 3.6]
               : [1, 1]
           }
           otherModels={[

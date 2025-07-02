@@ -7,17 +7,29 @@ import SvgIcon5 from "./icons/SvgIcon5";
 import "./style.css";
 import { TailSpin } from "react-loader-spinner";
 import messages from "./messages.json";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo, useCallback, useMemo } from "react";
 import { api } from "../../../../config/api";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
 import { useDebounce } from "../../BigScreen/useDebounce";
 
+// Cache for API responses
+const blogsCache = new Map();
+const categoriesCache = new Map();
+
+// Memoized icon components
+const MemoizedSvgIcon1 = memo(SvgIcon1);
+const MemoizedSvgIcon2 = memo(SvgIcon2);
+const MemoizedSvgIcon3 = memo(SvgIcon3);
+const MemoizedSvgIcon4 = memo(SvgIcon4);
+const MemoizedSvgIcon5 = memo(SvgIcon5);
+const MemoizedContentRenderer = memo(ContentRenderer);
+
 function ContentDisplayWidgetGenerator() {
   const isMandarin = localStorage.getItem("isMandarin");
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [loading2, setLoading2] = useState(true);
+  const [loading2, setLoading2] = useState(false);
   const [localsort, setLocalsort] = useState("");
   const [showcat, setShowcat] = useState(false);
   const [localcateg, setLocalcateg] = useState([]);
@@ -31,179 +43,190 @@ function ContentDisplayWidgetGenerator() {
 
   const navigate = useNavigate();
 
-  let debouncedValue = useDebounce(searchterm, 500);
-  const loadBlogs = async (param) => {
+  // Optimized debouncing with longer delay
+  const debouncedValue = useDebounce(searchterm, 800);
+
+  // Memoized error handler
+  const handleError = useCallback((error, customMessage) => {
+    const errorMessage = customMessage || error?.message || 
+      (isMandarin ? "發生錯誤" : "Something went wrong!");
+    toast.error(errorMessage);
+  }, [isMandarin]);
+
+  // Memoized query builder
+  const buildQuery = useCallback((pageNum = 1, param = null) => {
+    const params = new URLSearchParams();
+    
+    if (debouncedValue) params.append('search', debouncedValue);
+    
+    if (localsort && param !== "nosort") {
+      const ordering = localsort === "newest" || localsort === "最新" ? "-created_at" :
+                      localsort === "oldest" || localsort === "最舊" ? "created_at" : 
+                      "-view_count";
+      params.append('ordering', ordering);
+    }
+    
+    if (localcateg.length > 0) {
+      const categories = localcateg.filter(item => item !== param).join(",");
+      if (categories) params.append('category', categories);
+    }
+    
+    params.append('page', pageNum.toString());
+    
+    return `/blogs/?${params.toString()}`;
+  }, [debouncedValue, localsort, localcateg]);
+
+  // Optimized blog loading with caching
+  const loadBlogs = useCallback(async (param = null) => {
     try {
       setLoading(true);
       setPage(1);
-      console.log(
-        "Fetching : ",
-        `/blogs/?${searchterm ? `search=${searchterm}` : ""}${
-          localsort && param !== "nosort"
-            ? `&ordering=${
-                localsort === "newest" || localsort === "最新"
-                  ? "-created_at"
-                  : localsort === "oldest" || localsort === "最舊"
-                  ? "created_at"
-                  : "-view_count"
-              }`
-            : ""
-        }${
-          localcateg.length > 0
-            ? `&category=${localcateg
-                .filter((item) => item !== param)
-                .join(",")}`
-            : ""
-        }&page=${page}`
-      );
-      let response = await api.get(
-        `/blogs/?${searchterm ? `search=${searchterm}` : ""}${
-          localsort && param !== "nosort"
-            ? `&ordering=${
-                localsort === "newest" || localsort === "最新"
-                  ? "-created_at"
-                  : localsort === "oldest" || localsort === "最舊"
-                  ? "created_at"
-                  : "-view_count"
-              }`
-            : ""
-        }${
-          localcateg.length > 0
-            ? `&category=${localcateg
-                .filter((item) => item !== param)
-                .join(",")}`
-            : ""
-        }&page=${page}`
-      );
-      console.log("BLOGS : ", response);
-      if (response.status === 200) {
-        if (response.data.results.length > 0) {
-          setBlogs(response.data.results);
-          setLoading(false);
-          setNoBlogs(false);
-        } else {
-          setNoBlogs(true);
-          setLoading(false);
-        }
-      } else {
-        toast.error(
-          e.message || (isMandarin ? "發生錯誤" : "Something went wrong !")
-        );
-        navigate("/");
+      setNoBlogs(false);
+      
+      const queryUrl = buildQuery(1, param);
+      
+      // Check cache first
+      if (blogsCache.has(queryUrl)) {
+        const cachedData = blogsCache.get(queryUrl);
+        setBlogs(cachedData.results);
         setLoading(false);
+        setNoBlogs(cachedData.results.length === 0);
+        return;
       }
-    } catch (e) {
-      if (e.response.data.detail === "Invalid page.") {
-        setNoBlogs(true);
-        setLoading(false);
-      } else {
-        toast.error(
-          e.message || (isMandarin ? "發生錯誤" : "Something went wrong !")
-        );
-        setLoading(false);
-        navigate("/");
-      }
-    }
-  };
-  const loadNextPage = async () => {
-    try {
-      if (page === 1) return;
 
-      setLoading3(true);
-      console.log(
-        `/blogs/?${searchterm ? `search=${searchterm}` : ""}${
-          localsort
-            ? `&ordering=${
-                localsort === "newest" || localsort === "最新"
-                  ? "-created_at"
-                  : localsort === "oldest" || localsort === "最舊"
-                  ? "created_at"
-                  : "-view_count"
-              }`
-            : ""
-        }${
-          localcateg.length > 0 ? `&category=${localcateg.join(",")}` : ""
-        }&page=${page}`
-      );
-      let response = await api.get(
-        `/blogs/?${searchterm ? `search=${searchterm}` : ""}${
-          localsort
-            ? `&ordering=${
-                localsort === "newest" || localsort === "最新"
-                  ? "-created_at"
-                  : localsort === "oldest" || localsort === "最舊"
-                  ? "created_at"
-                  : "-view_count"
-              }`
-            : ""
-        }${
-          localcateg.length > 0 ? `&category=${localcateg.join(",")}` : ""
-        }&page=${page}`
-      );
+      const response = await api.get(queryUrl);
+      
       if (response.status === 200) {
-        if (response.data.results.length > 0) {
-          setBlogs((prev) => [...prev, ...response.data.results]);
-          setLoading3(false);
+        const results = response.data.results || [];
+        
+        // Cache the response
+        blogsCache.set(queryUrl, response.data);
+        
+        setBlogs(results);
+        setNoBlogs(results.length === 0);
+      } else {
+        handleError(null, isMandarin ? "無法加載博客" : "Failed to load blogs");
+        navigate("/");
+      }
+    } catch (error) {
+      console.error("Error loading blogs:", error);
+      
+      if (error?.response?.data?.detail === "Invalid page.") {
+        setNoBlogs(true);
+      } else {
+        handleError(error);
+        navigate("/");
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [buildQuery, handleError, isMandarin, navigate]);
+
+  // Optimized pagination
+  const loadNextPage = useCallback(async () => {
+    if (page === 1 || loading3) return;
+
+    try {
+      setLoading3(true);
+      
+      const queryUrl = buildQuery(page);
+      
+      // Check cache first
+      if (blogsCache.has(queryUrl)) {
+        const cachedData = blogsCache.get(queryUrl);
+        setBlogs(prev => [...prev, ...cachedData.results]);
+        setLoading3(false);
+        return;
+      }
+
+      const response = await api.get(queryUrl);
+      
+      if (response.status === 200) {
+        const results = response.data.results || [];
+        
+        if (results.length > 0) {
+          // Cache the response
+          blogsCache.set(queryUrl, response.data);
+          setBlogs(prev => [...prev, ...results]);
         } else {
           toast.error(isMandarin ? "沒有更多博客" : "No more blogs");
-          setLoading3(false);
         }
       } else {
-        toast.error(
-          e.message || (isMandarin ? "發生錯誤" : "Something went wrong !")
-        );
-        navigate("/");
-        setLoading3(false);
+        handleError(null, isMandarin ? "無法加載更多博客" : "Failed to load more blogs");
       }
-    } catch (e) {
-      console.log(e);
-      if (e.response.data.detail === "Invalid page.") {
+    } catch (error) {
+      console.error("Error loading next page:", error);
+      
+      if (error?.response?.data?.detail === "Invalid page.") {
         toast.error(isMandarin ? "沒有更多博客" : "No more blogs");
-        setLoading3(false);
       } else {
-        toast.error(
-          e.message || (isMandarin ? "發生錯誤" : "Something went wrong !")
-        );
-        setLoading3(false);
-        navigate("/");
+        handleError(error);
       }
+    } finally {
+      setLoading3(false);
     }
-  };
+  }, [buildQuery, page, loading3, handleError, isMandarin]);
 
-  const loadCategs = async () => {
+  // Optimized categories loading
+  const loadCategs = useCallback(async () => {
+    if (categs.length > 0 || loading2) return;
+
+    const cacheKey = 'blog-categories';
+    
+    // Check cache first
+    if (categoriesCache.has(cacheKey)) {
+      setCategs(categoriesCache.get(cacheKey));
+      return;
+    }
+
     try {
-      if (categs.length > 0) return;
       setLoading2(true);
-      let response = await api.get("/blog-categories/");
-      console.log(response);
+      const response = await api.get("/blog-categories/");
+      
       if (response.status === 200) {
-        setCategs(response.data);
-        setLoading2(false);
+        const data = response.data || [];
+        // Cache the response
+        categoriesCache.set(cacheKey, data);
+        setCategs(data);
       } else {
-        toast.error("Something went wrong !");
-        navigate("/");
-        setLoading2(false);
+        handleError(null, "Failed to load categories");
       }
-    } catch (e) {
-      toast.error("Something went wrong !");
+    } catch (error) {
+      console.error("Error loading categories:", error);
+      handleError(error);
+    } finally {
       setLoading2(false);
-      navigate("/");
     }
-  };
-  useEffect(() => {
-    loadBlogs();
-  }, [debouncedValue]);
-  useEffect(() => {
-    loadNextPage();
-  }, [page]);
+  }, [categs.length, loading2, handleError]);
 
-  const togglecateg = (categ) => {
+  // Optimized useEffect for initial load
+  useEffect(() => {
+    const controller = new AbortController();
+    
+    Promise.all([
+      loadBlogs(),
+      loadCategs()
+    ]).catch(console.error);
+
+    return () => controller.abort();
+  }, [debouncedValue]); // Only depend on debounced search term
+
+  // Optimized useEffect for pagination
+  useEffect(() => {
+    if (page > 1) {
+      loadNextPage();
+    }
+  }, [page, loadNextPage]);
+
+  // Memoized category toggle function
+  const togglecateg = useCallback((categ) => {
     if (localcateg.includes(categ)) {
       setLocalcateg(localcateg.filter((item) => item !== categ));
     } else {
       setLocalcateg([...localcateg, categ]);
     }
-  };
+  }, [localcateg]);
+
   return (
     <div className="blog-post-container-blogs">
       <p className="hero-title-text-style-blogs english">BLOGS</p>
@@ -227,7 +250,7 @@ function ContentDisplayWidgetGenerator() {
                 }}
               >
                 {localsort}
-                <SvgIcon1 className="svg-container4-blogs" />
+                <MemoizedSvgIcon1 className="svg-container4-blogs" />
               </button>
             ) : (
               <></>
@@ -243,7 +266,7 @@ function ContentDisplayWidgetGenerator() {
                   key={index}
                 >
                   {categ}
-                  <SvgIcon1 className="svg-container4-blogs" />
+                  <MemoizedSvgIcon1 className="svg-container4-blogs" />
                 </button>
               ))
             ) : (
@@ -253,7 +276,7 @@ function ContentDisplayWidgetGenerator() {
           <div className="horizontal-layout-container-blogs">
             <div className="flexible-container-blogs">
               <div className="rounded-header-container-blogs">
-                <SvgIcon4 className="svg-container5-blogs" />
+                <MemoizedSvgIcon4 className="svg-container5-blogs" />
                 <input
                   onChange={(e) => setSearchterm(e.target.value)}
                   value={searchterm}
@@ -268,7 +291,7 @@ function ContentDisplayWidgetGenerator() {
               className="button-with-icon3-blogs"
               onClick={() => setShowfilter(!showfilter)}
             >
-              <SvgIcon5 className="svg-container6-blogs" />
+              <MemoizedSvgIcon5 className="svg-container6-blogs" />
               {isMandarin ? "篩選" : "Filter"}
             </button>
           </div>
@@ -300,7 +323,7 @@ function ContentDisplayWidgetGenerator() {
           </h1>
         ) : (
           <>
-            <ContentRenderer blogs={blogs} />
+            <MemoizedContentRenderer blogs={blogs} />
 
             <button
               className="blog-load-more-button-style-blogs"
@@ -549,4 +572,4 @@ function ContentDisplayWidgetGenerator() {
   );
 }
 
-export default ContentDisplayWidgetGenerator;
+export default memo(ContentDisplayWidgetGenerator);

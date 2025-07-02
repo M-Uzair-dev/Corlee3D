@@ -2,14 +2,12 @@ import Container from "../../UI/Container";
 import ContentDisplayWidgetGenerator from "./ContentDisplayWidgetGenerator";
 import "./style.css";
 
-function BlogsComponent({ generateContentDisplayWidgetArgs }) {
+function BlogsComponent() {
   return (
     <Container>
       <div className="main-content-container-b">
         <div className="main-content-section-b">
-          <ContentDisplayWidgetGenerator
-            generateContentDisplayWidgetArgs={generateContentDisplayWidgetArgs}
-          />
+          <ContentDisplayWidgetGenerator />
         </div>
       </div>
     </Container>

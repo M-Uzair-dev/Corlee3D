@@ -284,7 +284,7 @@ function DynamicContentDisplay(props) {
             <h1
               className={isMandarin ? "loginpopupheader" : "loginpopupheader2"}
             >
-              {isMandarin ? "需要登入" : "Login required"}
+              {isMandarin ? "需要登入" : "Login Required"}
             </h1>
             <p>
               {isMandarin ? "請先登入以繼續。" : "This action requires login."}

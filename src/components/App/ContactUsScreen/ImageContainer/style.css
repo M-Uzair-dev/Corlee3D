@@ -1,13 +1,149 @@
 .vertical-spacer {
-  margin-top: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  padding: 20px 0;
 }
+
 .image-container-full-width {
-  box-sizing: border-box;
-  display: block;
-  width: 846px;
-  max-width: initial;
-  height: 411px;
+  width: 100%;
+  max-width: 800px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Google Map styles */
+.map-container {
+  width: 100%;
+  max-width: 800px;
+  height: 400px;
+  position: relative;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.map-container:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+/* Map wrapper styles */
+.map-wrapper {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.google-map {
+  width: 100%;
+  height: 100%;
   border: none;
-  border-radius: 24px;
-  object-fit: cover;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.google-map.loaded {
+  opacity: 1;
+}
+
+/* Loading state */
+.map-loading {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #f8f9fa;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 10;
+}
+
+.loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #e3e3e3;
+  border-top: 4px solid #4285f4;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.map-loading p {
+  color: #666;
+  font-size: 14px;
+  margin: 0;
+}
+
+/* Map overlay with address info */
+.map-overlay {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 250px;
+  z-index: 5;
+}
+
+.address-info h4 {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.address-info p {
+  margin: 0;
+  font-size: 14px;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .map-container {
+    height: 300px;
+    border-radius: 8px;
+  }
+  
+  .map-overlay {
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    max-width: none;
+    padding: 12px;
+  }
+  
+  .address-info h4 {
+    font-size: 14px;
+  }
+  
+  .address-info p {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .vertical-spacer {
+    padding: 16px;
+  }
+  
+  .map-container {
+    height: 250px;
+  }
 }

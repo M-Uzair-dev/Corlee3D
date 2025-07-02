@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo, useCallback, useMemo } from "react";
 import {
   FaBlog,
   FaEdit,
@@ -12,6 +12,61 @@ import { api } from "../../config/api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
+
+// Cache for blogs data to avoid redundant API calls
+const blogsCache = new Map();
+
+// Memoized action buttons component
+const ActionButtons = memo(({ blog, onView, onEdit, onDelete }) => (
+  <div className="action-cell">
+    <button
+      className="action-btn view"
+      onClick={() => onView(blog.id)}
+      title="View Blog"
+    >
+      <FaEye />
+    </button>
+    <button
+      className="action-btn edit"
+      onClick={() => onEdit(blog.id)}
+      title="Edit Blog"
+    >
+      <FaEdit />
+    </button>
+    <button
+      className="action-btn delete"
+      onClick={() => onDelete(blog.id)}
+      title="Delete Blog"
+    >
+      <FaTrash />
+    </button>
+  </div>
+));
+
+// Memoized pagination component
+const Pagination = memo(({ page, totalPages, onPrevPage, onNextPage, isLoading }) => (
+  <div className="pagination-controls">
+    <button
+      className="pagination-btn"
+      onClick={onPrevPage}
+      disabled={page <= 1 || isLoading}
+    >
+      <FaChevronLeft /> 上一頁
+    </button>
+    <span className="pagination-info">
+      第 {page} 頁，共 {totalPages} 頁
+    </span>
+    {page < totalPages && (
+      <button
+        className="pagination-btn"
+        onClick={onNextPage}
+        disabled={isLoading}
+      >
+        下一頁 <FaChevronRight />
+      </button>
+    )}
+  </div>
+));
 
 const Blogs = () => {
   const navigate = useNavigate();
@@ -39,13 +94,63 @@ const Blogs = () => {
 
   const ITEMS_PER_PAGE = 8;
 
-  useEffect(() => {
+  // Memoized cache key
+  const cacheKey = useMemo(() => `blogs_page_${page}_size_${ITEMS_PER_PAGE}`, [page]);
+
+  // Memoized action handlers
+  const handleViewBlog = useCallback((id) => {
+    navigate(`/blog/${id}`);
+  }, [navigate]);
+
+  const handleEditBlog = useCallback((id) => {
+    navigate(`/dashboard/blogs/edit/${id}`);
+  }, [navigate]);
+
+  const handleShowDeleteModal = useCallback((id) => {
+    setBlogToDelete(id);
+    setShowDeleteModal(true);
+  }, []);
+
+  const handleDeleteBlog = useCallback(() => {
+    toast.success("文章刪除成功");
+    // Clear cache and refetch
+    blogsCache.clear();
     fetchBlogs();
+  }, []);
+
+  const handlePrevPage = useCallback(() => {
+    if (page > 1) {
+      setPage((prev) => prev - 1);
+    }
   }, [page]);
 
-  const fetchBlogs = async () => {
+  const handleNextPage = useCallback(() => {
+    if (page < totalPages) {
+      setPage((prev) => prev + 1);
+    }
+  }, [page, totalPages]);
+
+  const handleCreate = useCallback(() => {
+    navigate("/dashboard/blogs/create");
+  }, [navigate]);
+
+  // Optimized fetch function with caching
+  const fetchBlogs = useCallback(async () => {
     try {
       setBlogsData((prev) => ({ ...prev, isLoading: true }));
+
+      // Check cache first
+      if (blogsCache.has(cacheKey)) {
+        const cachedData = blogsCache.get(cacheKey);
+        setBlogsData((prev) => ({
+          ...prev,
+          data: cachedData.data,
+          isLoading: false,
+        }));
+        setTotalPages(cachedData.totalPages);
+        return;
+      }
+
       const response = await api.get(
         `/blogs/?page=${page}&page_size=${ITEMS_PER_PAGE}`
       );
@@ -59,36 +164,25 @@ const Blogs = () => {
           view_count: blog.view_count || 0,
           created_at: new Date(blog.created_at).toLocaleDateString(),
           actions: (
-            <div className="action-cell">
-              <button
-                className="action-btn view"
-                onClick={() => handleViewBlog(blog.id)}
-                title="View Blog"
-              >
-                <FaEye />
-              </button>
-              <button
-                className="action-btn edit"
-                onClick={() => handleEditBlog(blog.id)}
-                title="Edit Blog"
-              >
-                <FaEdit />
-              </button>
-              <button
-                className="action-btn delete"
-                onClick={() => handleShowDeleteModal(blog.id)}
-                title="Delete Blog"
-              >
-                <FaTrash />
-              </button>
-            </div>
+            <ActionButtons
+              blog={blog}
+              onView={handleViewBlog}
+              onEdit={handleEditBlog}
+              onDelete={handleShowDeleteModal}
+            />
           ),
         }));
 
         const totalCount = response.data.count || 0;
         const calculatedTotalPages = Math.ceil(totalCount / ITEMS_PER_PAGE);
-        setTotalPages(calculatedTotalPages);
+        
+        // Cache the result
+        blogsCache.set(cacheKey, {
+          data: transformedData,
+          totalPages: calculatedTotalPages,
+        });
 
+        setTotalPages(calculatedTotalPages);
         setBlogsData((prev) => ({
           ...prev,
           data: transformedData,
@@ -100,81 +194,40 @@ const Blogs = () => {
       toast.error("載入文章失敗");
       setBlogsData((prev) => ({ ...prev, isLoading: false }));
     }
-  };
+  }, [page, cacheKey, handleViewBlog, handleEditBlog, handleShowDeleteModal]);
 
-  const handleViewBlog = (id) => {
-    navigate(`/blog/${id}`);
-  };
-
-  const handleEditBlog = (id) => {
-    navigate(`/dashboard/blogs/edit/${id}`);
-  };
-
-  const handleShowDeleteModal = (id) => {
-    setBlogToDelete(id);
-    setShowDeleteModal(true);
-  };
-
-  const handleDeleteBlog = () => {
-    toast.success("文章刪除成功");
+  useEffect(() => {
     fetchBlogs();
-  };
+  }, [fetchBlogs]);
 
-  const handlePrevPage = () => {
-    if (page > 1) {
-      setPage((prev) => prev - 1);
-    }
-  };
-
-  const handleNextPage = () => {
-    if (page < totalPages) {
-      setPage((prev) => prev + 1);
-    }
-  };
-
-  const handleCreate = () => {
-    navigate("/dashboard/blogs/create");
-  };
-
-  const Pagination = () => (
-    <div className="pagination-controls">
-      <button
-        className="pagination-btn"
-        onClick={handlePrevPage}
-        disabled={page <= 1 || blogsData.isLoading}
-      >
-        <FaChevronLeft /> 上一頁
-      </button>
-      <span className="pagination-info">
-        第 {page} 頁，共 {totalPages} 頁
-      </span>
-      {page < totalPages && (
-        <button
-          className="pagination-btn"
-          onClick={handleNextPage}
-          disabled={blogsData.isLoading}
-        >
-          下一頁 <FaChevronRight />
-        </button>
-      )}
-    </div>
-  );
+  // Memoized components
+  const MemoizedPageContent = useMemo(() => (
+    <PageContent
+      title="文章"
+      icon={<FaBlog />}
+      data={blogsData}
+      page="blogs"
+      onRefresh={fetchBlogs}
+      onCreate={handleCreate}
+      onDelete={handleDeleteBlog}
+      onEdit={handleEditBlog}
+      onView={handleViewBlog}
+    />
+  ), [blogsData, fetchBlogs, handleCreate, handleDeleteBlog, handleEditBlog, handleViewBlog]);
 
   return (
     <>
-      <PageContent
-        title="文章"
-        icon={<FaBlog />}
-        data={blogsData}
-        page="blogs"
-        onRefresh={fetchBlogs}
-        onCreate={handleCreate}
-        onDelete={handleDeleteBlog}
-        onEdit={handleEditBlog}
-        onView={handleViewBlog}
-      />
+      {MemoizedPageContent}
 
-      {totalPages > 1 && <Pagination />}
+      {totalPages > 1 && (
+        <Pagination
+          page={page}
+          totalPages={totalPages}
+          onPrevPage={handlePrevPage}
+          onNextPage={handleNextPage}
+          isLoading={blogsData.isLoading}
+        />
+      )}
 
       <DeleteModal
         isOpen={showDeleteModal}
@@ -257,4 +310,4 @@ const Blogs = () => {
   );
 };
 
-export default Blogs;
+export default memo(Blogs);
