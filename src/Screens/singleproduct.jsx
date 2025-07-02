@@ -232,18 +232,30 @@ const singleproduct = () => {
                 onClick={() => {
                   console.log(colors);
                 }}
-                className={`${isMandarin && product.title_mandarin ? "" : "english"}`}
+                className={`${
+                  isMandarin && product.title_mandarin ? "" : "english"
+                }`}
               >
                 {isMandarin && product.title_mandarin
                   ? product.title_mandarin
                   : product.title}
               </h1>
-              <p className={`functionaltext ${isMandarin && product.product_category_name_mandarin ? "" : "english"}`}>
+              <p
+                className={`functionaltext ${
+                  isMandarin && product.product_category_name_mandarin
+                    ? ""
+                    : "english"
+                }`}
+              >
                 {isMandarin && product.product_category_name_mandarin
                   ? product.product_category_name_mandarin
                   : product.product_category_name}
               </p>
-              <p className={`functionaltext2 ${isMandarin && product.description_mandarin ? "" : "english"}`}>
+              <p
+                className={`functionaltext2 ${
+                  isMandarin && product.description_mandarin ? "" : "english"
+                }`}
+              >
                 {isMandarin && product.description_mandarin
                   ? product.description_mandarin
                   : product.description}
@@ -374,14 +386,24 @@ const singleproduct = () => {
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
           <p className="mainkeytext">{isMandarin ? "成份" : "Composition"}</p>
-                              <div className="maintextans-wrapper">
-            <Tooltip 
-              title={!loading ? (isMandarin && product.composition_mandarin ? product.composition_mandarin : product.composition) : "loading..."} 
+          <div className="maintextans-wrapper">
+            <Tooltip
+              title={
+                !loading
+                  ? isMandarin && product.composition_mandarin
+                    ? product.composition_mandarin
+                    : product.composition
+                  : "loading..."
+              }
               placement="top"
               enterDelay={200}
               leaveDelay={0}
             >
-              <div className={`maintextans ${isMandarin && product.composition_mandarin ? "" : "english"}`}>
+              <div
+                className={`maintextans ${
+                  isMandarin && product.composition_mandarin ? "" : "english"
+                }`}
+              >
                 {!loading
                   ? isMandarin && product.composition_mandarin
                     ? product.composition_mandarin
@@ -394,7 +416,11 @@ const singleproduct = () => {
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
           <p className="mainkeytext">{isMandarin ? "重量" : "Weight"}</p>
-          <div className={`maintextans ${isMandarin && product.weight_mandarin ? "" : "english"}`}>
+          <div
+            className={`maintextans ${
+              isMandarin && product.weight_mandarin ? "" : "english"
+            }`}
+          >
             {!loading
               ? isMandarin && product.weight_mandarin
                 ? product.weight_mandarin + "g"
@@ -405,7 +431,11 @@ const singleproduct = () => {
         <div className="lineinproducts"></div>
         <div className="onedivofproduct">
           <p className="mainkeytext">{isMandarin ? "加⼯處理" : "Finish"}</p>
-          <div className={`maintextans ${isMandarin && product.finish_mandarin ? "" : "english"}`}>
+          <div
+            className={`maintextans ${
+              isMandarin && product.finish_mandarin ? "" : "english"
+            }`}
+          >
             {!loading
               ? isMandarin && product.finish_mandarin
                 ? product.finish_mandarin
@@ -465,7 +495,7 @@ const singleproduct = () => {
           }
           textureScale={
             model === "/models/jacket.glb"
-              ? [2.7, 2.7] // Fixed scale for jacket using traditional method
+              ? [5, 5]
               : model === "/models/shirt.glb"
               ? [3.6, 3.6]
               : model === "/models/pants.glb"
