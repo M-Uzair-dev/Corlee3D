@@ -6644,23 +6644,23 @@ button:hover:not(.button-with-icon2) {
   }
 }
 @media (max-width: 800px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer{
+  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 100px;
   }
 }@media (max-width: 750px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer{
+  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 250px;
   }
 }@media (max-width: 700px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer{
+  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 350px;
   }
 }@media (max-width: 600px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer{
+  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 450px;
   }
 }@media (max-width: 500px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer{
+  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 500px;
   }
 }
