@@ -5609,11 +5609,14 @@ button:hover:not(.button-with-icon2) {
 
 .vertical-align-centered-image img:nth-child(1) {
   animation: swipe 15s linear infinite;
+  scale: 0.8;
+  
 }
 
 .vertical-align-centered-image img:nth-child(2) {
   animation: swipe 15s linear infinite;
   animation-delay: 2.55s;
+  margin-right: -100px;
 }
 
 .vertical-align-centered-image img:nth-child(3) {
@@ -5629,6 +5632,8 @@ button:hover:not(.button-with-icon2) {
 .vertical-align-centered-image img:nth-child(5) {
   animation: swipe 15s linear infinite;
   animation-delay: 10.2s;
+  scale: 0.8;
+  margin-left: -10px;
 }
 
 .vertical-align-centered-image img:nth-child(6) {
@@ -6482,7 +6487,6 @@ button:hover:not(.button-with-icon2) {
     transform: translateY(-100%);
   }
   .contact-info-text-style-nav {
-    font-family: "Artnoova", sans-serif !important;
     font-size: 20px !important;
     font-weight: 500 !important;
     margin-right: 10px;
@@ -6644,25 +6648,28 @@ button:hover:not(.button-with-icon2) {
   }
 }
 @media (max-width: 800px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
+  .carousel-realization-container,.bagpage, .tailspin, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 100px;
   }
 }@media (max-width: 750px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
+  .carousel-realization-container,.bagpage, .tailspin, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 250px;
   }
 }@media (max-width: 700px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
+  .carousel-realization-container,.bagpage, .tailspin, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 350px;
   }
 }@media (max-width: 600px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
+  .carousel-realization-container,.bagpage, .tailspin, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 450px;
   }
 }@media (max-width: 500px) {
-  .carousel-realization-container, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
+  .carousel-realization-container,.bagpage, .tailspin, .hero-section1, .sighupcontainer, .password-reset-form-container1-email{
     margin-bottom: 500px;
   }
+}
+.ticket-details-container {
+  margin-bottom: 80px;
 }
 .productsimageandtextdiv{
   align-items: start;
@@ -6721,4 +6728,11 @@ button:hover:not(.button-with-icon2) {
 }
 .personal-details-title,.contact-info-text  {
   font-size: 16px;
+}
+.product-card-container3,.bigimage,.verticalimagesinproduct >* {
+  background-position: left !important;
+}
+.verticalimagesinproduct >*:not(:first-child), .imagediv{
+  pointer-events: none;
+  opacity: 0;
 }

@@ -2,6 +2,10 @@ import React, { useState, useCallback } from "react";
 import { api } from "../config/api";
 import { toast } from "sonner";
 
+// Image compression settings
+const MAX_IMAGE_SIZE = 1024 * 1024; // 1MB
+const COMPRESSION_QUALITY = 0.6; // 60% quality
+
 const ImageUploader = ({ onUploadSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [previewUrls, setPreviewUrls] = useState([]);
@@ -9,9 +13,68 @@ const ImageUploader = ({ onUploadSuccess }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isDragging, setIsDragging] = useState(false);
+  const [compressionProgress, setCompressionProgress] = useState(0);
+
+  // Function to compress image if needed
+  const compressImage = async (file) => {
+    return new Promise((resolve) => {
+      // If file is smaller than MAX_IMAGE_SIZE, return as is
+      if (file.size <= MAX_IMAGE_SIZE) {
+        resolve(file);
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = (event) => {
+        const img = new Image();
+        img.src = event.target.result;
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+
+          // Calculate new dimensions while maintaining aspect ratio
+          let width = img.width;
+          let height = img.height;
+          const aspectRatio = width / height;
+
+          // If width is larger, scale based on width
+          if (width > height) {
+            width = Math.min(width, 1920); // Max width 1920px
+            height = width / aspectRatio;
+          } else {
+            // If height is larger, scale based on height
+            height = Math.min(height, 1920); // Max height 1920px
+            width = height * aspectRatio;
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          ctx.drawImage(img, 0, 0, width, height);
+
+          canvas.toBlob(
+            (blob) => {
+              if (blob) {
+                // Create a new file from the blob
+                const compressedFile = new File([blob], file.name, {
+                  type: 'image/jpeg',
+                  lastModified: Date.now(),
+                });
+                resolve(compressedFile);
+              } else {
+                resolve(file); // Fallback to original if compression fails
+              }
+            },
+            'image/jpeg',
+            COMPRESSION_QUALITY
+          );
+        };
+      };
+    });
+  };
 
   // Process files function (shared between drag & drop and file input)
-  const processFiles = (files) => {
+  const processFiles = async (files) => {
     try {
       console.log("Processing files:", files.map(f => ({ name: f.name, size: f.size, type: f.type })));
       
@@ -27,12 +90,31 @@ const ImageUploader = ({ onUploadSuccess }) => {
         toast.warning("Some files were skipped as they are not images");
       }
 
+      // Compress images if needed
+      const processedFiles = [];
+      const totalFiles = imageFiles.length;
+      
+      for (let i = 0; i < imageFiles.length; i++) {
+        const file = imageFiles[i];
+        setCompressionProgress(Math.round((i / totalFiles) * 100));
+        
+        if (file.size > MAX_IMAGE_SIZE) {
+          toast.info(`Optimizing ${file.name} for upload...`);
+          const compressedFile = await compressImage(file);
+          processedFiles.push(compressedFile);
+        } else {
+          processedFiles.push(file);
+        }
+      }
+      
+      setCompressionProgress(0);
+
       // Create previews for new files
-      const newPreviewUrls = imageFiles.map(file => URL.createObjectURL(file));
+      const newPreviewUrls = processedFiles.map(file => URL.createObjectURL(file));
       console.log("Created preview URLs:", newPreviewUrls);
       
       // Add new files to existing selection
-      setSelectedFiles(prevFiles => [...prevFiles, ...imageFiles]);
+      setSelectedFiles(prevFiles => [...prevFiles, ...processedFiles]);
       setPreviewUrls(prevUrls => [...prevUrls, ...newPreviewUrls]);
     } catch (err) {
       console.error("Error processing files:", err);
@@ -94,7 +176,7 @@ const ImageUploader = ({ onUploadSuccess }) => {
 
   // Handle the upload process
   const handleUpload = async (e) => {
-    e.preventDefault(); // Prevent form submission
+    e.preventDefault();
     console.log("Upload process started");
     
     if (selectedFiles.length === 0) {
@@ -108,78 +190,50 @@ const ImageUploader = ({ onUploadSuccess }) => {
     setError(null);
 
     try {
-      // Create a FormData object to handle the file upload
       const formData = new FormData();
-      
-      // Log detailed file information before appending
-      console.log("Files to upload:", selectedFiles.map(f => ({
-        name: f.name,
-        type: f.type,
-        size: f.size,
-        lastModified: f.lastModified
-      })));
-
       selectedFiles.forEach(file => {
         formData.append('files[]', file);
-        console.log("Appending file to FormData:", file.name);
       });
 
-      // Log FormData entries to verify content
-      console.log("FormData entries:");
-      for (let pair of formData.entries()) {
-        console.log("FormData entry -", "key:", pair[0], "value:", pair[1] instanceof File ? {
-          name: pair[1].name,
-          type: pair[1].type,
-          size: pair[1].size
-        } : pair[1]);
-      }
-
-      // Log request configuration
+      // Increased timeout to 60 seconds
       const requestConfig = {
         headers: {
           "Content-Type": "multipart/form-data",
           "Accept": "application/json",
         },
+        timeout: 60000, // 60 seconds timeout
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           console.log("Upload progress:", percentCompleted + "%");
         },
       };
 
-      console.log("Sending request to /multiple-media-uploads/");
       const response = await api.post("/multiple-media-uploads/", formData, requestConfig);
-      
       const data = response.data;
       
       if (data && data.uploaded_files && data.uploaded_files.length > 0) {
-        console.log("Successfully uploaded files:", data.uploaded_files);
         setUploadedImages(data.uploaded_files);
         toast.success(`Successfully uploaded ${data.uploaded_files.length} files`);
+        
+        if (onUploadSuccess && typeof onUploadSuccess === "function") {
+          onUploadSuccess(data.uploaded_files);
+        }
       } else {
-        console.error("Upload response missing expected data structure:", data);
         throw new Error("No files were uploaded successfully");
-      }
-
-      setIsLoading(false);
-
-      // Call the onUploadSuccess callback if provided
-      if (onUploadSuccess && typeof onUploadSuccess === "function") {
-        console.log("Calling onUploadSuccess with:", data.uploaded_files);
-        onUploadSuccess(data.uploaded_files);
-      }
-
-      // Log any errors
-      if (data.errors && data.errors.length > 0) {
-        console.warn("Some files failed to upload:", data.errors);
-        const errorMsg = `${data.errors.length} files failed to upload. Check console for details.`;
-        setError(errorMsg);
-        toast.error(errorMsg);
       }
     } catch (err) {
       console.error("Upload failed:", err);
-      const errorMsg = `Upload failed: ${err.response?.data?.message || err.message}`;
+      let errorMsg = "Upload failed: ";
+      
+      if (err.code === "ECONNABORTED") {
+        errorMsg += "Upload timed out. Please try with fewer or smaller images.";
+      } else {
+        errorMsg += err.response?.data?.message || err.message;
+      }
+      
       setError(errorMsg);
       toast.error(errorMsg);
+    } finally {
       setIsLoading(false);
     }
   };
@@ -294,6 +348,20 @@ const ImageUploader = ({ onUploadSuccess }) => {
           <button onClick={handleReset} className="reset-button" type="button">
             Upload More Images
           </button>
+        </div>
+      )}
+
+      {compressionProgress > 0 && (
+        <div className="compression-progress">
+          <div className="progress-bar">
+            <div 
+              className="progress-bar-fill" 
+              style={{ width: `${compressionProgress}%` }}
+            ></div>
+          </div>
+          <div className="progress-text">
+            Optimizing images: {compressionProgress}%
+          </div>
         </div>
       )}
 
@@ -469,6 +537,34 @@ const ImageUploader = ({ onUploadSuccess }) => {
           padding: 10px 20px;
           border-radius: 4px;
           cursor: pointer;
+        }
+
+        .compression-progress {
+          margin: 10px 0;
+          padding: 10px;
+          background: #f8f9fa;
+          border-radius: 4px;
+        }
+
+        .progress-bar {
+          width: 100%;
+          height: 4px;
+          background: #eee;
+          border-radius: 2px;
+          overflow: hidden;
+        }
+
+        .progress-bar-fill {
+          height: 100%;
+          background: #4285f4;
+          transition: width 0.3s ease;
+        }
+
+        .progress-text {
+          margin-top: 5px;
+          font-size: 12px;
+          color: #666;
+          text-align: center;
         }
       `}</style>
     </form>

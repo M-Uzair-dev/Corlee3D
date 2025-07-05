@@ -55,25 +55,29 @@ function EditFabricPage() {
   useEffect(() => {
     const fetchAllData = async () => {
       try {
+        console.group('🔍 Fetching Fabric Data');
+        console.log('Fetching data for fabric ID:', id);
+
         const [fabricRes, productCategoriesRes, colorCategoriesRes] =
           await Promise.all([
             api.get(`/fabrics/withids/${id}`),
             api.get("/product-categories"),
             api.get("/color-categories"),
           ]);
+
         // Get data from correct paths in the API responses
         const productCategoriesData = productCategoriesRes?.data?.results || [];
         const colorCategoriesData = colorCategoriesRes?.data || [];
+        const fabricData = fabricRes?.data || {};
+
+        console.log('📊 Raw API Responses:', {
+          fabric: fabricData,
+          productCategories: productCategoriesData,
+          colorCategories: colorCategoriesData
+        });
 
         setProductCategories(productCategoriesData);
         setColorCategories(colorCategoriesData);
-
-        // Log raw data for debugging
-        console.log("Raw fabric data:", fabricRes?.data);
-        console.log("Product categories:", productCategoriesData);
-        console.log("Color categories:", colorCategoriesData);
-
-        const fabricData = fabricRes?.data || {};
 
         // Find product category ID from name
         let productCategoryId = "";
@@ -97,74 +101,123 @@ function EditFabricPage() {
 
         // Process color images
         let formattedColorImages = [];
-        // Create a map to store original image IDs
         const originalImageIds = {};
 
         if (
           fabricData?.color_images &&
           Array.isArray(fabricData.color_images)
         ) {
-          formattedColorImages = fabricData.color_images.map((colorImg) => {
-            // Find color category ID from name
+          formattedColorImages = fabricData.color_images.map((colorImg, index) => {
+            console.group(`Processing Color Image ${index + 1}`);
+            console.log('Raw color image data:', colorImg);
+
+            // Find color category ID
             let colorCategoryId = "";
-            if (colorImg?.color) {
+            
+            // First try to use the color_category_id from the API
+            if (colorImg?.color_category_id) {
+              console.log(`Using color_category_id from API: ${colorImg.color_category_id}`);
+              colorCategoryId = colorImg.color_category_id;
+            }
+            // If no color_category_id, try to match by color code or name
+            else if (colorImg?.color) {
+              console.group(`🔍 Matching Color: "${colorImg.color}"`);
+              console.log('Available color categories:', colorCategoriesData.map(c => ({
+                id: c.id,
+                name: c.name,
+                displayName: c.display_name,
+                color: c.color
+              })));
+
               // Try multiple matching strategies
               const matchingColor = colorCategoriesData.find((cat) => {
-                const catName = cat?.name?.toLowerCase() || "";
-                const catDisplayName = cat?.display_name?.toLowerCase() || "";
-                const imgColor = colorImg.color.toLowerCase();
+                // If the color is a hex code, try matching with the category's color field
+                if (colorImg.color.startsWith('#')) {
+                  const matches = colorImg.color.toLowerCase() === (cat?.color || '').toLowerCase();
+                  if (matches) {
+                    console.log(`✅ Found match by hex color code with category: ${cat.display_name} (${cat.color})`);
+                  }
+                  return matches;
+                }
+                
+                // Otherwise try matching by name/display_name
+                const catName = (cat?.name || "").toLowerCase().trim();
+                const catDisplayName = (cat?.display_name || "").toLowerCase().trim();
+                const imgColor = colorImg.color.toLowerCase().trim();
 
-                return catName === imgColor || catDisplayName === imgColor;
+                console.log(`Comparing with category:`, {
+                  categoryId: cat.id,
+                  categoryName: catName,
+                  categoryDisplayName: catDisplayName,
+                  categoryColor: cat.color,
+                  imageColor: imgColor
+                });
+
+                // Try exact matches first
+                if (catName === imgColor || catDisplayName === imgColor) {
+                  console.log(`✅ Found exact name match with category: ${cat.display_name}`);
+                  return true;
+                }
+
+                // Try partial matches
+                if (catName.includes(imgColor) || imgColor.includes(catName) ||
+                    catDisplayName.includes(imgColor) || imgColor.includes(catDisplayName)) {
+                  console.log(`✅ Found partial name match with category: ${cat.display_name}`);
+                  return true;
+                }
+
+                return false;
               });
 
               if (matchingColor) {
                 colorCategoryId = matchingColor.id;
-                console.log(
-                  `Matched color '${colorImg.color}' to category ID ${colorCategoryId}`
-                );
+                console.log(`✅ Final match:`, {
+                  originalColor: colorImg.color,
+                  matchedCategory: matchingColor.name,
+                  matchedDisplayName: matchingColor.display_name,
+                  matchedColor: matchingColor.color,
+                  categoryId: colorCategoryId
+                });
               } else {
-                console.log(
-                  `Could not find matching category for color: ${colorImg.color}`
-                );
-                // If we can't find a perfect match, use the first color category as fallback
-                if (colorCategoriesData.length > 0) {
-                  colorCategoryId = colorCategoriesData[0].id;
-                  console.log(
-                    `Using fallback category ID ${colorCategoryId} for color ${colorImg.color}`
-                  );
-                }
+                console.warn(`❌ No match found for color: "${colorImg.color}"`);
               }
+              console.groupEnd(); // End color matching group
+            } else {
+              console.warn('⚠️ No color or color_category_id in color image data');
             }
 
             // Use actual image IDs from the API response when available
-            // Otherwise, create temporary IDs for backward compatibility
             const getImageId = (idField, urlField) => {
-              // If we have an explicit ID from the API, use that
+              console.log(`Getting image ID for ${idField}:`, {
+                idField: colorImg[idField],
+                urlField: colorImg[urlField]
+              });
+              
               if (colorImg[idField]) {
                 return colorImg[idField];
-              }
-              // Fall back to creating a temp ID from URL if no ID is provided
-              else if (colorImg[urlField]) {
+              } else if (colorImg[urlField]) {
                 const tempId = `temp-${colorImg[urlField].split("/").pop()}`;
                 return tempId;
               }
               return null;
             };
 
-            // Get image IDs using the new fields from API
-            const primaryImageId = getImageId(
-              "primary_image_id",
-              "primary_image_url"
-            );
+            // Get image IDs
+            const primaryImageId = getImageId("primary_image_id", "primary_image_url");
             const auxImage1Id = getImageId("aux_image1_id", "aux_image1_url");
             const auxImage2Id = getImageId("aux_image2_id", "aux_image2_url");
             const auxImage3Id = getImageId("aux_image3_id", "aux_image3_url");
-            const modelImageId = getImageId(
-              "model_image_id",
-              "model_image_url"
-            );
+            const modelImageId = getImageId("model_image_id", "model_image_url");
 
-            // Add image details to our state
+            console.log('📸 Processed image IDs:', {
+              primaryImageId,
+              auxImage1Id,
+              auxImage2Id,
+              auxImage3Id,
+              modelImageId
+            });
+
+            // Add image details to state
             const updateImageDetails = (id, url) => {
               if (id && url) {
                 setImageDetails((prev) => ({
@@ -174,14 +227,14 @@ function EditFabricPage() {
               }
             };
 
-            // Set image details for all images
+            // Update image details
             updateImageDetails(primaryImageId, colorImg?.primary_image_url);
             updateImageDetails(auxImage1Id, colorImg?.aux_image1_url);
             updateImageDetails(auxImage2Id, colorImg?.aux_image2_url);
             updateImageDetails(auxImage3Id, colorImg?.aux_image3_url);
             updateImageDetails(modelImageId, colorImg?.model_image_url);
 
-            return {
+            const result = {
               color_category: colorCategoryId,
               primary_image: primaryImageId,
               aux_image1: auxImage1Id,
@@ -189,7 +242,15 @@ function EditFabricPage() {
               aux_image3: auxImage3Id,
               model_image: modelImageId,
             };
+
+            console.log('✨ Final processed color image:', result);
+            console.groupEnd(); // End color image processing group
+            return result;
           });
+
+          console.groupEnd(); // End color images group
+        } else {
+          console.warn('⚠️ No color_images array in fabric data');
         }
 
         // Ensure we have at least one color image
@@ -206,7 +267,7 @@ function EditFabricPage() {
           ];
         }
 
-        // Set form data from API response
+        // Set form data
         const updatedFormData = {
           title: fabricData?.title || "",
           item_code: fabricData?.item_code || "",
@@ -223,18 +284,19 @@ function EditFabricPage() {
           extra_categories: fabricData?.extra_categories || [],
           is_hot_selling: fabricData?.is_hot_selling || false,
           color_images: formattedColorImages,
-          // Store the mapping of temporary IDs to original IDs
           _originalImageIds: originalImageIds,
         };
 
-        console.log("Processed form data:", updatedFormData);
-        console.log("Original image IDs mapping:", originalImageIds);
+        console.log('📝 Final form data:', updatedFormData);
+        console.groupEnd(); // End main fetch group
+
         setFormData(updatedFormData);
         setIsLoading(false);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        console.error('❌ Error fetching data:', error);
         setErrorMessage("Failed to load fabric data. Please try again.");
         setIsLoading(false);
+        console.groupEnd(); // End main fetch group in case of error
       }
     };
 
@@ -252,12 +314,24 @@ function EditFabricPage() {
 
   // Handle color image field changes
   const handleColorImageChange = (index, field, value) => {
+    console.group(`🎨 Color Image Change`);
+    console.log('Change details:', {
+      index,
+      field,
+      value,
+      previousValue: formData.color_images[index]?.[field]
+    });
+    
     setFormData((prevData) => {
       const updatedColorImages = [...prevData.color_images];
       updatedColorImages[index] = {
         ...updatedColorImages[index],
         [field]: value,
       };
+      
+      console.log('Updated color image:', updatedColorImages[index]);
+      console.groupEnd();
+      
       return {
         ...prevData,
         color_images: updatedColorImages,

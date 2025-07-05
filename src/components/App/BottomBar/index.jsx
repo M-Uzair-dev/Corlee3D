@@ -37,7 +37,13 @@ function BottomBar(props) {
     } else {
       localStorage.removeItem("isMandarin");
     }
-    window.location.reload();
+    
+    // Check if current path starts with /products/
+    if (window.location.pathname.startsWith('/products/')) {
+      window.location.href = '/'; // Redirect to home page
+    } else {
+      window.location.reload(); // Otherwise just reload
+    }
   };
 
   return (
