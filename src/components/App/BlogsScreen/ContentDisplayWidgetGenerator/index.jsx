@@ -47,80 +47,100 @@ function ContentDisplayWidgetGenerator() {
   const debouncedValue = useDebounce(searchterm, 800);
 
   // Memoized error handler
-  const handleError = useCallback((error, customMessage) => {
-    const errorMessage = customMessage || error?.message || 
-      (isMandarin ? "發生錯誤" : "Something went wrong!");
-    toast.error(errorMessage);
-  }, [isMandarin]);
+  const handleError = useCallback(
+    (error, customMessage) => {
+      const errorMessage =
+        customMessage ||
+        error?.message ||
+        (isMandarin ? "發生錯誤" : "Something went wrong!");
+      toast.error(errorMessage);
+    },
+    [isMandarin]
+  );
 
   // Memoized query builder
-  const buildQuery = useCallback((pageNum = 1, param = null) => {
-    const params = new URLSearchParams();
-    
-    if (debouncedValue) params.append('search', debouncedValue);
-    
-    if (localsort && param !== "nosort") {
-      const ordering = localsort === "newest" || localsort === "最新" ? "-created_at" :
-                      localsort === "oldest" || localsort === "最舊" ? "created_at" : 
-                      "-view_count";
-      params.append('ordering', ordering);
-    }
-    
-    if (localcateg.length > 0) {
-      const categories = localcateg.filter(item => item !== param).join(",");
-      if (categories) params.append('category', categories);
-    }
-    
-    params.append('page', pageNum.toString());
-    
-    return `/blogs/?${params.toString()}`;
-  }, [debouncedValue, localsort, localcateg]);
+  const buildQuery = useCallback(
+    (pageNum = 1, param = null) => {
+      const params = new URLSearchParams();
+
+      if (debouncedValue) params.append("search", debouncedValue);
+
+      if (localsort && param !== "nosort") {
+        const ordering =
+          localsort === "newest" || localsort === "最新"
+            ? "-created_at"
+            : localsort === "oldest" || localsort === "最舊"
+            ? "created_at"
+            : "-view_count";
+        params.append("ordering", ordering);
+      }
+
+      if (localcateg.length > 0) {
+        const categories = localcateg
+          .filter((item) => item !== param)
+          .join(",");
+        if (categories) params.append("category", categories);
+      }
+
+      params.append("page", pageNum.toString());
+
+      return `/blogs/?${params.toString()}`;
+    },
+    [debouncedValue, localsort, localcateg]
+  );
 
   // Optimized blog loading with caching
-  const loadBlogs = useCallback(async (param = null) => {
-    try {
-      setLoading(true);
-      setPage(1);
-      setNoBlogs(false);
-      
-      const queryUrl = buildQuery(1, param);
-      
-      // Check cache first
-      if (blogsCache.has(queryUrl)) {
-        const cachedData = blogsCache.get(queryUrl);
-        setBlogs(cachedData.results);
-        setLoading(false);
-        setNoBlogs(cachedData.results.length === 0);
-        return;
-      }
+  const loadBlogs = useCallback(
+    async (param = null) => {
+      try {
+        setLoading(true);
+        setPage(1);
+        setNoBlogs(false);
 
-      const response = await api.get(queryUrl);
-      
-      if (response.status === 200) {
-        const results = response.data.results || [];
-        
-        // Cache the response
-        blogsCache.set(queryUrl, response.data);
-        
-        setBlogs(results);
-        setNoBlogs(results.length === 0);
-      } else {
-        handleError(null, isMandarin ? "無法加載博客" : "Failed to load blogs");
-        navigate("/");
+        const queryUrl = buildQuery(1, param);
+
+        // Check cache first
+        if (blogsCache.has(queryUrl)) {
+          const cachedData = blogsCache.get(queryUrl);
+          setBlogs(cachedData.results);
+          setLoading(false);
+          setNoBlogs(cachedData.results.length === 0);
+          return;
+        }
+
+        const response = await api.get(queryUrl);
+        console.log(response);
+
+        if (response.status === 200) {
+          const results = response.data.results || [];
+
+          // Cache the response
+          blogsCache.set(queryUrl, response.data);
+
+          setBlogs(results);
+          setNoBlogs(results.length === 0);
+        } else {
+          handleError(
+            null,
+            isMandarin ? "無法加載博客" : "Failed to load blogs"
+          );
+          navigate("/");
+        }
+      } catch (error) {
+        console.error("Error loading blogs:", error);
+
+        if (error?.response?.data?.detail === "Invalid page.") {
+          setNoBlogs(true);
+        } else {
+          handleError(error);
+          navigate("/");
+        }
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error loading blogs:", error);
-      
-      if (error?.response?.data?.detail === "Invalid page.") {
-        setNoBlogs(true);
-      } else {
-        handleError(error);
-        navigate("/");
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, [buildQuery, handleError, isMandarin, navigate]);
+    },
+    [buildQuery, handleError, isMandarin, navigate]
+  );
 
   // Optimized pagination
   const loadNextPage = useCallback(async () => {
@@ -128,35 +148,38 @@ function ContentDisplayWidgetGenerator() {
 
     try {
       setLoading3(true);
-      
+
       const queryUrl = buildQuery(page);
-      
+
       // Check cache first
       if (blogsCache.has(queryUrl)) {
         const cachedData = blogsCache.get(queryUrl);
-        setBlogs(prev => [...prev, ...cachedData.results]);
+        setBlogs((prev) => [...prev, ...cachedData.results]);
         setLoading3(false);
         return;
       }
 
       const response = await api.get(queryUrl);
-      
+
       if (response.status === 200) {
         const results = response.data.results || [];
-        
+
         if (results.length > 0) {
           // Cache the response
           blogsCache.set(queryUrl, response.data);
-          setBlogs(prev => [...prev, ...results]);
+          setBlogs((prev) => [...prev, ...results]);
         } else {
           toast.error(isMandarin ? "沒有更多博客" : "No more blogs");
         }
       } else {
-        handleError(null, isMandarin ? "無法加載更多博客" : "Failed to load more blogs");
+        handleError(
+          null,
+          isMandarin ? "無法加載更多博客" : "Failed to load more blogs"
+        );
       }
     } catch (error) {
       console.error("Error loading next page:", error);
-      
+
       if (error?.response?.data?.detail === "Invalid page.") {
         toast.error(isMandarin ? "沒有更多博客" : "No more blogs");
       } else {
@@ -171,8 +194,8 @@ function ContentDisplayWidgetGenerator() {
   const loadCategs = useCallback(async () => {
     if (categs.length > 0 || loading2) return;
 
-    const cacheKey = 'blog-categories';
-    
+    const cacheKey = "blog-categories";
+
     // Check cache first
     if (categoriesCache.has(cacheKey)) {
       setCategs(categoriesCache.get(cacheKey));
@@ -182,7 +205,7 @@ function ContentDisplayWidgetGenerator() {
     try {
       setLoading2(true);
       const response = await api.get("/blog-categories/");
-      
+
       if (response.status === 200) {
         const data = response.data || [];
         // Cache the response
@@ -202,11 +225,8 @@ function ContentDisplayWidgetGenerator() {
   // Optimized useEffect for initial load
   useEffect(() => {
     const controller = new AbortController();
-    
-    Promise.all([
-      loadBlogs(),
-      loadCategs()
-    ]).catch(console.error);
+
+    Promise.all([loadBlogs(), loadCategs()]).catch(console.error);
 
     return () => controller.abort();
   }, [debouncedValue]); // Only depend on debounced search term
@@ -219,23 +239,24 @@ function ContentDisplayWidgetGenerator() {
   }, [page, loadNextPage]);
 
   // Memoized category toggle function
-  const togglecateg = useCallback((categ) => {
-    if (localcateg.includes(categ)) {
-      setLocalcateg(localcateg.filter((item) => item !== categ));
-    } else {
-      setLocalcateg([...localcateg, categ]);
-    }
-  }, [localcateg]);
+  const togglecateg = useCallback(
+    (categ) => {
+      if (localcateg.includes(categ)) {
+        setLocalcateg(localcateg.filter((item) => item !== categ));
+      } else {
+        setLocalcateg([...localcateg, categ]);
+      }
+    },
+    [localcateg]
+  );
 
   return (
     <div className="blog-post-container-blogs">
       <p className="hero-title-text-style-blogs english">BLOGS</p>
       <p className="blog-post-content-text-style-blogs">
-        {
-          isMandarin
+        {isMandarin
           ? "這裡是小小紡織資料庫，關於產業洞察、趨勢分析、科技創新都在這!"
-          : "Industry insights, trend analysis, and smart solutions, your little textile library right here !"
-        }
+          : "Industry insights, trend analysis, and smart solutions, your little textile library right here !"}
       </p>
 
       <>
@@ -534,7 +555,9 @@ function ContentDisplayWidgetGenerator() {
                     >
                       <p
                         style={{ textAlign: "center", width: "100%" }}
-                        className={`${isMandarin && c.name_mandarin ? "" : "english"}`}
+                        className={`${
+                          isMandarin && c.name_mandarin ? "" : "english"
+                        }`}
                       >
                         {isMandarin && c.name_mandarin
                           ? c.name_mandarin

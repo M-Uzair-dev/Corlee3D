@@ -52,18 +52,30 @@ function TechCardDisplay(blog) {
 
   return (
     <div className="tech-card-container">
-      <p className={`tech-category-subtitle-text-style ${isMandarin && blog.category_name_mandarin ? "" : "english"}`}>
+      <p
+        className={`tech-category-subtitle-text-style ${
+          isMandarin && blog.category_name_mandarin ? "" : "english"
+        }`}
+      >
         {isMandarin && blog.category_name_mandarin
           ? blog.category_name_mandarin
           : blog.category_name}
       </p>
-      <p className={`tech-card-subtitle-text-style ${isMandarin && blog.title_mandarin ? "" : "english"}`}>
+      <p
+        className={`tech-card-subtitle-text-style ${
+          isMandarin && blog.title_mandarin ? "" : "english"
+        }`}
+      >
         {isMandarin && blog.title_mandarin ? blog.title_mandarin : blog.title}
       </p>
-      <p className={`tech-category-card-text ${isMandarin && blog.content_mandarin ? "" : "english"}`}>
+      <p
+        className={`tech-category-card-text ${
+          isMandarin && blog.content_mandarin ? "" : "english"
+        }`}
+      >
         {isMandarin && blog.content_mandarin
-          ? removeHTMLTags(blog.content_mandarin.replace(/\n/g, ""))
-          : removeHTMLTags(blog.content.replace(/\n/g, ""))}
+          ? removeHTMLTags(blog.content_mandarin?.replace(/\n/g, ""))
+          : removeHTMLTags(blog.content?.replace(/\n/g, ""))}
       </p>
       <div className="article-meta-container">
         <img
