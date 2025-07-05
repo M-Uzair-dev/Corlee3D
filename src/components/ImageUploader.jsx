@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { api } from "../config/api";
 import { toast } from "sonner";
 
@@ -8,30 +8,88 @@ const ImageUploader = ({ onUploadSuccess }) => {
   const [uploadedImages, setUploadedImages] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isDragging, setIsDragging] = useState(false);
 
-  // Handle file selection
-  const handleFileChange = (event) => {
+  // Process files function (shared between drag & drop and file input)
+  const processFiles = (files) => {
     try {
-      console.log("File selection started");
-      const files = Array.from(event.target.files);
-      console.log("Selected files:", files.map(f => ({ name: f.name, size: f.size, type: f.type })));
+      console.log("Processing files:", files.map(f => ({ name: f.name, size: f.size, type: f.type })));
       
-      setSelectedFiles(files);
+      // Filter for image files only
+      const imageFiles = Array.from(files).filter(file => file.type.startsWith('image/'));
+      
+      if (imageFiles.length === 0) {
+        toast.error("Please select image files only");
+        return;
+      }
 
-      // Create previews
-      const newPreviewUrls = files.map(file => URL.createObjectURL(file));
+      if (files.length !== imageFiles.length) {
+        toast.warning("Some files were skipped as they are not images");
+      }
+
+      // Create previews for new files
+      const newPreviewUrls = imageFiles.map(file => URL.createObjectURL(file));
       console.log("Created preview URLs:", newPreviewUrls);
       
-      setPreviewUrls(prevUrls => {
-        // Clean up old preview URLs
-        console.log("Cleaning up old preview URLs");
-        prevUrls.forEach(url => URL.revokeObjectURL(url));
-        return newPreviewUrls;
-      });
+      // Add new files to existing selection
+      setSelectedFiles(prevFiles => [...prevFiles, ...imageFiles]);
+      setPreviewUrls(prevUrls => [...prevUrls, ...newPreviewUrls]);
     } catch (err) {
-      console.error("Error in file selection:", err);
-      toast.error("Error selecting files: " + err.message);
+      console.error("Error processing files:", err);
+      toast.error("Error processing files: " + err.message);
     }
+  };
+
+  // Handle file selection from input
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    processFiles(files);
+    // Reset the file input
+    event.target.value = '';
+  };
+
+  // Handle drag and drop events
+  const handleDragEnter = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+  }, []);
+
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+  }, []);
+
+  const handleDrop = useCallback((e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsDragging(false);
+
+    const files = Array.from(e.dataTransfer.files);
+    processFiles(files);
+  }, []);
+
+  // Remove a selected file
+  const handleRemoveFile = (index) => {
+    setSelectedFiles(prevFiles => {
+      const newFiles = [...prevFiles];
+      newFiles.splice(index, 1);
+      return newFiles;
+    });
+
+    setPreviewUrls(prevUrls => {
+      // Revoke the URL for the removed preview
+      URL.revokeObjectURL(prevUrls[index]);
+      const newUrls = [...prevUrls];
+      newUrls.splice(index, 1);
+      return newUrls;
+    });
   };
 
   // Handle the upload process
@@ -87,24 +145,9 @@ const ImageUploader = ({ onUploadSuccess }) => {
           console.log("Upload progress:", percentCompleted + "%");
         },
       };
-      console.log("Request configuration:", {
-        url: "/multiple-media-uploads/",
-        headers: requestConfig.headers
-      });
 
       console.log("Sending request to /multiple-media-uploads/");
-      console.log("API base URL:", api.defaults.baseURL);
-      console.log("Full request URL:", api.defaults.baseURL + "/multiple-media-uploads/");
-      
       const response = await api.post("/multiple-media-uploads/", formData, requestConfig);
-
-      // Log detailed response information
-      console.log("Response received");
-      console.log("Response type:", typeof response);
-      console.log("Upload response status:", response.status);
-      console.log("Upload response headers:", response.headers);
-      console.log("Upload response:", response);
-      console.log("Upload response data:", response.data);
       
       const data = response.data;
       
@@ -134,19 +177,6 @@ const ImageUploader = ({ onUploadSuccess }) => {
       }
     } catch (err) {
       console.error("Upload failed:", err);
-      console.error("Error details:", {
-        message: err.message,
-        name: err.name,
-        code: err.code,
-        response: {
-          data: err.response?.data,
-          status: err.response?.status,
-          headers: err.response?.headers,
-          config: err.response?.config
-        },
-        request: err.request
-      });
-      
       const errorMsg = `Upload failed: ${err.response?.data?.message || err.message}`;
       setError(errorMsg);
       toast.error(errorMsg);
@@ -177,34 +207,53 @@ const ImageUploader = ({ onUploadSuccess }) => {
   }, [previewUrls]);
 
   return (
-    <form onSubmit={handleUpload} className="image-uploader">
+    <form 
+      onSubmit={handleUpload} 
+      className={`image-uploader ${isDragging ? 'dragging' : ''}`}
+      onDragEnter={handleDragEnter}
+      onDragOver={handleDragOver}
+      onDragLeave={handleDragLeave}
+      onDrop={handleDrop}
+    >
       <h3>Upload New Media</h3>
 
-      {/* File input */}
-      <div className="file-input-container">
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileChange}
-          id="file-input"
-          multiple
-        />
-        <label htmlFor="file-input" className="file-input-label">
-          Choose Files
-        </label>
-        {selectedFiles.length > 0 && (
-          <span className="file-name">{selectedFiles.length} files selected</span>
-        )}
+      {/* Drop zone */}
+      <div className="drop-zone">
+        <div className="drop-zone-content">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            id="file-input"
+            className="file-input"
+          />
+          <label htmlFor="file-input" className="file-input-label">
+            {selectedFiles.length === 0 ? 'Choose Files' : 'Add More Files'}
+          </label>
+          <div className="drop-zone-text">
+            or drag and drop images here
+          </div>
+          {selectedFiles.length > 0 && (
+            <span className="file-name">{selectedFiles.length} files selected</span>
+          )}
+        </div>
       </div>
 
       {/* Image previews */}
       {previewUrls.length > 0 && (
         <div className="image-previews">
-          <h4>Previews:</h4>
+          <h4>Selected Files:</h4>
           <div className="preview-grid">
             {previewUrls.map((url, index) => (
               <div key={index} className="preview-item">
                 <img src={url} alt={`Preview ${index + 1}`} />
+                <button
+                  type="button"
+                  className="remove-file-button"
+                  onClick={() => handleRemoveFile(index)}
+                >
+                  ×
+                </button>
               </div>
             ))}
           </div>
@@ -248,42 +297,55 @@ const ImageUploader = ({ onUploadSuccess }) => {
         </div>
       )}
 
-      {/* Updated CSS to match dashboard styling */}
       <style jsx>{`
         .image-uploader {
-          width: 100%;
-          margin: 0 auto;
-          padding: 0;
+          padding: 20px;
+          border-radius: 8px;
+          background: #fff;
         }
 
-        h3 {
-          margin-top: 0;
-          margin-bottom: 16px;
-          color: #333;
-          font-weight: 500;
+        .image-uploader.dragging .drop-zone {
+          border-color: #4285f4;
+          background-color: rgba(66, 133, 244, 0.05);
         }
 
-        h4 {
-          margin-top: 0;
-          margin-bottom: 8px;
-          color: #555;
-          font-weight: 500;
+        .drop-zone {
+          border: 2px dashed #ddd;
+          border-radius: 8px;
+          padding: 30px;
+          text-align: center;
+          transition: all 0.3s ease;
+          margin-bottom: 20px;
         }
 
-        .file-input-container {
-          margin: 16px 0;
+        .drop-zone:hover {
+          border-color: #4285f4;
+          background-color: rgba(66, 133, 244, 0.05);
+        }
+
+        .drop-zone-content {
           display: flex;
+          flex-direction: column;
           align-items: center;
-          flex-wrap: wrap;
+          gap: 10px;
+        }
+
+        .drop-zone-text {
+          color: #666;
+          margin-top: 8px;
+          font-size: 14px;
+        }
+
+        .file-input {
+          display: none;
         }
 
         .file-input-label {
           background: #4285f4;
           color: white;
-          padding: 8px 16px;
+          padding: 10px 20px;
           border-radius: 4px;
           cursor: pointer;
-          font-size: 14px;
           display: inline-block;
           transition: background-color 0.2s;
         }
@@ -293,63 +355,68 @@ const ImageUploader = ({ onUploadSuccess }) => {
         }
 
         .file-name {
-          margin-left: 10px;
+          color: #666;
           font-size: 14px;
-          color: #555;
-          word-break: break-all;
-          max-width: 250px;
-          display: inline-block;
         }
 
-        #file-input {
-          display: none;
-        }
-
-        .preview-grid, .upload-success-grid {
+        .preview-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
           gap: 16px;
-          margin: 16px 0;
+          margin-top: 10px;
         }
 
-        .preview-item, .upload-success-preview {
+        .preview-item {
           position: relative;
-          aspect-ratio: 1;
+          border: 1px solid #ddd;
           border-radius: 4px;
           overflow: hidden;
-          border: 1px solid #eee;
+          aspect-ratio: 1;
         }
 
-        .preview-item img, .upload-success-preview img {
+        .preview-item img {
           width: 100%;
           height: 100%;
           object-fit: cover;
         }
 
+        .remove-file-button {
+          position: absolute;
+          top: 4px;
+          right: 4px;
+          width: 24px;
+          height: 24px;
+          background: rgba(255, 0, 0, 0.8);
+          color: white;
+          border: none;
+          border-radius: 50%;
+          cursor: pointer;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 18px;
+          padding: 0;
+          line-height: 1;
+        }
+
         .upload-actions {
           display: flex;
           gap: 10px;
-          margin: 16px 0;
-        }
-
-        .upload-button,
-        .reset-button,
-        .cancel-button {
-          border: none;
-          padding: 8px 16px;
-          border-radius: 4px;
-          cursor: pointer;
-          font-size: 14px;
-          transition: background-color 0.2s;
+          margin-top: 20px;
         }
 
         .upload-button {
           background: #34a853;
           color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
+          transition: background-color 0.2s;
         }
 
         .upload-button:hover {
-          background: #2e8b46;
+          background: #2d8e47;
         }
 
         .upload-button:disabled {
@@ -357,35 +424,51 @@ const ImageUploader = ({ onUploadSuccess }) => {
           cursor: not-allowed;
         }
 
-        .reset-button {
-          background: #4285f4;
-          color: white;
-        }
-
-        .reset-button:hover {
-          background: #3367d6;
-        }
-
         .cancel-button {
           background: #f1f1f1;
-          color: #333;
-        }
-
-        .cancel-button:hover {
-          background: #e4e4e4;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
         }
 
         .error-message {
           color: #ea4335;
-          margin: 8px 0;
-          font-size: 14px;
+          margin-top: 10px;
         }
 
         .upload-success {
-          margin-top: 16px;
-          padding: 16px;
-          background: #f8f9fa;
+          margin-top: 20px;
+        }
+
+        .upload-success-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+          gap: 16px;
+          margin-top: 10px;
+        }
+
+        .upload-success-preview {
+          border: 1px solid #ddd;
           border-radius: 4px;
+          overflow: hidden;
+          aspect-ratio: 1;
+        }
+
+        .upload-success-preview img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .reset-button {
+          margin-top: 10px;
+          background: #4285f4;
+          color: white;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 4px;
+          cursor: pointer;
         }
       `}</style>
     </form>
