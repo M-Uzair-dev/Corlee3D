@@ -7,38 +7,31 @@ import logo5 from "./images/logo5.png";
 import logo6 from "./images/logo6.png";
 
 function ImageContainer1() {
+  const logos = [logo1, logo2, logo3, logo4, logo5, logo6];
+  
   return (
-    <div className="vertical-align-centered-image">
-      <img
-        src={logo1}
-        alt="logo1"
-        style={{ transform: "translate(0%, -50%)" }}
-      />
-      <img
-        src={logo2}
-        alt="logo2"
-        style={{ transform: "translate(0%, -50%)" }}
-      />
-      <img
-        src={logo3}
-        alt="logo3"
-        style={{ transform: "translate(0%, -50%)" }}
-      />
-      <img
-        src={logo4}
-        alt="logo4"
-        style={{ transform: "translate(0%, -50%)" }}
-      />
-      <img
-        src={logo5}
-        alt="logo5"
-        style={{ transform: "translate(0%, -50%)" }}
-      />
-      <img
-        src={logo6}
-        alt="logo6"
-        style={{ transform: "translate(0%, -50%)" }}
-      />
+    <div className="images-carousel">
+      {/* First set of logos */}
+      <div className="logos-slide">
+        {logos.map((logo, index) => (
+          <img
+            key={`logo-1-${index}`}
+            src={logo}
+            alt={`Logo ${index + 1}`}
+          />
+        ))}
+      </div>
+      
+      {/* Duplicate set of logos to create seamless loop */}
+      <div className="logos-slide">
+        {logos.map((logo, index) => (
+          <img
+            key={`logo-2-${index}`}
+            src={logo}
+            alt={`Logo ${index + 1}`}
+          />
+        ))}
+      </div>
     </div>
   );
 }
