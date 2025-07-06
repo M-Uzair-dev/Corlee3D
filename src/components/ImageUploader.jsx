@@ -207,7 +207,7 @@ const ImageUploader = ({ onUploadSuccess }) => {
           console.log("Upload progress:", percentCompleted + "%");
         },
       };
-
+      
       const response = await api.post("/multiple-media-uploads/", formData, requestConfig);
       const data = response.data;
       
@@ -274,22 +274,22 @@ const ImageUploader = ({ onUploadSuccess }) => {
       {/* Drop zone */}
       <div className="drop-zone">
         <div className="drop-zone-content">
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleFileChange}
-            id="file-input"
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleFileChange}
+          id="file-input"
             className="file-input"
-          />
-          <label htmlFor="file-input" className="file-input-label">
+        />
+        <label htmlFor="file-input" className="file-input-label">
             {selectedFiles.length === 0 ? 'Choose Files' : 'Add More Files'}
-          </label>
+        </label>
           <div className="drop-zone-text">
             or drag and drop images here
           </div>
-          {selectedFiles.length > 0 && (
-            <span className="file-name">{selectedFiles.length} files selected</span>
-          )}
+        {selectedFiles.length > 0 && (
+          <span className="file-name">{selectedFiles.length} files selected</span>
+        )}
         </div>
       </div>
 

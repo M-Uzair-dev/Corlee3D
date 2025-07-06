@@ -11,14 +11,23 @@ THREE.Cache.enabled = true;
 const textureLoader = new THREE.TextureLoader();
 const textureCache = new Map();
 
+// Material control defaults
+const DEFAULT_CONTROLS = {
+  roughness: 0.5,
+  metalness: 0.0,
+  brightness: 1.0,
+  ambientLight: 0.8,
+  directionalLight: 0.8
+};
+
 // Preload texture function
 const preloadTexture = async (url) => {
   if (!url || textureCache.has(url)) return textureCache.get(url);
   
   return new Promise((resolve) => {
     textureLoader.load(url, (texture) => {
-      texture.encoding = THREE.sRGBEncoding;
-      texture.colorSpace = "srgb-linear";
+      // Remove sRGB encoding since we're using WebGL 2.0's built-in color management
+      texture.colorSpace = "srgb";
       textureCache.set(url, texture);
       resolve(texture);
     });
@@ -34,7 +43,7 @@ const cleanupTexture = (url) => {
   }
 };
 
-const TexturedModel = ({ gltf, textureUrl, scale, modelUrl, textureScale = [2, 2] }) => {
+const TexturedModel = ({ gltf, textureUrl, scale, modelUrl, textureScale = [2, 2], materialControls }) => {
   const modelRef = useRef();
   const [texture, setTexture] = useState(null);
 
@@ -73,26 +82,25 @@ const TexturedModel = ({ gltf, textureUrl, scale, modelUrl, textureScale = [2, 2
   const material = useMemo(() => {
     if (!texture) return null;
 
-    // Clone the texture to avoid modifying the cached version
     const textureClone = texture.clone();
     
-    // Use unified modern method for all garments
     textureClone.wrapS = textureClone.wrapT = THREE.RepeatWrapping;
     textureClone.repeat.set(textureScale[0], textureScale[1]);
     textureClone.magFilter = THREE.LinearFilter;
     textureClone.minFilter = THREE.LinearMipmapLinearFilter;
     textureClone.generateMipmaps = true;
-    
     textureClone.needsUpdate = true;
 
     const mat = new THREE.MeshStandardMaterial({
       map: textureClone,
-      roughness: 0.9,
-      metalness: 0.0,
+      roughness: materialControls.roughness,
+      metalness: materialControls.metalness,
+      envMapIntensity: 1.0,
+      color: new THREE.Color(materialControls.brightness, materialControls.brightness, materialControls.brightness)
     });
 
     return mat;
-  }, [texture, textureScale, modelUrl]);
+  }, [texture, textureScale, modelUrl, materialControls]);
 
   const clonedScene = useMemo(() => {
     if (!material) return gltf.scene.clone();
@@ -133,7 +141,7 @@ const NonTexturedModel = ({ gltf, scale, modelUrl }) => {
   );
 };
 
-const Scene = ({ modelUrl, textureUrl, scale, onLoaded, textureScale }) => {
+const Scene = ({ modelUrl, textureUrl, scale, onLoaded, textureScale, materialControls }) => {
   const gltf = useGLTF(modelUrl, true);
 
   useEffect(() => {
@@ -142,18 +150,18 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded, textureScale }) => {
 
   return (
     <>
-      <ambientLight intensity={0.5} />
+      <ambientLight intensity={materialControls.ambientLight} />
       <directionalLight
         position={[5, 10, 7.5]}
-        intensity={1.2}
+        intensity={materialControls.directionalLight}
         castShadow
         shadow-mapSize-width={2048}
         shadow-mapSize-height={2048}
       />
-      <pointLight position={[-5, -5, -5]} intensity={0.5} />
+      <pointLight position={[-5, -5, -5]} intensity={0.3} />
       <spotLight
         position={[0, 5, 5]}
-        intensity={0.8}
+        intensity={0.5}
         angle={0.3}
         penumbra={0.5}
         castShadow
@@ -165,6 +173,7 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded, textureScale }) => {
           scale={scale}
           modelUrl={modelUrl}
           textureScale={textureScale}
+          materialControls={materialControls}
         />
       ) : (
         <NonTexturedModel
@@ -177,8 +186,71 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded, textureScale }) => {
   );
 };
 
+const MaterialControls = ({ controls, onChange }) => {
+  return (
+    <div className="material-controls">
+      <div className="control-group">
+        <label>Roughness: {controls.roughness.toFixed(2)}</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={controls.roughness}
+          onChange={(e) => onChange({ ...controls, roughness: parseFloat(e.target.value) })}
+        />
+      </div>
+      <div className="control-group">
+        <label>Metalness: {controls.metalness.toFixed(2)}</label>
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value={controls.metalness}
+          onChange={(e) => onChange({ ...controls, metalness: parseFloat(e.target.value) })}
+        />
+      </div>
+      <div className="control-group">
+        <label>Brightness: {controls.brightness.toFixed(2)}</label>
+        <input
+          type="range"
+          min="0.5"
+          max="1.5"
+          step="0.01"
+          value={controls.brightness}
+          onChange={(e) => onChange({ ...controls, brightness: parseFloat(e.target.value) })}
+        />
+      </div>
+      <div className="control-group">
+        <label>Ambient Light: {controls.ambientLight.toFixed(2)}</label>
+        <input
+          type="range"
+          min="0"
+          max="2"
+          step="0.01"
+          value={controls.ambientLight}
+          onChange={(e) => onChange({ ...controls, ambientLight: parseFloat(e.target.value) })}
+        />
+      </div>
+      <div className="control-group">
+        <label>Directional Light: {controls.directionalLight.toFixed(2)}</label>
+        <input
+          type="range"
+          min="0"
+          max="2"
+          step="0.01"
+          value={controls.directionalLight}
+          onChange={(e) => onChange({ ...controls, directionalLight: parseFloat(e.target.value) })}
+        />
+      </div>
+    </div>
+  );
+};
+
 const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [], otherTextures = [], textureScale = [2, 2] }) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
+  const [materialControls, setMaterialControls] = useState(DEFAULT_CONTROLS);
   const preloaded = useRef(new Set());
 
   // Preload models and textures
@@ -230,6 +302,7 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
+      <MaterialControls controls={materialControls} onChange={setMaterialControls} />
       <Suspense
         fallback={
           <div className="loading-container">
@@ -260,6 +333,7 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [
             scale={scale}
             onLoaded={() => setInitialLoaded(true)}
             textureScale={textureScale}
+            materialControls={materialControls}
           />
           <OrbitControls
             enableDamping

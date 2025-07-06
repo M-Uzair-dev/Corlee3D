@@ -6767,11 +6767,10 @@ button:hover:not(.button-with-icon2) {
 }
 .product-card-container3,
 .bigimage,
-.verticalimagesinproduct > * {
+.verticalimagesinproduct > *, .imagediv {
   background-position: left !important;
 }
-.verticalimagesinproduct > *:not(:first-child),
-.imagediv {
+.verticalimagesinproduct > *:not(:first-child) {
   pointer-events: none;
   opacity: 0;
 }
