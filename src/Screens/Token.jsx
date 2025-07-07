@@ -125,7 +125,7 @@ const Token = () => {
           ${
             isMandarin
               ? `
-            *:not(.english):not(.material-heading-text-style):not(.fashion-statement-text-style span:nth-child(1)):not(.dashboard-container *):not(.adddiv):not(.imagestext p:nth-child(1)):not(.textdivinbagdetails *:not(:first-child)):not(input):not(.singlecalldetail:nth-child(3)>p):not(.contact-heading):not(.contact-heading-text-style):not(.contact-info-section1 *):not(.textboxdivmain h1):not(*:has(.dropdowndiv) h1), .productdetailsdic h1:not(.english), .horizontal-menu-with-icons-nav *, contact-info-text-style-nav, .product-card-container-nav *, .contact-info-text-style-nav *{
+            *:not(.english):not(.password-container *):not(.material-heading-text-style):not(.fashion-statement-text-style span:nth-child(1)):not(.dashboard-container *):not(.adddiv):not(.imagestext p:nth-child(1)):not(.textdivinbagdetails *:not(:first-child)):not(input):not(.singlecalldetail:nth-child(3)>p):not(.contact-heading):not(.contact-heading-text-style):not(.contact-info-section1 *):not(.textboxdivmain h1):not(*:has(.dropdowndiv) h1), .productdetailsdic h1:not(.english), .horizontal-menu-with-icons-nav *, contact-info-text-style-nav, .product-card-container-nav *, .contact-info-text-style-nav *{
              font-family: "Noto Serif TC", serif !important;
             }
             

@@ -4,21 +4,21 @@ import { OrbitControls, useGLTF, useTexture, Center } from "@react-three/drei";
 import * as THREE from "three";
 import "./model.css";
 
+// Material control defaults
+const DEFAULT_CONTROLS = {
+  roughness: 1.0,
+  metalness: 0.0,
+  brightness: 1.15,
+  ambientLight: 1.18,
+  directionalLight: 1.43
+};
+
 // Enable Three.js caching
 THREE.Cache.enabled = true;
 
 // Create a global texture loader and cache
 const textureLoader = new THREE.TextureLoader();
 const textureCache = new Map();
-
-// Material control defaults
-const DEFAULT_CONTROLS = {
-  roughness: 0.5,
-  metalness: 0.0,
-  brightness: 1.0,
-  ambientLight: 0.8,
-  directionalLight: 0.8
-};
 
 // Preload texture function
 const preloadTexture = async (url) => {
@@ -186,71 +186,9 @@ const Scene = ({ modelUrl, textureUrl, scale, onLoaded, textureScale, materialCo
   );
 };
 
-const MaterialControls = ({ controls, onChange }) => {
-  return (
-    <div className="material-controls">
-      <div className="control-group">
-        <label>Roughness: {controls.roughness.toFixed(2)}</label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={controls.roughness}
-          onChange={(e) => onChange({ ...controls, roughness: parseFloat(e.target.value) })}
-        />
-      </div>
-      <div className="control-group">
-        <label>Metalness: {controls.metalness.toFixed(2)}</label>
-        <input
-          type="range"
-          min="0"
-          max="1"
-          step="0.01"
-          value={controls.metalness}
-          onChange={(e) => onChange({ ...controls, metalness: parseFloat(e.target.value) })}
-        />
-      </div>
-      <div className="control-group">
-        <label>Brightness: {controls.brightness.toFixed(2)}</label>
-        <input
-          type="range"
-          min="0.5"
-          max="1.5"
-          step="0.01"
-          value={controls.brightness}
-          onChange={(e) => onChange({ ...controls, brightness: parseFloat(e.target.value) })}
-        />
-      </div>
-      <div className="control-group">
-        <label>Ambient Light: {controls.ambientLight.toFixed(2)}</label>
-        <input
-          type="range"
-          min="0"
-          max="2"
-          step="0.01"
-          value={controls.ambientLight}
-          onChange={(e) => onChange({ ...controls, ambientLight: parseFloat(e.target.value) })}
-        />
-      </div>
-      <div className="control-group">
-        <label>Directional Light: {controls.directionalLight.toFixed(2)}</label>
-        <input
-          type="range"
-          min="0"
-          max="2"
-          step="0.01"
-          value={controls.directionalLight}
-          onChange={(e) => onChange({ ...controls, directionalLight: parseFloat(e.target.value) })}
-        />
-      </div>
-    </div>
-  );
-};
-
 const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [], otherTextures = [], textureScale = [2, 2] }) => {
   const [initialLoaded, setInitialLoaded] = useState(false);
-  const [materialControls, setMaterialControls] = useState(DEFAULT_CONTROLS);
+  const [materialControls] = useState(DEFAULT_CONTROLS);
   const preloaded = useRef(new Set());
 
   // Preload models and textures
@@ -302,7 +240,6 @@ const FabricModel = ({ textureUrl, modelUrl, scale, loadingText, otherModels = [
 
   return (
     <div style={{ width: "100%", height: "100%", position: "relative" }}>
-      <MaterialControls controls={materialControls} onChange={setMaterialControls} />
       <Suspense
         fallback={
           <div className="loading-container">

@@ -6768,7 +6768,15 @@ button:hover:not(.button-with-icon2) {
 .product-card-container3,
 .bigimage,
 .verticalimagesinproduct > *, .imagediv {
-  background-position: left !important;
+  background-position: -100px 0px !important;
+}
+@media (max-width: 600px) {
+  .product-card-container3,
+  .bigimage,
+  .verticalimagesinproduct > *,
+  .imagediv {
+    background-position: left !important;
+  }
 }
 .verticalimagesinproduct > *:not(:first-child) {
   pointer-events: none;
@@ -6782,4 +6790,7 @@ button:hover:not(.button-with-icon2) {
   gap: 10px !important;
   margin: 0 !important;
   height: auto !important;
+}
+.bagpage {
+  margin-bottom: 70px;
 }

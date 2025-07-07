@@ -37,7 +37,17 @@ function SecurePasswordForm(props) {
       }
     } catch (e) {
       console.log(e);
-      toast.error(isMandarin ? "發生錯誤" : "An error occured");
+      // Handle specific error messages from backend
+      if (e.response?.data) {
+        const errorData = e.response.data;
+        if (errorData.new_password2 && errorData.new_password2.length > 0) {
+          toast.error(errorData.new_password2[0]);
+        } else {
+          toast.error(isMandarin ? "發生錯誤" : "An error occurred");
+        }
+      } else {
+        toast.error(isMandarin ? "發生錯誤" : "An error occurred");
+      }
       setloading(false);
     }
   };
@@ -219,7 +229,6 @@ function SecurePasswordForm(props) {
         </div>
       </div>
       <div className="nested-svg-container">
-        {/* Input Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
         <div className="flex-row-container">
           <input
             placeholder={isMandarin ? "確認新密碼" : "Confirm new password"}
@@ -236,7 +245,6 @@ function SecurePasswordForm(props) {
           />
         </div>
       </div>
-      {/* Button Component is detected here. We've generated code using HTML. See other options in "Component library" dropdown in Settings */}
       <button
         className="password-reset-button"
         onClick={() => {
