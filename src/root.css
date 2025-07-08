@@ -6636,6 +6636,9 @@ button:hover:not(.button-with-icon2) {
   font-size: 35px !important;
 }
 
+.bagpage {
+  margin-bottom: 70px;
+}
 @media (max-width: 730px) {
   .header-title,
   .hero-title {
@@ -6767,7 +6770,8 @@ button:hover:not(.button-with-icon2) {
 }
 .product-card-container3,
 .bigimage,
-.verticalimagesinproduct > *, .imagediv {
+.verticalimagesinproduct > *,
+.imagediv {
   background-position: -100px 0px !important;
 }
 @media (max-width: 600px) {
@@ -6790,7 +6794,4 @@ button:hover:not(.button-with-icon2) {
   gap: 10px !important;
   margin: 0 !important;
   height: auto !important;
-}
-.bagpage {
-  margin-bottom: 70px;
 }
