@@ -3148,7 +3148,7 @@ body {
 @media (max-width: 1250px) {
   .productsdivinnavbar {
     flex-direction: column;
-    height: 1100px;
+    height: 800px;
   }
   .productsdivinnavbar > * {
     width: 90vw !important;
@@ -3160,6 +3160,9 @@ body {
   }
   .relatedproductsdivinnav {
     min-width: 0px !important;
+  }
+  .relatedproductsdivinnav {
+    gap: 10px !important;
   }
 }
 .relatedproductdivinnav {
@@ -6239,6 +6242,9 @@ button:hover:not(.button-with-icon2) {
   flex-direction: column;
   align-items: stretch;
   justify-content: flex-start;
+  touch-action: pan-y pinch-zoom;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
 }
 .adddiv {
   display: flex;
