@@ -37,10 +37,10 @@ function BottomBar(props) {
     } else {
       localStorage.removeItem("isMandarin");
     }
-    
+
     // Check if current path starts with /products/
-    if (window.location.pathname.startsWith('/products/')) {
-      window.location.href = '/'; // Redirect to home page
+    if (window.location.pathname.startsWith("/products/")) {
+      window.location.href = "/"; // Redirect to home page
     } else {
       window.location.reload(); // Otherwise just reload
     }
@@ -113,7 +113,8 @@ function BottomBar(props) {
           </div>
           <div className="sidebar-container-bb" onClick={() => navigate("/")}>
             <img
-              src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/logo-white.webp"
+              src="/images/logo.png"
+              style={{ filter: "invert(1)" }}
               className="image-container-bb"
             />
           </div>

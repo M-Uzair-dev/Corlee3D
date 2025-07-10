@@ -5213,7 +5213,7 @@ button:hover:not(.button-with-icon2) {
   justify-content: space-between;
 }
 .product-image-styles-nav {
-  min-width: 150px;
+  /* min-width: 150px; */
 }
 .fabric-gallery-container {
   display: flex !important;
@@ -6795,4 +6795,22 @@ button:hover:not(.button-with-icon2) {
 .map {
   width: 100% !important;
   max-width: 2000px !important;
+}
+.header-navbar-nav img {
+  scale: 0.7;
+  margin-left: -13px;
+}
+.image-container-bb {
+  scale: 0.7 !important;
+}
+.product-image-styles-nav {
+  margin-left: -5px !important;
+}
+.product-image-styles-nav {
+  scale: 0.7;
+}
+@media (max-width: 980px) {
+  .contact-info-text-style-nav {
+    border-bottom: none !important;
+  }
 }

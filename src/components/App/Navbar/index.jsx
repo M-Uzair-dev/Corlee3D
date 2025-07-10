@@ -104,7 +104,7 @@ function Navbar(props) {
             />
 
             <img
-              src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/logo.webp"
+              src="/images/logo.png"
               className="product-image-styles-nav"
               alt="logo"
               style={{ cursor: "pointer", zIndex: 3 }}
@@ -300,7 +300,7 @@ function Navbar(props) {
         <div className="productsoptionsdivinnav">
           {true && (
             <img
-              src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/logo.webp"
+              src="/images/logo.png"
               className="product-image-styles-nav logoimg"
               alt="logo"
               style={{ cursor: "pointer", zIndex: 3 }}
@@ -418,10 +418,16 @@ function Navbar(props) {
                     onClick={() => {
                       navigate(
                         isMandarin
-                          ? `/products/${categ.name_mandarin}/${categ.description_mandarin || `「${categ.name_mandarin}」類別的產品`}`
-                          : `/products/${categ.name}/${categ.description || "Products for " + categ.name + " category"}`
+                          ? `/products/${categ.name_mandarin}/${
+                              categ.description_mandarin ||
+                              `「${categ.name_mandarin}」類別的產品`
+                            }`
+                          : `/products/${categ.name}/${
+                              categ.description ||
+                              "Products for " + categ.name + " category"
+                            }`
                       );
-                      
+
                       setShowprod(false);
                       setOpen(false);
                     }}
@@ -447,7 +453,9 @@ function Navbar(props) {
                       </h1>
                       <p
                         className={`${
-                          isMandarin && categ.description_mandarin ? "" : "english"
+                          isMandarin && categ.description_mandarin
+                            ? ""
+                            : "english"
                         }`}
                       >
                         {isMandarin && categ.description_mandarin

@@ -121,7 +121,7 @@ function ProductNavigation(props) {
       >
         {true && (
           <img
-            src="https://d2e8m995jm0i5z.cloudfront.net/websiteimages/logo.webp"
+            src="/images/logo.png"
             className="product-image-styles-nav logoimg"
             alt="logo"
             style={{ cursor: "pointer", zIndex: 3 }}
