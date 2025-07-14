@@ -297,7 +297,7 @@ function Navbar(props) {
           }
         }}
       >
-        <div className="productsoptionsdivinnav">
+        <div className="productsoptionsdivinnav" data-lenis-prevent>
           {true && (
             <img
               src="/images/logo.png"
