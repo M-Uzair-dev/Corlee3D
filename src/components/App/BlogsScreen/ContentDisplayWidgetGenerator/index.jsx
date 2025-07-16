@@ -40,6 +40,7 @@ function ContentDisplayWidgetGenerator() {
   const [categs, setCategs] = useState([]);
   const [loading3, setLoading3] = useState(false);
   const [searchterm, setSearchterm] = useState("");
+  const [hasMore, setHasMore] = useState(true);
 
   const navigate = useNavigate();
 
@@ -96,6 +97,7 @@ function ContentDisplayWidgetGenerator() {
         setLoading(true);
         setPage(1);
         setNoBlogs(false);
+        setHasMore(true);
 
         const queryUrl = buildQuery(1, param);
 
@@ -105,6 +107,7 @@ function ContentDisplayWidgetGenerator() {
           setBlogs(cachedData.results);
           setLoading(false);
           setNoBlogs(cachedData.results.length === 0);
+          setHasMore(cachedData.results.length > 0);
           return;
         }
 
@@ -119,6 +122,7 @@ function ContentDisplayWidgetGenerator() {
 
           setBlogs(results);
           setNoBlogs(results.length === 0);
+          setHasMore(results.length > 0);
         } else {
           handleError(
             null,
@@ -131,6 +135,7 @@ function ContentDisplayWidgetGenerator() {
 
         if (error?.response?.data?.detail === "Invalid page.") {
           setNoBlogs(true);
+          setHasMore(false);
         } else {
           handleError(error);
           navigate("/");
@@ -144,7 +149,7 @@ function ContentDisplayWidgetGenerator() {
 
   // Optimized pagination
   const loadNextPage = useCallback(async () => {
-    if (page === 1 || loading3) return;
+    if (page === 1 || loading3 || !hasMore) return;
 
     try {
       setLoading3(true);
@@ -169,6 +174,7 @@ function ContentDisplayWidgetGenerator() {
           blogsCache.set(queryUrl, response.data);
           setBlogs((prev) => [...prev, ...results]);
         } else {
+          setHasMore(false);
           toast.error(isMandarin ? "沒有更多博客" : "No more blogs");
         }
       } else {
@@ -181,6 +187,7 @@ function ContentDisplayWidgetGenerator() {
       console.error("Error loading next page:", error);
 
       if (error?.response?.data?.detail === "Invalid page.") {
+        setHasMore(false);
         toast.error(isMandarin ? "沒有更多博客" : "No more blogs");
       } else {
         handleError(error);
@@ -188,7 +195,7 @@ function ContentDisplayWidgetGenerator() {
     } finally {
       setLoading3(false);
     }
-  }, [buildQuery, page, loading3, handleError, isMandarin]);
+  }, [buildQuery, page, loading3, handleError, isMandarin, hasMore]);
 
   // Optimized categories loading
   const loadCategs = useCallback(async () => {
@@ -346,37 +353,39 @@ function ContentDisplayWidgetGenerator() {
           <>
             <MemoizedContentRenderer blogs={blogs} />
 
-            <button
-              className="blog-load-more-button-style-blogs"
-              onClick={() => setPage(page + 1)}
-              disabled={loading3}
-            >
-              {loading3 ? (
-                <div
-                  className="loader"
-                  style={{
-                    width: "100%",
-                    display: "flex",
-                    justifyContent: "center",
-                  }}
-                >
-                  <TailSpin
-                    visible={true}
-                    height="30"
-                    width="30"
-                    color="#fff"
-                    ariaLabel="tail-spin-loading"
-                    radius="1"
-                    wrapperStyle={{}}
-                    wrapperClass=""
-                  />
-                </div>
-              ) : isMandarin ? (
-                "載入更多"
-              ) : (
-                messages["load_more"]
-              )}
-            </button>
+            {hasMore && (
+              <button
+                className="blog-load-more-button-style-blogs"
+                onClick={() => setPage(page + 1)}
+                disabled={loading3}
+              >
+                {loading3 ? (
+                  <div
+                    className="loader"
+                    style={{
+                      width: "100%",
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <TailSpin
+                      visible={true}
+                      height="30"
+                      width="30"
+                      color="#fff"
+                      ariaLabel="tail-spin-loading"
+                      radius="1"
+                      wrapperStyle={{}}
+                      wrapperClass=""
+                    />
+                  </div>
+                ) : isMandarin ? (
+                  "載入更多"
+                ) : (
+                  messages["load_more"]
+                )}
+              </button>
+            )}
           </>
         )}
       </>
