@@ -12,6 +12,8 @@ import { api } from "../../config/api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
+import SearchFilter from "../UI/SearchFilter";
+import { getFilterConfig } from "../../config/filterConfig";
 
 // Cache for blogs data to avoid redundant API calls
 const blogsCache = new Map();
@@ -74,6 +76,7 @@ const Blogs = () => {
   const [blogToDelete, setBlogToDelete] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [activeFilter, setActiveFilter] = useState(null);
   const [blogsData, setBlogsData] = useState({
     fields: {
       title: "標題",
@@ -95,7 +98,10 @@ const Blogs = () => {
   const ITEMS_PER_PAGE = 8;
 
   // Memoized cache key
-  const cacheKey = useMemo(() => `blogs_page_${page}_size_${ITEMS_PER_PAGE}`, [page]);
+  const cacheKey = useMemo(() => {
+    const filterKey = activeFilter ? `_${activeFilter.field}_${activeFilter.value}` : '';
+    return `blogs_page_${page}_size_${ITEMS_PER_PAGE}${filterKey}`;
+  }, [page, activeFilter]);
 
   // Memoized action handlers
   const handleViewBlog = useCallback((id) => {
@@ -134,6 +140,18 @@ const Blogs = () => {
     navigate("/dashboard/blogs/create");
   }, [navigate]);
 
+  const handleFilter = useCallback((filterData) => {
+    setActiveFilter(filterData);
+    setPage(1);
+    blogsCache.clear();
+  }, []);
+
+  const handleClearFilter = useCallback(() => {
+    setActiveFilter(null);
+    setPage(1);
+    blogsCache.clear();
+  }, []);
+
   // Optimized fetch function with caching
   const fetchBlogs = useCallback(async () => {
     try {
@@ -151,9 +169,13 @@ const Blogs = () => {
         return;
       }
 
-      const response = await api.get(
-        `/blogs/?page=${page}&page_size=${ITEMS_PER_PAGE}`
-      );
+      let apiUrl = `/blogs/?page=${page}&page_size=${ITEMS_PER_PAGE}`;
+      
+      if (activeFilter) {
+        apiUrl += `&${activeFilter.field}=${encodeURIComponent(activeFilter.value)}`;
+      }
+      
+      const response = await api.get(apiUrl);
 
       if (response.data.results) {
         const transformedData = response.data.results.map((blog) => ({
@@ -194,13 +216,23 @@ const Blogs = () => {
       toast.error("載入文章失敗");
       setBlogsData((prev) => ({ ...prev, isLoading: false }));
     }
-  }, [page, cacheKey, handleViewBlog, handleEditBlog, handleShowDeleteModal]);
+  }, [page, activeFilter, cacheKey, handleViewBlog, handleEditBlog, handleShowDeleteModal]);
 
   useEffect(() => {
     fetchBlogs();
   }, [fetchBlogs]);
 
   // Memoized components
+  const MemoizedSearchFilter = useMemo(() => (
+    <SearchFilter
+      filterFields={getFilterConfig('blogs')}
+      onFilter={handleFilter}
+      onClear={handleClearFilter}
+      disabled={blogsData.isLoading}
+      placeholder="輸入搜尋內容..."
+    />
+  ), [handleFilter, handleClearFilter, blogsData.isLoading]);
+
   const MemoizedPageContent = useMemo(() => (
     <PageContent
       title="文章"
@@ -217,6 +249,8 @@ const Blogs = () => {
 
   return (
     <>
+      {MemoizedSearchFilter}
+      
       {MemoizedPageContent}
 
       {totalPages > 1 && (

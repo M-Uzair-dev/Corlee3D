@@ -12,6 +12,8 @@ import { api } from "../../config/api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
+import SearchFilter from "../UI/SearchFilter";
+import { getFilterConfig } from "../../config/filterConfig";
 
 const Users = () => {
   const navigate = useNavigate();
@@ -19,6 +21,7 @@ const Users = () => {
   const [userToDelete, setUserToDelete] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [activeFilter, setActiveFilter] = useState(null);
   const [usersData, setUsersData] = useState({
     fields: {
       username: "使用者名稱",
@@ -39,14 +42,19 @@ const Users = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, [page]);
+  }, [page, activeFilter]);
 
   const fetchUsers = async () => {
     try {
       setUsersData((prev) => ({ ...prev, isLoading: true }));
-      const response = await api.get(
-        `/users/?page=${page}&page_size=${ITEMS_PER_PAGE}`
-      );
+      
+      let apiUrl = `/users/?page=${page}&page_size=${ITEMS_PER_PAGE}`;
+      
+      if (activeFilter) {
+        apiUrl += `&${activeFilter.field}=${encodeURIComponent(activeFilter.value)}`;
+      }
+      
+      const response = await api.get(apiUrl);
       console.log("Users response:", response.data);
 
       const transformedData = response.data.results.map((user) => ({
@@ -127,6 +135,16 @@ const Users = () => {
     }
   };
 
+  const handleFilter = (filterData) => {
+    setActiveFilter(filterData);
+    setPage(1);
+  };
+
+  const handleClearFilter = () => {
+    setActiveFilter(null);
+    setPage(1);
+  };
+
   // Create pagination UI component
   const Pagination = () => (
     <div className="pagination-controls">
@@ -154,6 +172,14 @@ const Users = () => {
 
   return (
     <>
+      <SearchFilter
+        filterFields={getFilterConfig('users')}
+        onFilter={handleFilter}
+        onClear={handleClearFilter}
+        disabled={usersData.isLoading}
+        placeholder="輸入搜尋內容..."
+      />
+      
       <PageContent
         title="使用者"
         icon={<FaUsers />}

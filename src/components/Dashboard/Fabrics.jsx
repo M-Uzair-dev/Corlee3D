@@ -4,10 +4,13 @@ import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
 import Edit from "../Edit";
+import SearchFilter from "../UI/SearchFilter";
+import { getFilterConfig } from "../../config/filterConfig";
 
 const Fabrics = () => {
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [activeFilter, setActiveFilter] = useState(null);
   const [fabricsData, setFabricsData] = useState({
     fields: {
       title: "標題",
@@ -31,14 +34,19 @@ const Fabrics = () => {
 
   useEffect(() => {
     fetchFabrics();
-  }, [page]);
+  }, [page, activeFilter]);
 
   const fetchFabrics = async () => {
     try {
       setFabricsData((prev) => ({ ...prev, isLoading: true }));
-      const response = await api.get(
-        `/fabrics/?page=${page}&page_size=${ITEMS_PER_PAGE}&sort_by=newest`
-      );
+      
+      let apiUrl = `/fabrics/?page=${page}&page_size=${ITEMS_PER_PAGE}&sort_by=newest`;
+      
+      if (activeFilter) {
+        apiUrl += `&${activeFilter.field}=${encodeURIComponent(activeFilter.value)}`;
+      }
+      
+      const response = await api.get(apiUrl);
       console.log(response.data);
       if (response.data.results) {
         // Transform API data to match table structure
@@ -102,6 +110,16 @@ const Fabrics = () => {
     }
   };
 
+  const handleFilter = (filterData) => {
+    setActiveFilter(filterData);
+    setPage(1);
+  };
+
+  const handleClearFilter = () => {
+    setActiveFilter(null);
+    setPage(1);
+  };
+
   // Create pagination UI component
   const Pagination = () => (
     <div className="pagination-controls">
@@ -129,6 +147,14 @@ const Fabrics = () => {
 
   return (
     <>
+      <SearchFilter
+        filterFields={getFilterConfig('fabrics')}
+        onFilter={handleFilter}
+        onClear={handleClearFilter}
+        disabled={fabricsData.isLoading}
+        placeholder="輸入搜尋內容..."
+      />
+      
       <PageContent
         title="布料"
         icon={<FaBox />}
