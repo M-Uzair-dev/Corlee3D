@@ -6,6 +6,7 @@ import {
   FaTrash,
   FaChevronLeft,
   FaChevronRight,
+  FaDownload,
 } from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
@@ -123,6 +124,40 @@ const Orders = () => {
     fetchOrders();
   };
 
+  const handleDownload = async () => {
+    try {
+      toast.info("開始下載訂單數據...");
+      
+      const response = await api.get('/download/orders/', {
+        responseType: 'blob'
+      });
+      
+      // Create blob URL and download
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+      
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Generate filename with current date/time
+      const now = new Date();
+      const timestamp = now.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z/, '');
+      link.download = `orders_data_${timestamp}.xlsx`;
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success("訂單數據下載成功！");
+    } catch (error) {
+      console.error("Error downloading orders:", error);
+      toast.error("下載訂單數據失敗");
+    }
+  };
+
   const handlePrevPage = () => {
     if (page > 1) {
       setPage((prev) => prev - 1);
@@ -161,6 +196,17 @@ const Orders = () => {
 
   return (
     <>
+      <div className="page-header">
+        <button
+          className="download-btn"
+          onClick={handleDownload}
+          disabled={ordersData.isLoading}
+          title="下載訂單數據"
+        >
+          <FaDownload /> 下載數據
+        </button>
+      </div>
+      
       <PageContent
         title="訂單"
         icon={<FaShoppingCart />}
@@ -179,6 +225,39 @@ const Orders = () => {
       />
 
       <style jsx>{`
+        .page-header {
+          display: flex;
+          justify-content: flex-end;
+          margin-bottom: 20px;
+        }
+        
+        .download-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          background: #28a745;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          transition: all 0.2s;
+          white-space: nowrap;
+        }
+        
+        .download-btn:hover:not(:disabled) {
+          background: #218838;
+          transform: translateY(-1px);
+        }
+        
+        .download-btn:disabled {
+          background: #6c757d;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
         .action-cell {
           display: flex;
           gap: 8px;

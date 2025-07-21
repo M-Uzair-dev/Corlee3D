@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaBox, FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { FaBox, FaChevronLeft, FaChevronRight, FaDownload } from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
 import { toast } from "sonner";
@@ -120,6 +120,40 @@ const Fabrics = () => {
     setPage(1);
   };
 
+  const handleDownload = async () => {
+    try {
+      toast.info("開始下載布料數據...");
+      
+      const response = await api.get('/download/fabrics/', {
+        responseType: 'blob'
+      });
+      
+      // Create blob URL and download
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+      
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Generate filename with current date/time
+      const now = new Date();
+      const timestamp = now.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z/, '');
+      link.download = `fabrics_data_${timestamp}.xlsx`;
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success("布料數據下載成功！");
+    } catch (error) {
+      console.error("Error downloading fabrics:", error);
+      toast.error("下載布料數據失敗");
+    }
+  };
+
   // Create pagination UI component
   const Pagination = () => (
     <div className="pagination-controls">
@@ -147,13 +181,23 @@ const Fabrics = () => {
 
   return (
     <>
-      <SearchFilter
-        filterFields={getFilterConfig('fabrics')}
-        onFilter={handleFilter}
-        onClear={handleClearFilter}
-        disabled={fabricsData.isLoading}
-        placeholder="輸入搜尋內容..."
-      />
+      <div className="page-header">
+        <SearchFilter
+          onFilter={handleFilter}
+          onClear={handleClearFilter}
+          disabled={fabricsData.isLoading}
+          placeholder="輸入關鍵字搜尋..."
+          keywordOnly={true}
+        />
+        <button
+          className="download-btn"
+          onClick={handleDownload}
+          disabled={fabricsData.isLoading}
+          title="下載布料數據"
+        >
+          <FaDownload /> 下載數據
+        </button>
+      </div>
       
       <PageContent
         title="布料"
@@ -164,6 +208,54 @@ const Fabrics = () => {
         onBulkDelete={handleBulkDelete}
       />
       {totalPages > 1 && <Pagination />}
+      
+      <style jsx>{`
+        .page-header {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          margin-bottom: 20px;
+        }
+        
+        .download-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          background: #28a745;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          transition: all 0.2s;
+          white-space: nowrap;
+          margin-top: 16px;
+        }
+        
+        .download-btn:hover:not(:disabled) {
+          background: #218838;
+          transform: translateY(-1px);
+        }
+        
+        .download-btn:disabled {
+          background: #6c757d;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
+        @media (max-width: 768px) {
+          .page-header {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          
+          .download-btn {
+            margin-top: 0;
+          }
+        }
+      `}</style>
     </>
   );
 };

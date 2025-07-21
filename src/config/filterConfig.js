@@ -11,10 +11,10 @@ export const FILTER_CONFIGS = {
   fabrics: [
     { value: "keyword", label: "關鍵字搜尋" },
     { value: "item_code", label: "商品編號" },
-    { value: "category", label: "分類" }
-  ],
-  
-  blogs: [
+    { value: "title", label: "標題" },
+    { value: "composition", label: "成分" },
+    { value: "weight", label: "重量" },
+    { value: "finish", label: "後加工" },
     { value: "category", label: "分類" }
   ]
 };

@@ -6,23 +6,33 @@ const SearchFilter = memo(({
   onFilter, 
   onClear, 
   placeholder = "輸入搜尋內容...",
-  disabled = false 
+  disabled = false,
+  keywordOnly = false
 }) => {
   const [selectedField, setSelectedField] = useState(filterFields[0]?.value || "");
   const [searchTerm, setSearchTerm] = useState("");
 
   const handleFilter = () => {
-    if (!selectedField || !searchTerm.trim()) return;
-    
-    onFilter({
-      field: selectedField,
-      value: searchTerm.trim()
-    });
+    if (keywordOnly) {
+      if (!searchTerm.trim()) return;
+      onFilter({
+        field: "keyword",
+        value: searchTerm.trim()
+      });
+    } else {
+      if (!selectedField || !searchTerm.trim()) return;
+      onFilter({
+        field: selectedField,
+        value: searchTerm.trim()
+      });
+    }
   };
 
   const handleClear = () => {
     setSearchTerm("");
-    setSelectedField(filterFields[0]?.value || "");
+    if (!keywordOnly) {
+      setSelectedField(filterFields[0]?.value || "");
+    }
     onClear();
   };
 
@@ -35,18 +45,20 @@ const SearchFilter = memo(({
   return (
     <div className="search-filter-container">
       <div className="search-filter-wrapper">
-        <select
-          className="filter-field-select"
-          value={selectedField}
-          onChange={(e) => setSelectedField(e.target.value)}
-          disabled={disabled}
-        >
-          {filterFields.map((field) => (
-            <option key={field.value} value={field.value}>
-              {field.label}
-            </option>
-          ))}
-        </select>
+        {!keywordOnly && (
+          <select
+            className="filter-field-select"
+            value={selectedField}
+            onChange={(e) => setSelectedField(e.target.value)}
+            disabled={disabled}
+          >
+            {filterFields.map((field) => (
+              <option key={field.value} value={field.value}>
+                {field.label}
+              </option>
+            ))}
+          </select>
+        )}
         
         <input
           type="text"
@@ -61,7 +73,7 @@ const SearchFilter = memo(({
         <button
           className="filter-btn"
           onClick={handleFilter}
-          disabled={disabled || !selectedField || !searchTerm.trim()}
+          disabled={disabled || !searchTerm.trim() || (!keywordOnly && !selectedField)}
           title="搜尋"
         >
           <FaSearch />

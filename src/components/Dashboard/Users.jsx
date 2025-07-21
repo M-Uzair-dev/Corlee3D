@@ -6,6 +6,7 @@ import {
   FaTrash,
   FaChevronLeft,
   FaChevronRight,
+  FaDownload,
 } from "react-icons/fa";
 import PageContent from "./PageContent";
 import { api } from "../../config/api";
@@ -145,6 +146,40 @@ const Users = () => {
     setPage(1);
   };
 
+  const handleDownload = async () => {
+    try {
+      toast.info("開始下載使用者數據...");
+      
+      const response = await api.get('/download/users/', {
+        responseType: 'blob'
+      });
+      
+      // Create blob URL and download
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+      });
+      
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Generate filename with current date/time
+      const now = new Date();
+      const timestamp = now.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z/, '');
+      link.download = `users_data_${timestamp}.xlsx`;
+      
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      
+      toast.success("使用者數據下載成功！");
+    } catch (error) {
+      console.error("Error downloading users:", error);
+      toast.error("下載使用者數據失敗");
+    }
+  };
+
   // Create pagination UI component
   const Pagination = () => (
     <div className="pagination-controls">
@@ -172,13 +207,23 @@ const Users = () => {
 
   return (
     <>
-      <SearchFilter
-        filterFields={getFilterConfig('users')}
-        onFilter={handleFilter}
-        onClear={handleClearFilter}
-        disabled={usersData.isLoading}
-        placeholder="輸入搜尋內容..."
-      />
+      <div className="page-header">
+        <SearchFilter
+          filterFields={getFilterConfig('users')}
+          onFilter={handleFilter}
+          onClear={handleClearFilter}
+          disabled={usersData.isLoading}
+          placeholder="輸入搜尋內容..."
+        />
+        <button
+          className="download-btn"
+          onClick={handleDownload}
+          disabled={usersData.isLoading}
+          title="下載使用者數據"
+        >
+          <FaDownload /> 下載數據
+        </button>
+      </div>
       
       <PageContent
         title="使用者"
@@ -199,6 +244,41 @@ const Users = () => {
       />
 
       <style jsx>{`
+        .page-header {
+          display: flex;
+          align-items: flex-start;
+          gap: 16px;
+          margin-bottom: 20px;
+        }
+        
+        .download-btn {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          padding: 12px 20px;
+          background: #28a745;
+          color: white;
+          border: none;
+          border-radius: 6px;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          transition: all 0.2s;
+          white-space: nowrap;
+          margin-top: 16px;
+        }
+        
+        .download-btn:hover:not(:disabled) {
+          background: #218838;
+          transform: translateY(-1px);
+        }
+        
+        .download-btn:disabled {
+          background: #6c757d;
+          cursor: not-allowed;
+          transform: none;
+        }
+        
         .action-cell {
           display: flex;
           gap: 8px;
@@ -265,6 +345,17 @@ const Users = () => {
         .pagination-info {
           color: #666;
           font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+          .page-header {
+            flex-direction: column;
+            align-items: stretch;
+          }
+          
+          .download-btn {
+            margin-top: 0;
+          }
         }
       `}</style>
     </>
