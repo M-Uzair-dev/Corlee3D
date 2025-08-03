@@ -13,6 +13,7 @@ import { api } from "../../config/api";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
 import DeleteModal from "../UI/DeleteModal";
+import SearchFilter from "../UI/SearchFilter";
 
 const Orders = () => {
   const navigate = useNavigate();
@@ -20,6 +21,7 @@ const Orders = () => {
   const [orderToDelete, setOrderToDelete] = useState(null);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
+  const [activeFilter, setActiveFilter] = useState(null);
   const [ordersData, setOrdersData] = useState({
     fields: {
       id: "訂單編號",
@@ -42,15 +44,19 @@ const Orders = () => {
 
   useEffect(() => {
     fetchOrders();
-  }, [page]);
+  }, [page, activeFilter]);
 
   const fetchOrders = async () => {
     try {
       setOrdersData((prev) => ({ ...prev, isLoading: true }));
 
-      const response = await api.get(
-        `/orders/?page=${page}&page_size=${ITEMS_PER_PAGE}`
-      );
+      let apiUrl = `/orders/?page=${page}&page_size=${ITEMS_PER_PAGE}`;
+
+      if (activeFilter && activeFilter.value) {
+        apiUrl += `&email=${encodeURIComponent(activeFilter.value)}`;
+      }
+
+      const response = await api.get(apiUrl);
       console.log("response : ", response.data);
       if (response.data.results) {
         const transformedData = response.data.results.map((order) => ({
@@ -127,30 +133,33 @@ const Orders = () => {
   const handleDownload = async () => {
     try {
       toast.info("開始下載訂單數據...");
-      
-      const response = await api.get('/download/orders/', {
-        responseType: 'blob'
+
+      const response = await api.get("/download/orders/", {
+        responseType: "blob",
       });
-      
+
       // Create blob URL and download
       const blob = new Blob([response.data], {
-        type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+        type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
       });
-      
+
       const url = window.URL.createObjectURL(blob);
-      const link = document.createElement('a');
+      const link = document.createElement("a");
       link.href = url;
-      
+
       // Generate filename with current date/time
       const now = new Date();
-      const timestamp = now.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}Z/, '');
+      const timestamp = now
+        .toISOString()
+        .replace(/[-:]/g, "")
+        .replace(/\.\d{3}Z/, "");
       link.download = `orders_data_${timestamp}.xlsx`;
-      
+
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
       window.URL.revokeObjectURL(url);
-      
+
       toast.success("訂單數據下載成功！");
     } catch (error) {
       console.error("Error downloading orders:", error);
@@ -168,6 +177,16 @@ const Orders = () => {
     if (page < totalPages) {
       setPage((prev) => prev + 1);
     }
+  };
+
+  const handleFilter = (filterData) => {
+    setActiveFilter(filterData);
+    setPage(1);
+  };
+
+  const handleClearFilter = () => {
+    setActiveFilter(null);
+    setPage(1);
   };
 
   const Pagination = () => (
@@ -196,17 +215,32 @@ const Orders = () => {
 
   return (
     <>
-      <div className="page-header">
-        <button
-          className="download-btn"
-          onClick={handleDownload}
-          disabled={ordersData.isLoading}
-          title="下載訂單數據"
-        >
-          <FaDownload /> 下載數據
-        </button>
+      <div className="orders-header">
+        <div className="header-left">
+          <h2 className="page-title">訂單管理</h2>
+        </div>
+        <div className="header-center">
+          <SearchFilter
+            onFilter={handleFilter}
+            onClear={handleClearFilter}
+            disabled={ordersData.isLoading}
+            placeholder="輸入客戶信箱搜尋..."
+            keywordOnly={true}
+          />
+        </div>
+        <div className="header-right">
+          <button
+            className="download-btn"
+            onClick={handleDownload}
+            disabled={ordersData.isLoading}
+            title="下載訂單數據"
+          >
+            <FaDownload />
+            <span className="btn-text">下載數據</span>
+          </button>
+        </div>
       </div>
-      
+
       <PageContent
         title="訂單"
         icon={<FaShoppingCart />}
@@ -225,39 +259,79 @@ const Orders = () => {
       />
 
       <style jsx>{`
-        .page-header {
+        .orders-header {
+          display: grid;
+          grid-template-columns: 1fr 2fr 1fr;
+          align-items: center;
+          gap: 24px;
+          margin-bottom: 32px;
+          padding: 20px 24px;
+          background: #fff;
+          border-radius: 12px;
+          box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+          border: 1px solid #e5e7eb;
+        }
+
+        .header-left {
+          display: flex;
+          align-items: center;
+        }
+
+        .page-title {
+          margin: 0;
+          font-size: 24px;
+          font-weight: 600;
+          color: #1f2937;
+        }
+
+        .header-center {
+          display: flex;
+          justify-content: center;
+        }
+
+        .header-right {
           display: flex;
           justify-content: flex-end;
-          margin-bottom: 20px;
         }
-        
+
         .download-btn {
           display: flex;
           align-items: center;
           gap: 8px;
-          padding: 12px 20px;
-          background: #28a745;
+          padding: 12px 24px;
+          background: linear-gradient(135deg, #059669, #047857);
           color: white;
           border: none;
-          border-radius: 6px;
+          border-radius: 8px;
           cursor: pointer;
           font-size: 14px;
-          font-weight: 500;
-          transition: all 0.2s;
+          font-weight: 600;
+          transition: all 0.3s ease;
           white-space: nowrap;
+          box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
         }
-        
+
         .download-btn:hover:not(:disabled) {
-          background: #218838;
-          transform: translateY(-1px);
+          background: linear-gradient(135deg, #047857, #065f46);
+          transform: translateY(-2px);
+          box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3);
         }
-        
+
+        .download-btn:active:not(:disabled) {
+          transform: translateY(0);
+        }
+
         .download-btn:disabled {
-          background: #6c757d;
+          background: #9ca3af;
           cursor: not-allowed;
           transform: none;
+          box-shadow: none;
         }
-        
+
+        .btn-text {
+          display: inline;
+        }
+
         .action-cell {
           display: flex;
           gap: 8px;
@@ -324,6 +398,59 @@ const Orders = () => {
         .pagination-info {
           color: #666;
           font-size: 14px;
+        }
+
+        /* Tablet Responsive */
+        @media (max-width: 1024px) {
+          .orders-header {
+            grid-template-columns: 1fr;
+            gap: 16px;
+            text-align: center;
+          }
+
+          .header-left,
+          .header-center,
+          .header-right {
+            justify-content: center;
+          }
+
+          .page-title {
+            font-size: 20px;
+          }
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+          .orders-header {
+            padding: 16px 20px;
+            margin-bottom: 24px;
+            gap: 12px;
+          }
+
+          .page-title {
+            font-size: 18px;
+          }
+
+          .download-btn {
+            padding: 10px 20px;
+            font-size: 13px;
+          }
+        }
+
+        /* Small Mobile */
+        @media (max-width: 480px) {
+          .orders-header {
+            padding: 12px 16px;
+            border-radius: 8px;
+          }
+
+          .page-title {
+            font-size: 16px;
+          }
+
+          .download-btn {
+            padding: 8px 16px;
+          }
         }
       `}</style>
     </>

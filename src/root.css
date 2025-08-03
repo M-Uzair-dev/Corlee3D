@@ -6838,3 +6838,20 @@ button:hover:not(.button-with-icon2) {
     margin-bottom: -0px !important;
   }
 }
+.orders-header {
+  border-radius: 0px !important;
+}
+.search-filter-wrapper input {
+  box-sizing: border-box !important;
+}
+.search-filter-container {
+  flex: 1;
+}
+@media (max-width: 768px) {
+  .header {
+    padding-top: 70px !important;
+  }
+}
+.page-header {
+  padding: 20px;
+}
